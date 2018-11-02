@@ -3,15 +3,13 @@ import csv
 import json
 import sys
 
-#TODO: Rausfinden, wieso ich tweepy nicht installieren kann...
 import tweepy
 from tweepy import OAuthHandler
 
-#TODO: Keys einfügen oder als neue Datei, sobald API akzeptiert wurde
-consumer_key = 'YOUR-CONSUMER-KEY'
-consumer_secret = 'YOUR-CONSUMER-SECRET'
-access_token = 'YOUR-ACCESS-TOKEN'
-access_secret = 'YOUR-ACCESS-SECRET'
+consumer_key = ''
+consumer_secret = ''
+access_token = ''
+access_secret = ''
 
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
@@ -27,8 +25,9 @@ class TwitterStreamListener(tweepy.StreamListener):
 
     with open('twitter_bullying.csv', 'a') as csvfile:
         writer = csv.writer(csvfile, delimiter=';')
-        writer.writerow(['Tweet', 'Created at', 'Text', 'Hashtags'])  # header
+        writer.writerow(['Tweet', 'Created at', 'User', 'ID', 'Reply to', 'Retweet', 'Text', 'Hashtags'])  # header
 
+    # Brauchen wir nicht?
     with open('twitter_bullying.json', 'w') as jsonfile:
         json.dump([], jsonfile)                                                                             # initialize file with empty list
 
@@ -36,34 +35,34 @@ class TwitterStreamListener(tweepy.StreamListener):
         TwitterStreamListener.collected_tweets += 1                                                         # count respective tweets
 
         try:
-            print TwitterStreamListener.collected_tweets, TwitterStreamListener.num_tweets, status.text
+            print (TwitterStreamListener.collected_tweets, TwitterStreamListener.num_tweets, status.text)
 
 
-            #TODO: Aspekte (Status, Datum, User etc.) auf unsere Bedürfnisse anpassen
             # saving all data to csv
             with open('twitter_bullying.csv', 'a') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
-                writer.writerow([TwitterStreamListener.num_tweets, status.created_at, status])
+                writer.writerow([TwitterStreamListener.num_tweets, status.created_at, status.author.screen_name, status.id, status.in_reply_to_screen_name,
+                                 status.retweeted, status.text, status.entities.get('hashtags')])
 
-            # saving all data to json
+            # saving all data to json - brauchen wir nicht? - bisher nicht geordnet, nur zum Zählen
             with open('twitter_bullying.json', 'w') as tweets_jsonfile:
                 entry = {'Number': TwitterStreamListener.num_tweets, 'Date': str(status.created_at),        # current tweet
                          'Text': status.text, 'Hashtags': status.entities.get('hashtags')}
-                TwitterStreamListener.tweets.append(entry)  # append to tweets-list
+                TwitterStreamListener.tweets.append(entry)                                                  # append to tweets-list
                 json.dump(TwitterStreamListener.tweets,
                           tweets_jsonfile)                                                                  # write into file (to not overwrite existing entries)
                 TwitterStreamListener.num_tweets += 1                                                       # count tweets that have been saved
 
-        except Exception, e:
+        except Exception as e:
             print >> sys.stderr, 'Encountered Exception:', e
             pass
 
 
         #Zum Testen: Stream stoppen nach einigen Tweets
-        #if TwitterStreamListener.num_tweets < 1201:
-            #return True
-        #else:
-            #return False
+        if TwitterStreamListener.num_tweets < 51:
+            return True
+        else:
+            return False
 
     def on_error(self, status_code):
         print >> sys.stderr, 'Encountered error with status code:', status_code
