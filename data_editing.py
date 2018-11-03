@@ -1,24 +1,34 @@
 # Using Twitter API to look up status.text from tweets from file NAACL_SRW_2016.csv
 
 import csv
-import sys
 
 import tweepy
 from tweepy import OAuthHandler
 
-consumer_key = ''
-consumer_secret = ''
-access_token = ''
-access_secret = ''
+from twython import Twython
+
+consumer_key = 'lEzt5b20SAMRFB8yVwYzha8N5'
+consumer_secret = 'l7XluMNrkueVmvL8Qn4fGIzIigmXotMub0CLduCItd2EkPmJ1A'
+access_token = '2182630772-D5WxiST9kUCDvqCdN7WWLsRJnvNrQa1b6hZYlme'
+access_secret = 'zqH1m4jLiD3VevMbzxukPZzLFuoyaCoituawo92SspR5k'
 
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
+twitter = Twython(
+    consumer_key, consumer_secret, access_token, access_secret)
+
+# id to text using tweepy
 def get_tweet_text(tweet_id):
     tweet = api.get_status(tweet_id)
     return tweet.text
+
+# id to text using Twython
+def get_tweet_text_twython(tweet_id):
+    tweet = twitter.show_status(id=tweet_id)
+    return (tweet['text'])
 
 with open('NAACL_SRW_2016_cleaned.csv', 'a') as csvfile_clean:
 
@@ -31,6 +41,7 @@ with open('NAACL_SRW_2016_cleaned.csv', 'a') as csvfile_clean:
             id_of_tweet = (row[0])
             hate = (row[1])
             tweet = get_tweet_text(id_of_tweet)
+            print(tweet)
 
             writer = csv.writer(csvfile_clean, delimiter=';')
-            writer.writerow([id_of_tweet, hate, tweet.text])
+            writer.writerow([id_of_tweet, hate, tweet])
