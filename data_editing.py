@@ -7,10 +7,10 @@ from tweepy import OAuthHandler
 
 from twython import Twython
 
-consumer_key = 'lEzt5b20SAMRFB8yVwYzha8N5'
-consumer_secret = 'l7XluMNrkueVmvL8Qn4fGIzIigmXotMub0CLduCItd2EkPmJ1A'
-access_token = '2182630772-D5WxiST9kUCDvqCdN7WWLsRJnvNrQa1b6hZYlme'
-access_secret = 'zqH1m4jLiD3VevMbzxukPZzLFuoyaCoituawo92SspR5k'
+consumer_key = ''
+consumer_secret = ''
+access_token = ''
+access_secret = ''
 
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
