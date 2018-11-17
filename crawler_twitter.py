@@ -77,9 +77,9 @@ streaming_api = tweepy.streaming.Stream(auth, TwitterStreamListener(), timeout=6
 
 #TODO: Geeignete Hashtags aussuchen
 #terms = ['disney', 'pixar']                                                                                 # example topics
-terms = ['bully', 'bullying', 'blacklivesmatter', 'gross', 'bitch', 'banIslam', 'stopIslam', 'rapefugees', 'whitelivesmatter',
+terms = ['bully', 'bullying', 'blacklivesmatter', 'banIslam', 'stopIslam', 'rapefugees', 'whitelivesmatter',
          'IfMySonWasGay', 'IfMyDaughterBroughtHomeABlack', 'ADeadJew', 'AGoodJew', 'IfIWereANazi', 'SignsYoSonIsGay',
-         'HowToTurnDownAUglyPerson', 'HeterosexualPrideDay' 'whitenesstoldme', 'onlyintheghetto', 'ifsantawasblack', 'notracist']
+         'HowToTurnDownAUglyPerson', 'HeterosexualPrideDay', 'whitenesstoldme', 'onlyintheghetto', 'ifsantawasblack', 'notracist']
 # source: https://www.demos.co.uk/project/anti-islamic-content-on-twitter/, https://www.hollywoodreporter.com/news/france-twitter-hate-speech-hashtags-410664,
 # https://www.glaad.org/blog/spiritday-inspires-twitter-users-reclaim-homophobic-hashtag, https://bust.com/feminism/8762-awesome-twitter-users-take-over-homophobic-hashtag.html,
 # https://www.theguardian.com/world/2017/jun/30/heterosexualprideday-backfires-lgbt-users-subvert-twitter, https://www.sbs.com.au/topics/life/culture/article/2018/05/21/twitter-hashtag-calling-out-whiteness,
