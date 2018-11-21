@@ -1,5 +1,4 @@
 # Cleaning the Twitter Hate Speech Classifier Dataset
-
 import csv
 import sys
 
