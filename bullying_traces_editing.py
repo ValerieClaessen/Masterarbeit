@@ -1,16 +1,17 @@
-# Using Twitter API to look up status.text from tweets from file NAACL_SRW_2016.csv
+# Cleaning and looking up Tweets from IDs of Bullying Traces (data.csv)
 
 import csv
+import sys
 
 import tweepy
 from tweepy import OAuthHandler
 
 from twython import Twython
 
-consumer_key = 'obZZa92lwvVyzgWmP2yLIyLNh'
-consumer_secret = 'sZMjbyDsEVjVyQyGfWOK7O0YX5wtn6eeb5AiTPAdTm1YIxaAhb'
-access_token = '2182630772-Hg4Y4zSoJb5S79W9SvJvA1202OMZS7m4RdS5bnT'
-access_secret = 'H36PBHlXEwJib0FNrVgAhU45fRZEvf3opvqR3Jq52WSJr'
+consumer_key = ''
+consumer_secret = ''
+access_token = ''
+access_secret = ''
 
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
@@ -30,21 +31,62 @@ def get_tweet_text_twython(tweet_id):
     tweet = twitter.show_status(id=tweet_id)
     return (tweet['text'])
 
-with open('bullying_traces_cleaned.csv', 'a') as csvfile_clean:
+with open('data.csv', encoding="utf-8", errors='ignore') as f:    #save with ; as delimiter
+    reader = csv.reader(f, delimiter = ',')
 
-    writer = csv.writer(csvfile_clean, delimiter=';')
-    writer.writerow(['ID', 'Tweet'])                 # header
+    with open('bullying_traces_cleaned.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile, delimiter=';')
 
-    with open('data.csv') as csvfile:
-        csv_reader: object = csv.reader(csvfile, delimiter=',')
-        for row in csv_reader:
+        for row in reader:
+            try:
+                writer.writerow(row)
+            except csv.Error as e:
+                sys.exit('file %s, line %d: %s' % ("twitter-hate-speech-classifier_cleaned.csv", reader.line_num, e))
+
+with open('bullying_traces_cleaned.csv', 'r') as f2:
+    reader2 = csv.reader(f2, delimiter = ";")
+
+    with open('bullying_traces_cleaned2.csv', 'w') as csvfile2:
+        writer2 = csv.writer(csvfile2, delimiter=';')
+        writer2.writerow(["User ID", "Tweet ID", "Text", "Cyberbullying", "Type", "Form", "Teasing"])
+
+        for row in reader2:
             print(row)
             try:
+                if row[2] == "y":
+                    row[2] = 1
+                else:
+                    row[2] = 0
+
+                if row[5] == "y":
+                    row[5] = 2
+                elif row[5] == "n":
+                    row[5] = 1
+                else:
+                    row[5] = 0
                 id_of_tweet = (row[0])
                 tweet = get_tweet_text(id_of_tweet)
-                print(tweet)
 
-                writer = csv.writer(csvfile_clean, delimiter=';')
-                writer.writerow([id_of_tweet, tweet])
+                print([row[1], id_of_tweet, tweet, row[2], row[3], row[4], row[5]])
+                writer2.writerow([row[1], id_of_tweet, tweet, row[2], row[3], row[4], row[5]])
             except tweepy.TweepError as e:
                 print(e)
+
+#with open('bullying_traces_cleaned2.csv', 'a') as csvfile_clean:
+#
+ #   writer = csv.writer(csvfile_clean, delimiter=';')
+  #  writer.writerow(['ID', 'Tweet'])                 # header
+#
+ #   with open('data.csv') as csvfile:
+  #      csv_reader: object = csv.reader(csvfile, delimiter=',')
+   #     for row in csv_reader:
+    #        print(row)
+     #       try:
+      #          id_of_tweet = (row[0])
+       #         tweet = get_tweet_text(id_of_tweet)
+        #        print(tweet)
+#
+ #               writer = csv.writer(csvfile_clean, delimiter=';')
+  #              writer.writerow([id_of_tweet, tweet])
+   #         except tweepy.TweepError as e:
+    #            print(e)
