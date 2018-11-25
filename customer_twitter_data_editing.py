@@ -12,6 +12,8 @@ with open('./Datasets/customer_twitter.csv', 'r') as f2:
 
     with open('./Datasets/customer_twitter_cleaned.csv', 'w') as csvfile2:
         writer1 = csv.writer(csvfile2, delimiter=';')
+        next(reader, None)  #hierdurch wird die erste Zeile des originaldokuments übersprungen (beim einlesen)
+        writer1.writerow(['Conversation ID','Tweet ID', 'Author ID', 'Created at', 'Text', 'Response Tweet', 'In Response to Tweet'])
 
         for row in reader:
             writer1.writerow(row)
