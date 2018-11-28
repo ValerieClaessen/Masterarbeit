@@ -7,22 +7,59 @@ def append_data():
         reader = csv.reader(f, delimiter = ";")
         next(reader, None)    #skip header
 
-        with open('twitter_bullying_archive2.csv', 'a') as f2:          #merge files
-            writer = csv.writer(f2, delimiter=';')
+        with open('twitter_bullying_archive2.csv', 'r') as f3:
+            reader2 = csv.reader(f3, delimiter=";")
+            next(reader2, None)  # skip header
 
-            count = 13043
-            for row in reader:
-                row[0] = count
-                writer.writerow(row)
-                count += 1
+            with open('twitter_bullying_archive3.csv', 'r') as f4:
+                reader3 = csv.reader(f4, delimiter=";")
+                next(reader, None)  # skip header
+
+                with open('twitter_bullying_archive4.csv', 'r') as f5:
+                    reader4 = csv.reader(f5, delimiter=";")
+                    next(reader, None)  # skip header
+
+                    with open('twitter_bullying_archive5.csv', 'r') as f6:
+                        reader5 = csv.reader(f6, delimiter=";")
+                        next(reader, None)  # skip header
+
+                        with open('twitter_bullying.csv', 'a') as f2:          #merge files
+                            writer = csv.writer(f2, delimiter=';')
+                            writer.writerow(['Tweet', 'Created at', 'User', 'ID', 'Reply to', 'Retweet', 'Text', 'Hashtags'])  # header
+
+                            count = 1
+                            for row in reader:
+                                row[0] = count
+                                writer.writerow(row)
+                                count += 1
+
+                            for row in reader2:
+                                row[0] = count
+                                writer.writerow(row)
+                                count += 1
+
+                            for row in reader3:
+                                row[0] = count
+                                writer.writerow(row)
+                                count += 1
+
+                            for row in reader4:
+                                row[0] = count
+                                writer.writerow(row)
+                                count += 1
+
+                            for row in reader5:
+                                row[0] = count
+                                writer.writerow(row)
+                                count += 1
 
 #delete same tweets
 def delete_same_tweets():
-    with open('twitter_bullying_archive2.csv', 'r') as f:
+    with open('twitter_bullying.csv', 'r') as f:
         reader = csv.reader(f, delimiter=";")
         next(reader, None)  # skip header
 
-        with open('twitter_bullying_archive2_cleaned.csv', 'w') as f2:
+        with open('twitter_bullying_cleaned.csv', 'w') as f2:
             writer = csv.writer(f2, delimiter=';')
             lines = []
             count = 1
@@ -43,11 +80,11 @@ def delete_same_tweets():
                     print("same")
 
 def get_hashtags():
-    with open('twitter_bullying_archive2_cleaned.csv', 'r') as f:
+    with open('twitter_bullying_cleaned.csv', 'r') as f:
         reader = csv.reader(f, delimiter=";")
         next(reader, None)  # skip header
 
-        with open('twitter_bullying_archive2_cleaned2.csv', 'w') as f2:
+        with open('twitter_bullying_cleaned2.csv', 'w') as f2:
             writer = csv.writer(f2, delimiter=';')
             writer.writerow(['Tweet', 'Created at', 'User', 'ID', 'Reply to', 'Retweet', 'Text', 'Hashtags'])  # header
 
@@ -66,6 +103,8 @@ def get_hashtags():
                 print(hashtag)
 
                 writer.writerow(row)
+
+#TODO: Daten nach Datum ordnen
 
 append_data()
 delete_same_tweets()
