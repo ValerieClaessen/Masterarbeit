@@ -2,7 +2,7 @@
 import csv
 import sys
 
-with open('twitter-hate-speech-classifier.csv', encoding="utf-8", errors='ignore') as f:
+with open('twitter-hate-speech-classifier.csv', encoding="utf-8", errors='ignore') as f:        #save with ; as delimiter
     reader = csv.reader(f, delimiter = ',')
 
     with open('twitter-hate-speech-classifier_cleaned.csv', 'w') as csvfile:

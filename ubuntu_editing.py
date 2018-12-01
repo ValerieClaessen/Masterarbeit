@@ -15,11 +15,8 @@ def save_with_semicolon(file, filename):
                     sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
 
 save_with_semicolon("dialogueText.csv", "dialogueText_cleaned.csv")
-print("ok")
 save_with_semicolon("dialogueText_196.csv", "dialogueText_196_cleaned.csv")
-print("ok2")
 save_with_semicolon("dialogueText_301.csv", "dialogueText_301_cleaned.csv")
-print("ok3")
 
 def write_to_new_file(file, filename):
     with open(file, 'r') as f2:
@@ -34,9 +31,6 @@ def write_to_new_file(file, filename):
                 writer2.writerow([row[1], row[2], row[3], row[4], row[5]])
 
 write_to_new_file("dialogueText_cleaned.csv", "dialogueText_cleaned2.csv")
-print("ok4")
 write_to_new_file("dialogueText_196_cleaned.csv", "dialogueText_196_cleaned2.csv")
-print("ok5")
 write_to_new_file("dialogueText_301_cleaned.csv", "dialogueText_301_cleaned2.csv")
-print("ok6")
 

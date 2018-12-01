@@ -71,22 +71,3 @@ with open('bullying_traces_cleaned.csv', 'r') as f2:
                 writer2.writerow([row[1], id_of_tweet, tweet, row[2], row[3], row[4], row[5]])
             except tweepy.TweepError as e:
                 print(e)
-
-#with open('bullying_traces_cleaned2.csv', 'a') as csvfile_clean:
-#
- #   writer = csv.writer(csvfile_clean, delimiter=';')
-  #  writer.writerow(['ID', 'Tweet'])                 # header
-#
- #   with open('data.csv') as csvfile:
-  #      csv_reader: object = csv.reader(csvfile, delimiter=',')
-   #     for row in csv_reader:
-    #        print(row)
-     #       try:
-      #          id_of_tweet = (row[0])
-       #         tweet = get_tweet_text(id_of_tweet)
-        #        print(tweet)
-#
- #               writer = csv.writer(csvfile_clean, delimiter=';')
-  #              writer.writerow([id_of_tweet, tweet])
-   #         except tweepy.TweepError as e:
-    #            print(e)

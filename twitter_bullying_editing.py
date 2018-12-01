@@ -23,35 +23,53 @@ def append_data():
                         reader5 = csv.reader(f6, delimiter=";")
                         next(reader, None)  # skip header
 
-                        with open('twitter_bullying.csv', 'a') as f2:          #merge files
-                            writer = csv.writer(f2, delimiter=';')
-                            writer.writerow(['Tweet', 'Created at', 'User', 'ID', 'Reply to', 'Retweet', 'Text', 'Hashtags'])  # header
+                        with open('twitter_bullying_archive6.csv', 'r') as f7:
+                            reader6 = csv.reader(f7, delimiter=";")
+                            next(reader, None)  # skip header
 
-                            count = 1
-                            for row in reader:
-                                row[0] = count
-                                writer.writerow(row)
-                                count += 1
+                            with open('twitter_bullying_archive7.csv', 'r') as f8:
+                                reader7 = csv.reader(f8, delimiter=";")
+                                next(reader, None)  # skip header
 
-                            for row in reader2:
-                                row[0] = count
-                                writer.writerow(row)
-                                count += 1
+                                with open('twitter_bullying.csv', 'a') as f2:          #merge files
+                                    writer = csv.writer(f2, delimiter=';')
+                                    writer.writerow(['Tweet', 'Created at', 'User', 'ID', 'Reply to', 'Retweet', 'Text', 'Hashtags'])  # header
 
-                            for row in reader3:
-                                row[0] = count
-                                writer.writerow(row)
-                                count += 1
+                                    count = 1
+                                    for row in reader:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
 
-                            for row in reader4:
-                                row[0] = count
-                                writer.writerow(row)
-                                count += 1
+                                    for row in reader2:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
 
-                            for row in reader5:
-                                row[0] = count
-                                writer.writerow(row)
-                                count += 1
+                                    for row in reader3:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
+
+                                    for row in reader4:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
+
+                                    for row in reader5:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
+
+                                    for row in reader6:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
+
+                                    for row in reader7:
+                                        row[0] = count
+                                        writer.writerow(row)
+                                        count += 1
 
 #delete same tweets
 def delete_same_tweets():
