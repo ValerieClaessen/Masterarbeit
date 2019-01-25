@@ -32,7 +32,7 @@ def processing(file1, file2):
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]])
 
-processing("twitter_bullying_test.csv", "twitter_bullying_test_processed.csv")
+#processing("twitter_bullying_test.csv", "twitter_bullying_test_processed.csv")
 
 def remove_duplicate_smileys(file):
     smileys = open(file, "r")
@@ -48,7 +48,7 @@ def remove_duplicate_smileys(file):
             file2.write(line)
         smiley_list.append(line)
 
-remove_duplicate_smileys("smileys.txt")
+#remove_duplicate_smileys("smileys.txt")
 
 def processing_smileys(file1, file2, file3):
     with codecs.open(file1, 'r', encoding="ascii", errors='ignore') as csvfile:
@@ -58,16 +58,27 @@ def processing_smileys(file1, file2, file3):
         smileys = open(file2, 'r')
         for smiley in smileys:
             smiley_list.append(smiley.strip())
+        smiley_list.sort(key=len, reverse=True)                                     # sort smileys (longest first)
 
-        for row in reader:
+        found_smiley_list = []
+        for el in smiley_list:
+            found_smiley_list.append("<" + el + ">")
+
+        for row in reader:                                                          # check if smiley would be part of an already marked smiley
             for el in smiley_list:
-                row[5] = row[5].replace(el, "+" + el + "+")                         # mark smileys with "+smiley+"
+                found_smiley = False
+                for em in found_smiley_list:
+                    if em in row[5]:
+                        found_smiley = True
+
+                if found_smiley == False:
+                    row[5] = row[5].replace(el, "<" + el + ">")                         # mark smileys with "<smiley>"
 
             with open(file3, 'a') as csvfile:  # saving processed tweets to new file
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]])
 
-processing_smileys("twitter_bullying_test_processed.csv", "smileys2.txt", "twitter_bullying_test_processed2.csv")
+#processing_smileys("twitter_bullying_test_processed.csv", "smileys2.txt", "twitter_bullying_test_processed2.csv")
 
 def processing_abbreviations(file1, file2, file3):
     with open(file2) as f:
@@ -85,5 +96,77 @@ def processing_abbreviations(file1, file2, file3):
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]])
 
-processing_abbreviations("twitter_bullying_test_processed2.csv", "abbreviations.csv", "twitter_bullying_test_processed3.csv")
+#processing_abbreviations("twitter_bullying_test_processed2.csv", "abbreviations.csv", "twitter_bullying_test_processed3.csv")
 
+# method to remove duplicates in a string
+def unique_list(l):
+    ulist = []
+    [ulist.append(x) for x in l if x not in ulist]
+    return ulist
+
+# Making the final version of the annotated tweets
+# Only those tweets contain cyberbullying, which were marked "1" by both annotators
+# If different strengths were selected, choose the weaker one
+# All topics selected by the annotators will be topics in the final file
+def create_final_twitter_bullying(file1, file2, file3):
+    cyberbullying1 = []
+    strength1 = []
+    topic1 = []
+    cyberbullying2 = []
+    strength2 = []
+    topic2 = []
+    cyberbullying3 = []
+    strength3 = []
+    topic3 = []
+
+    with codecs.open(file1, 'r', encoding="ascii", errors='ignore') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+
+        for row in reader:
+            cyberbullying1.append(row[7])
+            strength1.append(row[8])
+            topic1.append(row[9])
+
+    with codecs.open(file2, 'r', encoding="ascii", errors='ignore') as csvfile:
+        reader2 = csv.reader(csvfile, delimiter=';')
+
+        for row in reader2:
+            cyberbullying2.append(row[7])
+            strength2.append(row[8])
+            topic2.append(row[9])
+
+        with open(file3, 'a') as csvfile:
+            writer = csv.writer(csvfile, delimiter=';')
+
+            x = 0
+            for el in cyberbullying1:
+                if el == 1 and cyberbullying2[x] == 1:
+                    print("1")
+                    cyberbullying3.append(1)
+                else:
+                    cyberbullying3.append(0)
+                x += 1
+
+            x = 0
+            for el in strength1:
+                if el <= strength2[x]:
+                    strength3.append(el)
+                else:
+                    strength3.append(strength2[x])
+                x += 1
+
+            x = 0
+            for el in topic3:
+                top1 = el
+                top1 = top1.replace(",", "")
+                top2 = topic2[x]
+                top2 = top2.replace(",", "")
+                topic3.append(top1 + " " + top2)
+                x += 1
+
+            #delete identical topics
+            while x <= 4999:
+                top = topic3[x]
+                topic3[x] = ' '.join(unique_list(top.split()))
+
+#create_final_twitter_bullying("twitter_bullying_sabrina.csv", "twitter_bullying_valerie.csv", "twitter_bullying_final")
