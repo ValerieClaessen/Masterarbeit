@@ -4,9 +4,6 @@ c1 = open("./Datasets/customer_twitter_cleaned.csv", "w")
 c1.truncate()
 c1.close()
 
-
-
-
 with open('./Datasets/customer_twitter.csv', 'r') as f2:
     reader = csv.reader(f2, delimiter = ",")
 

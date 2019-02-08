@@ -1,6 +1,5 @@
 import csv
 
-
 c1 = open("./Datasets/labeled_data_cleaned.csv", "w")
 c1.truncate()
 c1.close()
