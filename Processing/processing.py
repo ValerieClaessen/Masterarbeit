@@ -1,7 +1,7 @@
 import csv
 import re
 import codecs
-from spellchecker_autocorrect import correctSentence
+import spellchecker_autocorrect
 
 # method to remove duplicates in a string
 def unique_list(l):
@@ -638,26 +638,26 @@ def autocorrect(file1, file2):
 
             # correct the utterance
             # twitter_bullying
-            #row[5] = correctSentence(row[5])
+            #row[5] = spellchecker_autocorrect.correctSentence(row[5])
 
             # bullying_traces
-            #row[2] = correctSentence(row[2])
+            #row[2] = spellchecker_autocorrect.correctSentence(row[2])
 
             # customer_twitter
             # dialogText_196
             # dialogueText_301
             # dialogueText
             # supreme_conversation
-            #row[4] = correctSentence(row[4])
+            #row[4] = spellchecker_autocorrect.correctSentence(row[4])
 
             # labeled_data
-            #row[6] = correctSentence(row[6])
+            row[6] = spellchecker_autocorrect.correctSentence(row[6])
 
             # twitter_hate_speech_classifier
-            #row[1] = correctSentence(row[1])
+            #row[1] = spellchecker_autocorrect.correctSentence(row[1])
 
             # movie_lines
-            #row[3] = correctSentence(row[3])
+            #row[3] = spellchecker_autocorrect.correctSentence(row[3])
 
             # saving the autocorrected utterance in a new file together with all the other columns
             with open(file2, 'a') as csvfile:  # saving processed tweets to new file

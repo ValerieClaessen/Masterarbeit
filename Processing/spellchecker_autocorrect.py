@@ -3,7 +3,6 @@ import string
 
 from spellchecker import SpellChecker
 
-
 def correctSentence(sentence_to_correct):
 
     words = nltk.word_tokenize(sentence_to_correct)
@@ -18,7 +17,7 @@ def correctSentence(sentence_to_correct):
 
     sentence = ""
     for part in corrected_sentence: #gehe durch die Liste
-        if part not in string.punctuation:  #alle Wörter die kein Satzzeichen sind bekommen ein Leerzeichen vorangestellt
+        if part not in string.punctuation:  #alle Wörter, die kein Satzzeichen sind, bekommen ein Leerzeichen vorangestellt
             sentence = sentence + " " + part
         else:
             sentence = sentence + part
