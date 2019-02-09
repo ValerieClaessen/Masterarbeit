@@ -31,8 +31,15 @@ def test_results(file1, column1, file2, column2):
                 wrong_cyberbullying += 1
         x += 1
 
-    print(cyberbullying, no_cyberbullying)
-    print(right_cyberbullying, right_no_cyberbullying, wrong_cyberbullying, wrong_no_cyberbullying)
+    str_cyberbullying = str(cyberbullying)
+    str_no_cyberbullying = str(no_cyberbullying)
+    str_right_cyberbullying = str(right_cyberbullying)
+    str_right_no_cyberbullying = str(right_no_cyberbullying)
+    str_wrong_cyberbullying = str(wrong_cyberbullying)
+    str_wrong_no_cyberbullying = str(wrong_no_cyberbullying)
+
+    print("Cyberbullying:" + " ", str_cyberbullying, " " + "No Cyberbullying:" + " " + str_no_cyberbullying)
+    print("True Positive: ", str_right_cyberbullying, " " + "True Negative: ", str_right_no_cyberbullying, " " + "False Positive: ", str_wrong_cyberbullying, " " + "False Negative: ", str_wrong_no_cyberbullying)
 
 # function to estimate precision, recall and accuracy of the algorithm
 def estimate():
