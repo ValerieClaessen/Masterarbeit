@@ -1,11 +1,10 @@
 import nltk
 import csv
-import pickle
+import logging
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 #nltk.download()
-
-
+from POS_method.build_single_vector import build_vector
 
 c1 = open("POS_method/POS_Testdaten_vec.csv", "w")
 c1.truncate()
@@ -16,7 +15,7 @@ c2.truncate()
 c2.close()
 
 swearword_tag = "sw"
-text = "I hate my fucking ugly friend who is called Lisa Marie Schuster!!!!"
+text = "I hate my fucking ugly friend who is called LISA Marie Schuster!!!!"
 upper_test = "HAfTgggE"
 
 #
@@ -191,11 +190,12 @@ with open('POS_method/POS_Testdaten.csv', 'r') as f2:
         #    w.write(POS_specials_all(test_tags2))
 
 
-        #print(str1)
+        logging.info('Starting POS-Tagging')
         with open('POS_method/POS_Testdaten_test.csv', 'a') as f3:
             writer = csv.writer(f3, delimiter=';')
             str1 = ','.join(POS_specials_all(test_tags2))
-            writer.writerow([row[0], str1])
+            writer.writerow([row[0], str1, row[2]])
+        logging.info('POS-Tagging: END')
 
 with open('POS_method/POS_Testdaten_test.csv', 'r') as f:
     reader = csv.reader(f, delimiter=";")
@@ -267,12 +267,12 @@ with open('POS_method/POS_Testdaten_test.csv', 'r') as f:
                        n_counter))
 
         #print(vector)
-
+        logging.info('Starting Vector')
         with open('POS_method/POS_Testdaten_vec.csv', 'a') as f3:
             writer = csv.writer(f3, delimiter=';')
             str1 = ','.join(str(v) for v in vector)
-            writer.writerow([row[0], row[1], str1])
-
+            writer.writerow([row[0], row[1], str1, row[2]])
+        logging.info('Vector: END')
 
 
 
@@ -284,3 +284,30 @@ with open('POS_method/POS_Testdaten_test.csv', 'r') as f:
 #nltk.help.upenn_tagset('NNP')
 #print(tokens)
 #print(prepare_POS_text(text))
+
+
+
+
+#processes one single tweet and returns POS-vector
+def process_single_tweet(tweet):
+
+    # 1. clean tweet
+    clean_tweet = prepare_POS_text(tweet)
+
+    #2. pos_tag tweet
+
+    test_postags = nltk.pos_tag(clean_tweet)
+
+    #3. tag special words
+    special_tags = ','.join((POS_specials_all(test_postags)))
+    tags_split = special_tags.split(",")
+
+    #4. build vector
+    vector = build_vector(tags_split)
+
+
+    with open('POS_method/POS_Testdaten_compare.csv', 'a') as c:
+        writer2 = csv.writer(c, delimiter=';')
+        writer2.writerow([tweet, tags_split, vector])
+
+process_single_tweet(text)
