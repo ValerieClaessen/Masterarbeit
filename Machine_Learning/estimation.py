@@ -1,10 +1,10 @@
 import machine_learning_processing
 
 # function to quickly test the results of the algorithms
-def test_results(file1, file2):
+def test_results(file1, column1, file2, column2):
     # make lists of assigned cyberbullying values (0 / 1)
-    cyberbullying1 = machine_learning_processing.make_list_of_column(file1, 7)
-    cyberbullying2 = machine_learning_processing.make_list_of_column(file2, 1)
+    cyberbullying1 = machine_learning_processing.make_list_of_column(file1, column1)
+    cyberbullying2 = machine_learning_processing.make_list_of_column(file2, column2)
 
     right_cyberbullying = 0                     # utterance contains cyberbullying and was assigned cyberbullying
     right_no_cyberbullying = 0                  # utterance doesn't contain cyberbullying and was assigned no_cyberbullying
@@ -33,8 +33,6 @@ def test_results(file1, file2):
 
     print(cyberbullying, no_cyberbullying)
     print(right_cyberbullying, right_no_cyberbullying, wrong_cyberbullying, wrong_no_cyberbullying)
-
-#test_results("twitter_bullying_test.csv", "twitter_bullying_naive_bayes_test.csv")
 
 # function to estimate precision, recall and accuracy of the algorithm
 def estimate():

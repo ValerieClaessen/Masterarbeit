@@ -19,7 +19,7 @@ def process_data(file):
     """
 
     data_list = []
-    punctuation = ['.', ',', ';', '!', '?', '(', ')', '[', ']',             # list of english punctuation marks (used in tweets)
+    punctuation = ['.', ',', ';', '!', '?', '(', ')', '[', ']',             # list of english punctuation marks (used in utterances)
                    '&', ':', '-', '/', '\\', '$', '*', '"', "'", '+',
                    '=', '@', '%', '~', '{', '}', '|', '<', '>', '`', '']
     stopwords = nltk.corpus.stopwords.words("english")                      # list of english stopwords
@@ -31,14 +31,14 @@ def process_data(file):
             data_list.append(row[5])
 
     for index, element in enumerate(data_list):
-        element = element.lower()                                           # tweet to lowercase
+        element = element.lower()                                           # utterance to lowercase
         for mark in punctuation:
             element = element.replace(mark, '')                             # delete punctuation marks
         element = ''.join([i for i in element if not i.isdigit()])          # delete numbers
-        element = word_tokenize(element)                                    # tokenize tweet
+        element = word_tokenize(element)                                    # tokenize utterance
         element = [w for w in element if w not in stopwords]                # delete stopwords (depending on results we may not remvove stopwords)
 
-        for i, word in enumerate(element):                                  # stem words in tweet
+        for i, word in enumerate(element):                                  # stem words in utterance
             word = nltk.SnowballStemmer("english").stem(word)
             element[i] = str(word)
 
@@ -46,9 +46,44 @@ def process_data(file):
 
     return data_list
 
-
-test_list = process_data("twitter_bullying_test.csv")
+#test_list = process_data("twitter_bullying_training.csv")
 #print(test_list)
+
+# function to process an utterance of the test set
+def process_utterance(utterance):
+    """
+    Before we can label our utterance from the test set, we need to process it.
+    This includes:
+        - converting all words to lowercase
+        - deleting punctuation marks
+        - deleting numbers
+        - tokenize tweets to get a list of words
+        - deleting stopwords or not deleting stopwords depending on the results
+        - stem all words
+
+    This function will the processed utterance.
+    """
+
+    punctuation = ['.', ',', ';', '!', '?', '(', ')', '[', ']',             # list of english punctuation marks (used in utterances)
+                   '&', ':', '-', '/', '\\', '$', '*', '"', "'", '+',
+                   '=', '@', '%', '~', '{', '}', '|', '<', '>', '`', '']
+    stopwords = nltk.corpus.stopwords.words("english")                      # list of english stopwords
+
+    utterance = utterance.lower()                                           # utterance to lowercase
+    for mark in punctuation:
+        utterance = utterance.replace(mark, '')                             # delete punctuation marks
+    utterance = ''.join([i for i in utterance if not i.isdigit()])          # delete numbers
+    utterance = word_tokenize(utterance)                                    # tokenize utterance
+    utterance = [w for w in utterance if w not in stopwords]                # delete stopwords (depending on results we may not remvove stopwords)
+
+    for i, word in enumerate(utterance):                                    # stem words in utterance
+        word = nltk.SnowballStemmer("english").stem(word)
+        utterance[i] = str(word)
+
+    return utterance
+
+#test_utterance = process_utterance("Yup. I can't stand this shit. The left screams and yells Black Lives Matter and the minute a black man or woman disappear")
+#print(test_utterance)
 
 # function to make a lexicon containing all vocabulary of our dataset
 def make_lexicon(data_list):
@@ -65,7 +100,7 @@ def make_lexicon(data_list):
 
     return lex
 
-test_lex = make_lexicon(test_list)
+#test_lex = make_lexicon(test_list)
 #print(test_lex)
 
 # function to save lexicon in a txt file
@@ -142,4 +177,4 @@ def make_lexicon_with_occurence(file, column, lex, utterances):
             file.write(line)
         file.close()
 
-#make_lexicon_with_occurence("twitter_bullying_test.csv", 7, test_lex, test_list)
+#make_lexicon_with_occurence("twitter_bullying_training.csv", 7, test_lex, test_list)
