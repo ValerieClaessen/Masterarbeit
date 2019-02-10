@@ -14,16 +14,23 @@ c2 = open("POS_method/POS_Testdaten_test.csv", "w")
 c2.truncate()
 c2.close()
 
+c3 = open("POS_method/POS_Testdaten_compare.csv", "w")
+c3.truncate()
+c3.close()
+
 swearword_tag = "sw"
 text = "I hate my fucking ugly friend who is called LISA Marie Schuster!!!!"
 upper_test = "HAfTgggE"
 
-#
+##### Methode bereitet Zeilen auf POS-Tagging vor #####
+# - bei Bedarf Stopworte entfernen
+# - bei Bedarf nicht-alphanumerische Zeichen entfernen (wird aktuell nicht gemacht damit Satzzeichen beachtet werden können)
+# return: Zeile mit veränderter Zeile
 def prepare_POS_text(row):
     tokens = word_tokenize(row)
     stop_words = set(stopwords.words('english'))
     #words = [word for word in tokens if word.isalpha()] #auf alphanumerische Zeichen prüfen
-    words = [w for w in tokens if not w in stop_words]   #Stopworte entfernen #TODO: Das ganze am ende auch mit Stopworten ausprobieren!
+    words = [w for w in tokens if not w in stop_words]   #Stopworte entfernen
     return words
 
 
@@ -32,7 +39,8 @@ tokens = nltk.word_tokenize(text)   #tokenizing
 
 test_tags= nltk.pos_tag(prepare_POS_text(text)) #POS-tagging
 
-
+##### Methode untersucht wie viele Buchstaben in einem Wort großgeschrieben sind #####
+# return: Anzhal an großgeschriebenen Buchstaben in einem Wort
 def check_upper_word(word):
     char_count = 0
     for char in word:
@@ -43,11 +51,21 @@ def check_upper_word(word):
 
 
 
+##### Methode fügt die gewünschten POS-Tag veränderungen ein #####
+# - POS-Tags zu Gruppen zusammenfügen
+# - Fragezeichen und Ausrufezeichen markieren
+# - Capslock erkennen und markieren, danach werden die worte in lower case umgewandelt und normal weiter getagged   [CL]
+# - Abgleich der getaggten Wörter mit Wörterbüchern:
+#       1. Schimpfworte [sw]
+#       2. Namen (Vornamen > Nachnamen > Zweite Vornamen)   [name]
+#       3. negative Worte   [n]
+#       --> Reichenfolge ist dabei zu beachten da diese Tags nicht doppelt vergeben werden können
+# TODO: Smileyerkennung
+
 
 def POS_specials_all(pos_tags):
-    pos_tags_man = []
-    pos_tags_new = []
-    upper_check = []
+    pos_tags_man = []   #Liste mit fertiger Taggung die zurückgegeben wird (jeweils eine Zeile)
+
     for tag in pos_tags:
         if tag[1] == "NNP" or tag[1] == "NNS" or tag[1] == "NN" or tag[1] == "NNPS":    #Nomen
             new_pos = list(tag)
@@ -82,9 +100,9 @@ def POS_specials_all(pos_tags):
             new_pos[1] = tag[1]
 
 
-    #for tag in pos_tags:
+
         if check_upper_word(tag[0]) >= 2:   #Capslock (bei mind. 2 großgeschriebenen Zeichen)
-            #new_pos = list(tag)
+
             to_lower = ''.join(tag[0])
             low = nltk.tag.pos_tag([to_lower.lower()])
             for item in low:
@@ -117,11 +135,9 @@ def POS_specials_all(pos_tags):
 
 
         else:
-            #new_pos = list(tag)
             new_pos[1] = new_pos[1]
 
 
-    #for tag in pos_tags:
         written = False
         f = open('POS_method/list.txt', 'r')
         for line in f:
@@ -169,34 +185,35 @@ def POS_specials_all(pos_tags):
         #    #new_pos = list(tag)
         #    new_pos[1] = new_pos[1]
 
-        new_tag = tuple(new_pos)
+        new_tag = tuple(new_pos)    #Umwandlung zurück in Tupel
         pos_tags_man.append(new_tag[1])
 
 
     return pos_tags_man
 
-
+##### Lesen der Ausgangssätze #####
 with open('POS_method/POS_Testdaten.csv', 'r') as f2:
     reader = csv.reader(f2, delimiter = ";")
     for row in reader:
-        #print(row[0])
         text2 = ""
-        cleaned = prepare_POS_text(row[0])
-        #text2 = nltk.word_tokenize(row[0])
+        cleaned = prepare_POS_text(row[0])  #Anwendung der Textbereinigung
         test_tags2 = []
-        test_tags2 = nltk.pos_tag(cleaned)
+        test_tags2 = nltk.pos_tag(cleaned)  #POS-tagging
 
         #with open('POS_tagged_data.csv', 'w') as w:
         #    w.write(POS_specials_all(test_tags2))
 
 
         logging.info('Starting POS-Tagging')
+
+        ##### Schreiben der Ausgangssätze und POS-tags #####
         with open('POS_method/POS_Testdaten_test.csv', 'a') as f3:
             writer = csv.writer(f3, delimiter=';')
-            str1 = ','.join(POS_specials_all(test_tags2))
-            writer.writerow([row[0], str1, row[2]])
+            str1 = ','.join(POS_specials_all(test_tags2))   #Anwenden des speziellen Taggens
+            writer.writerow([row[0], str1, row[2]])         #Ausgangstext , POS-Tags, Cyberbullying (1/0)
         logging.info('POS-Tagging: END')
 
+##### Erstellen der Vektoren der einzelnen Sätze #####
 with open('POS_method/POS_Testdaten_test.csv', 'r') as f:
     reader = csv.reader(f, delimiter=";")
     for row in reader:
@@ -268,27 +285,17 @@ with open('POS_method/POS_Testdaten_test.csv', 'r') as f:
 
         #print(vector)
         logging.info('Starting Vector')
+
+        ##### Aufschreiben der Vektoren in neue .csv #####
         with open('POS_method/POS_Testdaten_vec.csv', 'a') as f3:
             writer = csv.writer(f3, delimiter=';')
             str1 = ','.join(str(v) for v in vector)
-            writer.writerow([row[0], row[1], str1, row[2]])
+            writer.writerow([row[0], row[1], str1, row[2]])     #Ausgangstext, POS-Tags, Vektoren, Cyberbullying (1/0)
         logging.info('Vector: END')
 
 
-
-
-
-#print(POS_specials_all(test_tags))
-
-
-#nltk.help.upenn_tagset('NNP')
-#print(tokens)
-#print(prepare_POS_text(text))
-
-
-
-
-#processes one single tweet and returns POS-vector
+##### Methode kann einen einzelnen Satz zu Testzwecken komplett bearbeiten und schreibt das Ergebnis in eine neue Date
+# Input: Siehe Variable ganz oben
 def process_single_tweet(tweet):
 
     # 1. clean tweet
@@ -309,5 +316,6 @@ def process_single_tweet(tweet):
     with open('POS_method/POS_Testdaten_compare.csv', 'a') as c:
         writer2 = csv.writer(c, delimiter=';')
         writer2.writerow([tweet, tags_split, vector])
+
 
 process_single_tweet(text)
