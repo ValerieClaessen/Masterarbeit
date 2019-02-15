@@ -46,8 +46,9 @@ def process_data(file):
 
     return data_list
 
-#test_list = process_data("twitter_bullying_training.csv")
+#train_list = process_data("twitter_bullying_training.csv")
 #print(test_list)
+#train_list = process_data("train_set.csv")
 
 # function to process an utterance of the test set
 def process_utterance(utterance):
@@ -102,6 +103,7 @@ def make_lexicon(data_list):
 
 #test_lex = make_lexicon(test_list)
 #print(test_lex)
+#lex = make_lexicon(train_list)
 
 # function to save lexicon in a txt file
 def lex_into_txt(lex):
@@ -110,6 +112,7 @@ def lex_into_txt(lex):
             f.write("%s\n" % word)
 
 #lex_into_txt(test_lex)
+#lex_into_txt(lex)
 
 # function to make a list of all values from a column from a dataset
 def make_list_of_column(file, column):
@@ -178,3 +181,4 @@ def make_lexicon_with_occurence(file, column, lex, utterances):
         file.close()
 
 #make_lexicon_with_occurence("twitter_bullying_training.csv", 7, test_lex, test_list)
+#make_lexicon_with_occurence("/machinelearning/train_set.csv", 7, lex, train_list)

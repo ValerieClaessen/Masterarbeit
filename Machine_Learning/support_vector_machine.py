@@ -1,25 +1,11 @@
 import csv
 import machine_learning_processing
 import estimation
+import senti_strength
 import math
 import numpy as np
 
-# function to use the support vector machine algorithm on an utterance of the test set
-# returns the class for the utterances assigned by the algorithm
-def do_svm(data_list, lex, test_utterance, file, column):
-    """
-    We use the Support Vector Machine (with k-nearest neighbour) algorithm to determine the class of each tweet.
-    We work with our data_list containing all stemmed and processed utterances and our lexicon without occurence probabilities.
-
-    First we need to estimate the vectors for each utterance of the training set.
-    The values of the vector are the number of times each word of our lexicon appears in our utterance.
-    Then we compare for each utterance its vector with all other vectors to find the ones most similar.
-    To do this, we need to estimate the normalized dot product.
-
-    The class of our tweet is estimated by the (intellectually assigned) class of the k tweets with the most similar vector
-    (k=3 or k=5, whichever gets the better results).
-    """
-
+def do_matrix(data_list, lex):
     # create a list of lists (term_utterance_matrix) representing the vectors of each utterance
     term_utterance_matrix = []
     for utterance in data_list:
@@ -38,6 +24,24 @@ def do_svm(data_list, lex, test_utterance, file, column):
             vec_utterance.append(n)
         #print(vec_utterance)
         term_utterance_matrix.append(vec_utterance)             # append vector to the list of vectors
+
+    return term_utterance_matrix
+
+# function to use the support vector machine algorithm on an utterance of the test set
+# returns the class for the utterances assigned by the algorithm
+def do_svm(data_list, lex, test_utterance, file, column, matrix):
+    """
+    We use the Support Vector Machine (with k-nearest neighbour) algorithm to determine the class of each tweet.
+    We work with our data_list containing all stemmed and processed utterances and our lexicon without occurence probabilities.
+
+    First we need to estimate the vectors for each utterance of the training set.
+    The values of the vector are the number of times each word of our lexicon appears in our utterance.
+    Then we compare for each utterance its vector with all other vectors to find the ones most similar.
+    To do this, we need to estimate the normalized dot product.
+
+    The class of our tweet is estimated by the (intellectually assigned) class of the k tweets with the most similar vector
+    (k=3 or k=5, whichever gets the better results).
+    """
 
     # make vector from the utterance of the test set
     vec_test_utterance = []                                     # vector of the utterance from the test_set
@@ -61,7 +65,7 @@ def do_svm(data_list, lex, test_utterance, file, column):
     vec_len = np.linalg.norm(np_vec)                            # length of test_vector
     #print(vec_len)
 
-    for vector in term_utterance_matrix:                                    # loop through all vectors from the training set
+    for vector in matrix:                                    # loop through all vectors from the training set
         np_vec2 = np.array(vector)
         vec2_len = np.linalg.norm(np_vec2)                                  # length of vector from training set
 
@@ -125,24 +129,31 @@ def do_svm(data_list, lex, test_utterance, file, column):
     cb = classes.count("1")                                     # number of most similiar utterances with the class cyberbulling
     no_cb = classes.count("0")                                  # number of most similiar utterances with the class no_cyberbulling
     cb_class = ""                                               # determine class of the test_utterance
-    if cb == max([cb, no_cb]):
+    #if cb == max([cb, no_cb]):
+    #    cb_class = 1
+    #else:
+    #    cb_class = 0
+    #print(cb_class)
+
+    if cb >= 2:
         cb_class = 1
     else:
         cb_class = 0
-    #print(cb_class)
 
     return cb_class
 
 # function to label a test set using the Support Vector Machine algorithm and to save results in a new file
-def do_test_set_svm(utterances_test, utterances_training, filename, lex, file, column):
+def do_test_set_svm(utterances_test, utterances_training, filename, lex, file, column, matrix):
     # annotation using svm will be saved in a new file
     with open(filename, 'w') as f:
         writer = csv.writer(f, delimiter=';')
         writer.writerow(["Utterance", "Cyberbullying"])  # header
 
+
+
         x = 0
         for utterance in utterances_test:
-            class_cb = do_svm(utterances_training, lex, utterance, file, column)        # determine class of the utterance using do_svm()
+            class_cb = do_svm(utterances_training, lex, utterance, file, column, matrix)        # determine class of the utterance using do_svm()
 
             # write utterance and its assigned class into the file
             utterance_string = ""
@@ -151,20 +162,75 @@ def do_test_set_svm(utterances_test, utterances_training, filename, lex, file, c
             writer.writerow([utterance_string, class_cb])
             x += 1
 
-            print(x, class_cb)                                                                # count of utterances already labeled
+            if x == 500:
+                print(x)
+            #print(x, class_cb)                                                                # count of utterances already labeled
+
+
+# function to label a test set using the Support Vector Machine algorithm and to save results in a new file
+def do_test_set_svm_sent(utterances_test, utterances_training, filename, lex_pos, lex_neut, lex_neg, file, column, matrix_pos, matrix_neut, matrix_net, sentimentfile):
+    # annotation using svm will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Cyberbullying"])  # header
+
+        list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile, 1)
+
+        utterance_id = 0
+        for utterance in utterances_test:
+            # use lexicon with positive, neutral or negative vocabulary based on the sentiment of the utterance
+            if list_of_sentiments[utterance_id] == 1 or list_of_sentiments[utterance_id] == "1":
+                class_cb = do_svm(utterances_training, lex_pos, utterance, file, column, matrix_pos)  # determine class of the utterance using do_svm()
+            elif list_of_sentiments[utterance_id] == 0 or list_of_sentiments[utterance_id] == "0":
+                class_cb = do_svm(utterances_training, lex_neut, utterance, file, column, matrix_neut)
+            else:
+                class_cb = do_svm(utterances_training, lex_neg, utterance, file, column, matrix_neg)
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_cb])
+            utterance_id += 1
+
+            if utterance_id == 100:
+                print(utterance_id)
+            elif utterance_id == 200:
+                print(utterance_id)
+            elif utterance_id == 300:
+                print(utterance_id)
+            elif utterance_id == 400:
+                print(utterance_id)
+            elif utterance_id == 500:
+                print(utterance_id)
+            elif utterance_id == 600:
+                print(utterance_id)
+            elif utterance_id == 700:
+                print(utterance_id)
+            elif utterance_id == 800:
+                print(utterance_id)
+            elif utterance_id == 900:
+                print(utterance_id)
+            # print(x, class_cb)                                                                # count of utterances already labeled
 
 
 utterance = machine_learning_processing.process_utterance("Yup. I can't stand this shit. The left screams and yells Black Lives Matter and the minute a black man or woman disappear")
 utterance2 = machine_learning_processing.process_utterance("ban islam")
 utterance3 = machine_learning_processing.process_utterance("This is our president. WHO talks like that?!? Our leader does. I cant. How embarrassing. A disgrace to the office.")
 
-test_list = machine_learning_processing.process_data("twitter_bullying_test.csv")
-training_list = machine_learning_processing.process_data("twitter_bullying_training.csv")
+test_list = machine_learning_processing.process_data("test_set.csv")
+training_list = machine_learning_processing.process_data("train_set.csv")
 
-#do_svm(test_list, "lexicon.txt", utterance, "twitter_bullying_test.csv", 7)
-#do_svm(test_list, "lexicon.txt", utterance2, "twitter_bullying_test.csv", 7)
-#do_svm(test_list, "lexicon.txt", utterance3, "twitter_bullying_test.csv", 7)
+#term_utterance_matrix = do_matrix(training_list, "lexicon.txt")
+matrix_pos = do_matrix(training_list, "lexicon_pos.txt")
+matrix_neut = do_matrix(training_list, "lexicon_neut.txt")
+matrix_neg = do_matrix(training_list, "lexicon_neg.txt")
 
-#do_test_set_svm(test_list, training_list, "twitter_bullying_svm_test.csv", "lexicon.txt", "twitter_bullying_training.csv", 7)
+#do_svm(training_list, "lexicon.txt", utterance, "train_set.csv", 7, term_utterance_matrix)
+#do_svm(training_list, "lexicon.txt", utterance2, "train_set.csv", 7, term_utterance_matrix)
+#do_svm(training_list, "lexicon.txt", utterance3, "train_set.csv", 7, term_utterance_matrix)
 
-estimation.test_results("twitter_bullying_test.csv", 7, "twitter_bullying_svm_test.csv", 1)
+#do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2.csv", "lexicon.txt", "train_set.csv", 7, term_utterance_matrix)
+do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
+
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
