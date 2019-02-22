@@ -18,9 +18,8 @@ from POS_method.build_single_vector import build_vector
 # c3.truncate()
 # c3.close()
 
-swearword_tag = "sw"
-text = "I hate my fucking ugly friend who is called LISA Marie Schuster!!!!"
-upper_test = "HAfTgggE"
+
+text = "Why is Donald Trump a coward,!!!!"
 
 ##### Methode bereitet Zeilen auf POS-Tagging vor #####
 # - bei Bedarf Stopworte entfernen

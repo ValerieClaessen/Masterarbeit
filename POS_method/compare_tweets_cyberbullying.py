@@ -7,7 +7,7 @@ c1 = open("POS_Testdaten_cos_dist.csv", "w")
 c1.truncate()
 c1.close()
 
-text = "I hate Lisa marie and love you!!!"
+text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
 #TODO: Distanz nicht komplett für jeden Vergleichstweet in ein Dokument schreiben sondern direkt nur die 10 größten Werte in einer Liste zwischenspeichern
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
@@ -18,9 +18,10 @@ def cos_sim(a, b):
     norm_b = np.linalg.norm(b)
     return dot_product / (norm_a * norm_b)
 
+#####berechnen der knn#####
+#input: tweet =Tweet der verglichen werden soll, row_number = Spalte vond er die Nachbarn "eingeholt" werden
 
-
-def compare_vec_tweet(tweet):
+def compare_vec_tweet(tweet, row_number):
     dist_list = []
     vector = process_single_tweet(tweet)
 
@@ -31,14 +32,14 @@ def compare_vec_tweet(tweet):
             words = []
             int_words = []
 
-            words = row[2].split(',')   #Ausspalten der Vektoren
+            words = row[2].split(',')   #Aufspalten der Vektoren
             for word in words:
                 word = int(word)
                 int_words.append(word)  #schreiben in Liste als Integer
 
             cos = cos_sim(int_words, vector)  #Berechnung der Distanz zwischen Test-Vektor und Vektor aus .csv
             dist = {}
-            dist["CB"] = row[3]
+            dist["CB"] = row[row_number]
             dist["cos"] = cos
             #dist[row[3]] = cos
             dist_list.append(dist.copy())
@@ -56,38 +57,7 @@ def compare_vec_tweet(tweet):
     return percent
 
 
+print(compare_vec_tweet(text, 3))
 
-print(compare_vec_tweet(text))
 
 
-        ##### Schreiben der Distanz in neue .csv #####
-#         with open('POS_Testdaten_cos_dist.csv', 'a') as c:
-#             writer2 = csv.writer(c, delimiter=';')
-#             writer2.writerow([row[0], row[1], row[2], row[3], cos]) #Ausgangstext, POS-Tags, Vektoren, Cyberbullying (1/0), Distanz zu Testvector
-#
-# ##### K-Nearest-Neighbors #####
-# with open('POS_Testdaten_cos_dist.csv', 'r') as c2:
-#     reader2 = csv.reader(c2, delimiter=";")
-#     d = []
-#     for row in reader2: #Liste aus allen Distanzen
-#         d.append(float(row[4]))
-#
-# sorted_list = sorted(d, key=float, reverse=True)    #Liste in umgekehrter Reihenfolge Sortieren
-# knn = sorted_list[:10]  #nur die 10 größten Distanzen behalten
-#
-#
-# ##### Werte wieder den Ausgangssätzen zuordnen #####
-# # - Aus den Einsen und Nullen der Cyberbullying-Zuordnung entsteht nun aus den KNN ein Prozentwert für die Wahrscheinlichkeit von CB des verglichenen Tweets
-# with open('POS_Testdaten_cos_dist.csv', 'r') as c3:
-#     reader3 = csv.reader(c3, delimiter=";")
-#     percent = 0
-#
-#     for row in reader3:
-#         for value in knn:
-#             if float(row[4]) == value:
-#                 percent += int(row[3])  #Zusammenaddieren aller CB-Werte
-#                 #print(value)
-#                 #print(float(row[4]))
-#                 break
-#
-#     print(percent)
