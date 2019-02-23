@@ -202,21 +202,26 @@ def estimate_sentiment_probabilities_strengths(sentimentfile, cbfile, cbrow):
 
             utterance_id += 1
 
+    #print(count_pos, count_neut, count_neg)
+    #print(pos_s1, pos_s2, pos_s3, pos_s4, pos_s5)
+    #print(neut_s1,neut_s2,neut_s3,neut_s4,neut_s5)
+    #print(neg_s1, neg_s2, neg_s3, neg_s4, neg_s5)
+
     p_pos_s1 = pos_s1 / count_pos                           # probability of a positive utterance being in class s1
     p_pos_s2 = pos_s2 / count_pos
-    p_pos_s3 = pos_s2 / count_pos
-    p_pos_s4 = pos_s2 / count_pos
-    p_pos_s5 = pos_s2 / count_pos
+    p_pos_s3 = pos_s3 / count_pos
+    p_pos_s4 = pos_s4 / count_pos
+    p_pos_s5 = pos_s5 / count_pos
     p_neut_s1 = neut_s1 / count_neut                        # probability of a neutral utterance being in class s1
     p_neut_s2 = neut_s2 / count_neut
-    p_neut_s3 = neut_s2 / count_neut
-    p_neut_s4 = neut_s2 / count_neut
-    p_neut_s5 = neut_s2 / count_neut
+    p_neut_s3 = neut_s3 / count_neut
+    p_neut_s4 = neut_s4 / count_neut
+    p_neut_s5 = neut_s5 / count_neut
     p_neg_s1 = neg_s1 / count_neg                           # probability of a negative utterance being in class s1
     p_neg_s2 = neg_s2 / count_neg
-    p_neg_s3 = neg_s2 / count_neg
-    p_neg_s4 = neg_s2 / count_neg
-    p_neg_s5 = neg_s2 / count_neg
+    p_neg_s3 = neg_s3 / count_neg
+    p_neg_s4 = neg_s4 / count_neg
+    p_neg_s5 = neg_s5 / count_neg
 
     p_pos_s1 = round(p_pos_s1, 3)                           # round probabilities to values with 3 positions behind decimal point
     p_pos_s2 = round(p_pos_s2, 3)
@@ -238,6 +243,14 @@ def estimate_sentiment_probabilities_strengths(sentimentfile, cbfile, cbrow):
     return sentiment_list
 
 #sentiment_list = estimate_sentiment_probabilities("train_set_with_sentiment.csv", "train_set.csv", 7)
+#print(sentiment_list)
+
+# hate speech
+#sentiment_list = estimate_sentiment_probabilities("train_set_with_sentiment.csv", "train_set.csv", 9)
+#print(sentiment_list)
+
+# strength
+#sentiment_list = estimate_sentiment_probabilities_strengths("train_cb_set_with_sentiment.csv", "train_cb_set.csv", 8)
 #print(sentiment_list)
 
 def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode):
@@ -281,3 +294,8 @@ def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode):
 #make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_pos2.txt", 1, 0)
 #make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neg2.txt", -1, 0)
 #make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neut2.txt", 0, 0)
+
+# strength
+#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_pos_cb.txt", 1, 0)
+#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neg_cb.txt", -1, 0)
+#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neut_cb.txt", 0, 0)

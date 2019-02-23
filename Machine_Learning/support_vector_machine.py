@@ -294,11 +294,11 @@ def do_test_set_svm(utterances_test, utterances_training, filename, lex, file, c
             #print(x, class_cb)                                                                # count of utterances already labeled
 
 # function to label a test set using the Support Vector Machine algorithm and to save results in a new file
-def do_test_set_svm_sent(utterances_test, utterances_training, filename, lex_pos, lex_neut, lex_neg, file, column, matrix_pos, matrix_neut, matrix_net, sentimentfile):
+def do_test_set_svm_sent(utterances_test, utterances_training, filename, lex_pos, lex_neut, lex_neg, file, column, matrix_pos, matrix_neut, matrix_neg, sentimentfile, columnname):
     # annotation using svm will be saved in a new file
     with open(filename, 'w') as f:
         writer = csv.writer(f, delimiter=';')
-        writer.writerow(["Utterance", "Cyberbullying"])  # header
+        writer.writerow(["Utterance", columnname])  # header
 
         list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile, 1)
 
@@ -306,7 +306,7 @@ def do_test_set_svm_sent(utterances_test, utterances_training, filename, lex_pos
         for utterance in utterances_test:
             # use lexicon with positive, neutral or negative vocabulary based on the sentiment of the utterance
             if list_of_sentiments[utterance_id] == 1 or list_of_sentiments[utterance_id] == "1":
-                class_cb = do_svm(utterances_training, lex_pos, utterance, file, column, matrix_pos)  # determine class of the utterance using do_svm()
+                class_cb = do_svm(utterances_training, lex_pos, utterance, file, column, matrix_pos)                        # determine class of the utterance using do_svm()
             elif list_of_sentiments[utterance_id] == 0 or list_of_sentiments[utterance_id] == "0":
                 class_cb = do_svm(utterances_training, lex_neut, utterance, file, column, matrix_neut)
             else:
@@ -361,6 +361,51 @@ def do_test_set_svm_strength(utterances_test, utterances_training, filename, lex
                 print(x)
             #print(x, class_cb)                                                                # count of utterances already labeled
 
+# function to label a test set using the Support Vector Machine algorithm and to save results in a new file
+def do_test_set_svm_sent_strength(utterances_test, utterances_training, filename, lex_pos, lex_neut, lex_neg, file, column, matrix_pos, matrix_neut, matrix_neg, sentimentfile):
+    # annotation using svm will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Cyberbullying Strength"])  # header
+
+        list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile, 1)
+
+        utterance_id = 0
+        for utterance in utterances_test:
+            # use lexicon with positive, neutral or negative vocabulary based on the sentiment of the utterance
+            if list_of_sentiments[utterance_id] == 1 or list_of_sentiments[utterance_id] == "1":
+                class_strength = do_svm_strength(utterances_training, lex_pos, utterance, file, column, matrix_pos)                        # determine class of the utterance using do_svm()
+            elif list_of_sentiments[utterance_id] == 0 or list_of_sentiments[utterance_id] == "0":
+                class_strength = do_svm_strength(utterances_training, lex_neut, utterance, file, column, matrix_neut)
+            else:
+                class_strength = do_svm_strength(utterances_training, lex_neg, utterance, file, column, matrix_neg)
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_strength])
+            utterance_id += 1
+
+            if utterance_id == 100:
+                print(utterance_id)
+            elif utterance_id == 200:
+                print(utterance_id)
+            elif utterance_id == 300:
+                print(utterance_id)
+            elif utterance_id == 400:
+                print(utterance_id)
+            elif utterance_id == 500:
+                print(utterance_id)
+            elif utterance_id == 600:
+                print(utterance_id)
+            elif utterance_id == 700:
+                print(utterance_id)
+            elif utterance_id == 800:
+                print(utterance_id)
+            elif utterance_id == 900:
+                print(utterance_id)
+            # print(x, class_cb)                                                                # count of utterances already labeled
 
 utterance = machine_learning_processing.process_utterance("Yup. I can't stand this shit. The left screams and yells Black Lives Matter and the minute a black man or woman disappear")
 utterance2 = machine_learning_processing.process_utterance("ban islam")
@@ -383,34 +428,52 @@ matrix_neg2 = do_matrix(training_list, "lexicon_neg2.txt")
 #do_svm(training_list, "lexicon.txt", utterance3, "train_set.csv", 7, term_utterance_matrix)
 
 #do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2.csv", "lexicon.txt", "train_set.csv", 7, term_utterance_matrix, "Cyberbullying")
-#do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
+do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
+print("done")
 
-do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2_2.csv", "lexicon2.txt", "train_set.csv", 7, term_utterance_matrix2, "Cyberbullying")
-do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_2.csv", "lexicon_pos2.txt", "lexicon_neut2.txt", "lexicon_neg2.txt", "train_set.csv", 7, matrix_pos2, matrix_neut2, matrix_neg2, "test_set_with_sentiment.csv")
+#do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2_2.csv", "lexicon2.txt", "train_set.csv", 7, term_utterance_matrix2, "Cyberbullying")
+#do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_2.csv", "lexicon_pos2.txt", "lexicon_neut2.txt", "lexicon_neg2.txt", "train_set.csv", 7, matrix_pos2, matrix_neut2, matrix_neg2, "test_set_with_sentiment.csv")
 
 do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2_c.csv", "lexicon.txt", "train_set.csv", 7, term_utterance_matrix, "Cyberbullying")
-do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_c.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
+print("done2")
+do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_c.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv", "Cyberbullying")
+print("done3")
 
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2.csv", 1)
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2_2.csv", 1)
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent_2.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2_2.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent_2.csv", 1)
 
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2.csv", 1)
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2_c.csv", 1)
-estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent_c.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2_c.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent_c.csv", 1)
 
 # hate speech
 do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2_hs.csv", "lexicon.txt", "train_set.csv", 9, term_utterance_matrix, "Hate Speech")
-estimation.test_results("test_set.csv", 9, "twitter_bullying_svm_k2_hs.csv", 1)
+#estimation.test_results("test_set.csv", 9, "twitter_bullying_svm_k2_hs.csv", 1)
+print("done4")
+
+# hate speech with sentiment
+do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_hs.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 9, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv", "Hate Speech")
+#estimation.test_results("test_set.csv", 9, "twitter_bullying_svm_sent_hs.csv", 1)
+print("done5")
 
 # strengths
 test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
 training_s_list = machine_learning_processing.process_data("train_cb_set.csv")
 term_utterance_matrix_s = do_matrix(training_s_list, "lexicon_cb.txt")
 do_test_set_svm_strength(test_s_list, training_s_list, "twitter_bullying_svm_k2_strength.csv", "lexicon_cb.txt", "train_cb_set.csv", 8, term_utterance_matrix_s)
-estimation.test_results("test_cb_set.csv", 8, "twitter_bullying_svm_k2_strength.csv", 1)
+#estimation.test_results("test_cb_set.csv", 8, "twitter_bullying_svm_k2_strength.csv", 1)
+print("done6")
+
+# strengths with sentiment
+matrix_pos_s = do_matrix(training_s_list, "lexicon_pos_cb.txt")
+matrix_neut_s = do_matrix(training_s_list, "lexicon_neut_cb.txt")
+matrix_neg_s = do_matrix(training_s_list, "lexicon_neg_cb.txt")
+do_test_set_svm_sent_strength(test_s_list, training_s_list, "twitter_bullying_svm_sent_strength.csv", "lexicon_pos_cb.txt", "lexicon_neut_cb.txt", "lexicon_neg_cb.txt", "train_cb_set.csv", 8, matrix_pos_s, matrix_neut_s, matrix_neg_s, "test_cb_set_with_sentiment.csv")
+#estimation.test_results("test_cb_set.csv", 8, "twitter_bullying_svm_sent_strength.csv", 1)
+print("done7")
 
 
 

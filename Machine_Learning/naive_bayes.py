@@ -350,6 +350,124 @@ def do_naive_bayes_strength(utterance, lex):
 
     return class_strength
 
+#function to use the naive bayes algorithm with sentiment on an utterance of the test_set
+# returns the hate speech class for the utterances assigned by the algorithm
+def do_sentiment_naive_bayes_hs(utterance, lex, sentiment, sentimentlist):
+    p_utterance_class_1 = 1  # p(tweet|class)
+    p_utterance_class_0 = 1
+
+    for word in utterance:
+
+        for line in open(lex):
+            if word in line:
+                line_split = line.split()
+
+                # multiply each word frequency in the respective class
+                # with laplace smoothing
+                p_utterance_class_1 *= float(line_split[1])
+                p_utterance_class_0 *= float(line_split[2])
+
+    p_pos_hs = sentimentlist[0]
+    p_pos_no_hs = sentimentlist[1]
+    p_neut_hs = sentimentlist[2]
+    p_neut_no_hs = sentimentlist[3]
+    p_neg_hs = sentimentlist[4]
+    p_neg_no_hs = sentimentlist[5]
+
+    if sentiment == 1 or sentiment == "1":
+        p_class_utterance_1 = p_utterance_class_1 * freq_hs * p_pos_hs
+        p_class_utterance_0 = p_utterance_class_0 * freq_no_hs * p_pos_no_hs
+    elif sentiment == 0 or sentiment == "0":
+        p_class_utterance_1 = p_utterance_class_1 * freq_hs * p_neut_hs
+        p_class_utterance_0 = p_utterance_class_0 * freq_no_hs * p_neut_no_hs
+    else:
+        p_class_utterance_1 = p_utterance_class_1 * freq_hs * p_neg_hs * 100000000000000        # more impact if the utterance is negative
+        p_class_utterance_0 = p_utterance_class_0 * freq_no_hs * p_neg_no_hs
+    #print(p_class_utterance_0, p_class_utterance_1)
+
+    # class with the higher probability will be assigned to the utterance
+    values = [p_class_utterance_1, p_class_utterance_0]
+    if max(values) == values[0]:  # determine class (max p(class|tweet))
+        class_hs = 1
+    else:
+        class_hs = 0
+    # print(class_hs)
+
+    return class_hs
+
+#function to use the naive bayes algorithm with sentiment on an utterance of the test_set
+# returns the hate speech class for the utterances assigned by the algorithm
+def do_sentiment_naive_bayes_strength(utterance, lex, sentiment, sentimentlist):
+    p_utterance_class_1 = 1  # p(tweet|class)
+    p_utterance_class_2 = 1
+    p_utterance_class_3 = 1
+    p_utterance_class_4 = 1
+    p_utterance_class_5 = 1
+
+    for word in utterance:
+        for line in open(lex):
+            if word in line:
+                line_split = line.split()
+
+                # multiply each word frequency in the respective class
+                # with laplace smoothing
+                p_utterance_class_1 *= float(line_split[1])
+                p_utterance_class_2 *= float(line_split[2])
+                p_utterance_class_3 *= float(line_split[3])
+                p_utterance_class_4 *= float(line_split[4])
+                p_utterance_class_5 *= float(line_split[5])
+
+    p_pos_s1 = sentimentlist[0]
+    p_pos_s2 = sentimentlist[1]
+    p_pos_s3 = sentimentlist[2]
+    p_pos_s4 = sentimentlist[3]
+    p_pos_s5 = sentimentlist[4]
+    p_neut_s1 = sentimentlist[5]
+    p_neut_s2 = sentimentlist[6]
+    p_neut_s3 = sentimentlist[7]
+    p_neut_s4 = sentimentlist[8]
+    p_neut_s5 = sentimentlist[9]
+    p_neg_s1 = sentimentlist[10]
+    p_neg_s2 = sentimentlist[11]
+    p_neg_s3 = sentimentlist[12]
+    p_neg_s4 = sentimentlist[13]
+    p_neg_s5 = sentimentlist[14]
+
+    if sentiment == 1 or sentiment == "1":
+        p_class_utterance_1 = p_utterance_class_1 * freq_s1 * p_pos_s1
+        p_class_utterance_2 = p_utterance_class_2 * freq_s2 * p_pos_s2
+        p_class_utterance_3 = p_utterance_class_3 * freq_s3 * p_pos_s3
+        p_class_utterance_4 = p_utterance_class_4 * freq_s4 * p_pos_s4
+        p_class_utterance_5 = p_utterance_class_5 * freq_s5 * p_pos_s5
+    elif sentiment == 0 or sentiment == "0":
+        p_class_utterance_1 = p_utterance_class_1 * freq_s1 * p_neut_s1
+        p_class_utterance_2 = p_utterance_class_2 * freq_s2 * p_neut_s2
+        p_class_utterance_3 = p_utterance_class_3 * freq_s3 * p_neut_s3
+        p_class_utterance_4 = p_utterance_class_4 * freq_s4 * p_neut_s4
+        p_class_utterance_5 = p_utterance_class_5 * freq_s5 * p_neut_s5
+    else:
+        p_class_utterance_1 = p_utterance_class_1 * freq_s1 * p_neg_s1
+        p_class_utterance_2 = p_utterance_class_2 * freq_s2 * p_neg_s2
+        p_class_utterance_3 = p_utterance_class_3 * freq_s3 * p_neg_s3
+        p_class_utterance_4 = p_utterance_class_4 * freq_s4 * p_neg_s4
+        p_class_utterance_5 = p_utterance_class_5 * freq_s5 * p_neg_s5
+
+    # class with the higher probability will be assigned to the utterance
+    values = [p_class_utterance_1, p_class_utterance_2, p_class_utterance_3, p_class_utterance_4, p_class_utterance_5]
+    if max(values) == values[0]:  # determine class (max p(class|tweet))
+        class_strength = 1
+    elif max(values) == values[1]:
+        class_strength = 2
+    elif max(values) == values[2]:
+        class_strength = 3
+    elif max(values) == values[3]:
+        class_strength = 4
+    else:
+        class_strength = 5
+    # print(class_strength)
+
+    return class_strength
+
 # function to label a test set using the Naive Bayes algorithm and to save results in a new file
 def do_test_set_naive_bayes(utterances, filename, lex):
     # annotation using naive_bayes will be saved in a new file
@@ -419,6 +537,49 @@ def do_test_set_naive_bayes_strength(utterances, filename, lex):
                 utterance_string = utterance_string + word + " "
             writer.writerow([utterance_string, class_strength])
 
+# function to label a test set using the Naive Bayes algorithm and Sentiment and to save results in a new file
+def do_test_set_naive_bayes_sent_hs(utterances, filename, lex, file, column, sentimentfile_train, sentimentfile_test):
+    # annotation using naive_bayes will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Hate Speech"]) # header
+
+        sentimentlist = senti_strength.estimate_sentiment_probabilities(sentimentfile_train, file, column)
+        list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile_test, 1)
+
+        utterance_id = 0
+        for utterance in utterances:
+            class_hs = do_sentiment_naive_bayes_hs(utterance, lex, list_of_sentiments[utterance_id], sentimentlist)  # determine class of the utterance using do_sentiment_naive_bayes_hs()
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_hs])
+            utterance_id += 1
+
+# function to label a test set using the Naive Bayes algorithm and Sentiment and to save results in a new file
+def do_test_set_naive_bayes_sent_strength(utterances, filename, lex, file, column, sentimentfile_train, sentimentfile_test):
+    # annotation using naive_bayes will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Cyberbullying Strength"]) # header
+
+        sentimentlist = senti_strength.estimate_sentiment_probabilities_strengths(sentimentfile_train, file, column)
+        list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile_test, 1)
+
+        utterance_id = 0
+        for utterance in utterances:
+            class_strength = do_sentiment_naive_bayes_strength(utterance, lex, list_of_sentiments[utterance_id], sentimentlist)  # determine class of the utterance using do_naive_bayes()
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_strength])
+            utterance_id += 1
+
+
 utterance = machine_learning_processing.process_utterance("Yup. I can't stand this shit. The left screams and yells Black Lives Matter and the minute a black man or woman disappear")
 utterance2 = machine_learning_processing.process_utterance("ban islam")
 utterance3 = machine_learning_processing.process_utterance("This is our president. WHO talks like that?!? Our leader does. I cant. How embarrassing. A disgrace to the office.")
@@ -450,8 +611,17 @@ test_list = machine_learning_processing.process_data("test_set.csv")
 #do_test_set_naive_bayes_hate_speech(test_list, "twitter_bullying_naive_bayes_hs.csv", "lexicon_with_occurences_hs.txt")
 #estimation.test_results("test_set.csv", 9, "twitter_bullying_naive_bayes_hs.csv", 1)
 
+# hate speech with sentiment
+#do_test_set_naive_bayes_sent_hs(test_list, "twitter_bullying_naive_bayes_sent_hs.csv", "lexicon_with_occurences_hs.txt", "train_set.csv", 9, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
+#estimation.test_results("test_set.csv", 9, "twitter_bullying_naive_bayes_sent_hs.csv", 1)
+
 # strength
 test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
 #do_test_set_naive_bayes_strength(test_s_list, "twitter_bullying_naive_bayes_strength.csv", "lexicon_with_occurences_cb.txt")
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_strength.csv", 1)
+
+# strength with sentiment
+#do_test_set_naive_bayes_sent_strength(test_s_list, "twitter_bullying_naive_bayes_sent_strength.csv", "lexicon_with_occurences_cb.txt", "train_cb_set.csv", 8, "train_cb_set_with_sentiment.csv", "test_cb_set_with_sentiment.csv")
+#estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_sent_strength.csv", 1)
+
 
