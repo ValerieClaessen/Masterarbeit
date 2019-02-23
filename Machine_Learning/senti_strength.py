@@ -16,6 +16,8 @@ def utterances_into_txt(file, filename):
 
 #utterances_into_txt("train_set.csv", "train_set.txt")
 #utterances_into_txt("test_set.csv", "test_set.txt")
+#utterances_into_txt("train_cb_set.csv", "train_cb_set.txt")
+#utterances_into_txt("test_cb_set.csv", "test_cb_set.txt")
 
 # function to save results of SentiStrength into csv file
 def sentiment_into_csv(file, filename):
@@ -29,6 +31,8 @@ def sentiment_into_csv(file, filename):
 
 #sentiment_into_csv("train_set_sentiment.txt", "train_set_sentiment.csv")
 #sentiment_into_csv("test_set_sentiment.txt", "test_set_sentiment.csv")
+#sentiment_into_csv("train_cb_set_sentiment.txt", "train_cb_set_sentiment.csv")
+#sentiment_into_csv("test_cb_set_sentiment.txt", "test_cb_set_sentiment.csv")
 
 # function to estimate the sentiment based on SentiStrength assigned positive and negative values
 def estimate_sentiment(file, filename):
@@ -54,6 +58,8 @@ def estimate_sentiment(file, filename):
 
 #estimate_sentiment("train_set_sentiment.csv", "train_set_with_sentiment.csv")
 #estimate_sentiment("test_set_sentiment.csv", "test_set_with_sentiment.csv")
+#estimate_sentiment("train_cb_set_sentiment.csv", "train_cb_set_with_sentiment.csv")
+#estimate_sentiment("test_cb_set_sentiment.csv", "test_cb_set_with_sentiment.csv")
 
 # function to estimate the probability of an utterance with a specific sentiment to be in class cyberbullying / no_cyberbullying
 # return a list of all probabilities (sentiment_list)
@@ -119,6 +125,116 @@ def estimate_sentiment_probabilities(sentimentfile, cbfile, cbrow):
     p_neg_no_cb = round(p_neg_no_cb, 3)
 
     sentiment_list = [p_pos_cb, p_pos_no_cb, p_neut_cb, p_neut_no_cb, p_neg_cb, p_neg_no_cb]
+    return sentiment_list
+
+# function to estimate the probability of an utterance with a specific sentiment to be in class s1-s5
+# return a list of all probabilities (sentiment_list)
+def estimate_sentiment_probabilities_strengths(sentimentfile, cbfile, cbrow):
+    strength_list = machine_learning_processing.make_list_of_column(cbfile, cbrow)    # list of cyberbullying values
+
+    count_pos = 0                                           # number of positive utterances
+    count_neut = 0                                          # number of neutral utterances
+    count_neg = 0                                           # number of negative utterances
+
+    pos_s1 = 0                                              # number of positive utterances in class s1
+    pos_s2 = 0
+    pos_s3 = 0
+    pos_s4 = 0
+    pos_s5 = 0
+
+    neut_s1 = 0                                             # number of neutral utterances in class s1
+    neut_s2 = 0
+    neut_s3 = 0
+    neut_s4 = 0
+    neut_s5 = 0
+
+    neg_s1 = 0                                              # number of negative utterances in class s1
+    neg_s2 = 0
+    neg_s3 = 0
+    neg_s4 = 0
+    neg_s5 = 0
+
+    with open(sentimentfile, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                  # skip header
+
+        utterance_id = 0
+        for row in reader:
+            if row[1] == 1 or row[1] == "1":
+                count_pos += 1
+
+                if strength_list[utterance_id] == 1 or strength_list[utterance_id] == "1":
+                    pos_s1 += 1
+                elif strength_list[utterance_id] == 2 or strength_list[utterance_id] == "2":
+                    pos_s2 += 1
+                elif strength_list[utterance_id] == 3 or strength_list[utterance_id] == "3":
+                    pos_s3 += 1
+                elif strength_list[utterance_id] == 4 or strength_list[utterance_id] == "4":
+                    pos_s4 += 1
+                else:
+                    pos_s5 += 1
+            elif row[1] == -1 or row[1] == "-1":
+                count_neg += 1
+
+                if strength_list[utterance_id] == 1 or strength_list[utterance_id] == "1":
+                    neg_s1 += 1
+                elif strength_list[utterance_id] == 2 or strength_list[utterance_id] == "2":
+                    neg_s2 += 1
+                elif strength_list[utterance_id] == 3 or strength_list[utterance_id] == "3":
+                    neg_s3 += 1
+                elif strength_list[utterance_id] == 4 or strength_list[utterance_id] == "4":
+                    neg_s4 += 1
+                else:
+                    neg_s5 += 1
+            else:
+                count_neut += 1
+
+                if strength_list[utterance_id] == 1 or strength_list[utterance_id] == "1":
+                    neut_s1 += 1
+                elif strength_list[utterance_id] == 2 or strength_list[utterance_id] == "2":
+                    neut_s2 += 1
+                elif strength_list[utterance_id] == 3 or strength_list[utterance_id] == "3":
+                    neut_s3 += 1
+                elif strength_list[utterance_id] == 4 or strength_list[utterance_id] == "4":
+                    neut_s4 += 1
+                else:
+                    neut_s5 += 1
+
+            utterance_id += 1
+
+    p_pos_s1 = pos_s1 / count_pos                           # probability of a positive utterance being in class s1
+    p_pos_s2 = pos_s2 / count_pos
+    p_pos_s3 = pos_s2 / count_pos
+    p_pos_s4 = pos_s2 / count_pos
+    p_pos_s5 = pos_s2 / count_pos
+    p_neut_s1 = neut_s1 / count_neut                        # probability of a neutral utterance being in class s1
+    p_neut_s2 = neut_s2 / count_neut
+    p_neut_s3 = neut_s2 / count_neut
+    p_neut_s4 = neut_s2 / count_neut
+    p_neut_s5 = neut_s2 / count_neut
+    p_neg_s1 = neg_s1 / count_neg                           # probability of a negative utterance being in class s1
+    p_neg_s2 = neg_s2 / count_neg
+    p_neg_s3 = neg_s2 / count_neg
+    p_neg_s4 = neg_s2 / count_neg
+    p_neg_s5 = neg_s2 / count_neg
+
+    p_pos_s1 = round(p_pos_s1, 3)                           # round probabilities to values with 3 positions behind decimal point
+    p_pos_s2 = round(p_pos_s2, 3)
+    p_pos_s3 = round(p_pos_s3, 3)
+    p_pos_s4 = round(p_pos_s4, 3)
+    p_pos_s5 = round(p_pos_s5, 3)
+    p_neut_s1 = round(p_neut_s1, 3)
+    p_neut_s2 = round(p_neut_s2, 3)
+    p_neut_s3 = round(p_neut_s3, 3)
+    p_neut_s4 = round(p_neut_s4, 3)
+    p_neut_s5 = round(p_neut_s5, 3)
+    p_neg_s1 = round(p_neg_s1, 3)
+    p_neg_s2 = round(p_neg_s2, 3)
+    p_neg_s3 = round(p_neg_s3, 3)
+    p_neg_s4 = round(p_neg_s4, 3)
+    p_neg_s5 = round(p_neg_s5, 3)
+
+    sentiment_list = [p_pos_s1, p_pos_s2, p_pos_s3, p_pos_s4, p_pos_s5, p_neut_s1, p_neut_s2, p_neut_s3, p_neut_s4, p_neut_s5, p_neg_s1, p_neg_s2, p_neg_s3, p_neg_s4, p_neg_s5]
     return sentiment_list
 
 #sentiment_list = estimate_sentiment_probabilities("train_set_with_sentiment.csv", "train_set.csv", 7)

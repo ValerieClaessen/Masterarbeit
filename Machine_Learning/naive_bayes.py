@@ -6,8 +6,15 @@ import senti_strength
 # global variables
 freq_cb = 0
 freq_no_cb = 0
+freq_hs = 0
+freq_no_hs = 0
+freq_s1 = 0
+freq_s2 = 0
+freq_s3 = 0
+freq_s4 = 0
+freq_s5 = 0
 
-# function to estimate the frequencies of each class in the training dataset
+# function to estimate the frequencies of each cyberbullying class in the training dataset
 def estimate_class_frequency(file):
     with open(file, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=';')
@@ -32,8 +39,73 @@ def estimate_class_frequency(file):
 
 estimate_class_frequency("train_set.csv")
 
+# function to estimate the frequencies of each hate speech class in the training dataset
+def estimate_hate_speech_frequency(file):
+    with open(file, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                                  # skip header
+
+        hate_speech = 0
+        no_hatespeech = 0
+        utterances = 0
+
+        # count utterances that are labeled as hate speech / no hate speech
+        for row in reader:
+            if row[9] == 1 or row[9] == "1":
+                hate_speech += 1
+            else:
+                no_hatespeech += 1
+            utterances += 1
+
+        global freq_hs
+        freq_hs = hate_speech / utterances                # frequency of utterances that are labeled as cyberbullying
+        global freq_no_hs
+        freq_no_hs = no_hatespeech / utterances          # frequency of utterances that are labeled as no_cyberbullying
+
+estimate_hate_speech_frequency("train_set.csv")
+
+# function to estimate the frequencies of each cyberbullying strength class in the training dataset
+def estimate_cb_strength_frequency(file):
+    with open(file, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                                  # skip header
+
+        s1 = 0
+        s2 = 0
+        s3 = 0
+        s4 = 0
+        s5 = 0
+        utterances = 0
+
+        # count utterances that are labeled as s1 / s2 / s3 / s4 / s5
+        for row in reader:
+            if row[8] == 1 or row[8] == "1":
+                s1 += 1
+            elif row[8] == 2 or row[8] == "2":
+                s2 += 1
+            elif row[8] == 3 or row[8] == "3":
+                s3 += 1
+            elif row[8] == 4 or row[8] == "4":
+                s4 += 1
+            else:
+                s5 += 1
+            utterances += 1
+
+        global freq_s1
+        freq_s1 = s1 / utterances                   # frequency of utterances that are labeled as cyberbullying strength 1
+        global freq_s2
+        freq_s2 = s2 / utterances                   # frequency of utterances that are labeled as no_cyberbullying strength 2
+        global freq_s3
+        freq_s3 = s3 / utterances                   # frequency of utterances that are labeled as no_cyberbullying strength 3
+        global freq_s4
+        freq_s4 = s4 / utterances                   # frequency of utterances that are labeled as no_cyberbullying strength 4
+        global freq_s5
+        freq_s5 = s5 / utterances                   # frequency of utterances that are labeled as no_cyberbullying strength 5
+
+estimate_cb_strength_frequency("train_cb_set.csv")
+
 #function to use the naive bayes algorithm on an utterance of the test_set
-# returns the class for the utterances assigned by the algorithm
+# returns the cyberbullying class for the utterances assigned by the algorithm
 def do_naive_bayes(utterance, lex):
     """
     We use the Naive Bayes algorithm to determine the class (cyberbullying, no cyberbullying) of each tweet.
@@ -97,7 +169,7 @@ def do_naive_bayes(utterance, lex):
     return class_cb
 
 #function to use the naive bayes algorithm with sentiment on an utterance of the test_set
-# returns the class for the utterances assigned by the algorithm
+# returns the cyberbullying class for the utterances assigned by the algorithm
 def do_sentiment_naive_bayes(utterance, lex, sentiment, sentimentlist):
     p_utterance_class_1 = 1  # p(tweet|class)
     p_utterance_class_0 = 1
@@ -162,6 +234,122 @@ def do_sentiment_naive_bayes(utterance, lex, sentiment, sentimentlist):
 
     return class_cb
 
+#function to use the naive bayes algorithm on an utterance of the test_set
+# returns the hate speech class for the utterances assigned by the algorithm
+def do_naive_bayes_hate_speech(utterance, lex):
+    """
+    We use the Naive Bayes algorithm to determine the class (hate speech, no hate speech) of each tweet.
+    We work with our data_list containing all stemmed and processed tweets and our lexicon.
+
+    For Naive Bayes we need to:
+        - estimate P(class|tweet) for every class (hate speech, no hate speech) and every tweet
+        - compare the probabilites to find the greatest probability and therefore the most suitable class
+        - save the tweet with the respective class in a csv-file (to later compare it with the manually assigned classes)
+
+    P(tweet|class) = P(w1|class) * P(w2|class) * ... * P(wn|class)
+
+    Then we have to estimate P(class|tweet) by multiplying P(tweet|class) with P(class), which is
+    determined by the number of hate-speech-tweets and no_hate_speech-tweets in our data.
+    """
+
+    # base value must be 1, so we won't multiply with 0
+    p_utterance_class_1 = 1                                             # p(tweet|class)
+    p_utterance_class_0 = 1
+
+    for word in utterance:
+        for line in open(lex):
+            if word in line:
+                line_split = line.split()
+
+                # multiply each word frequency in the respective class
+                # with laplace smoothing
+                p_utterance_class_1 *= float(line_split[1])
+                p_utterance_class_0 *= float(line_split[2])
+
+                # without laplace smoothing --> barely a change in results
+                #if line_split[1] != "0.0":
+                #    p_utterance_class_1 *= float(line_split[1])
+                #else:
+                #    p_utterance_class_1 *= 0.025                        # multiply by a low weight to get best result with unseen word-class-occurences
+                #if line_split[2] != "0.0":
+                #    p_utterance_class_0 *= float(line_split[2])
+                #else:
+                #    p_utterance_class_0 *= 0.025
+
+    # multiply p(tweet|class) with p(class) (freq_cb / freq_no_cb)
+    p_class_utterance_1 = p_utterance_class_1 * freq_hs                 # p(class|tweet)
+    p_class_utterance_0 = p_utterance_class_0 * freq_no_hs
+
+    # class with the higher probability will be assigned to the utterance
+    values = [p_class_utterance_1, p_class_utterance_0]
+    if max(values) == values[0]:                                        # determine class (max p(class|tweet))
+        class_hs = 1
+    else:
+        class_hs = 0
+    #print(class_cb)
+
+    return class_hs
+
+#function to use the naive bayes algorithm on an utterance of the test_set
+# returns the strength class for the utterances assigned by the algorithm
+def do_naive_bayes_strength(utterance, lex):
+    """
+    We use the Naive Bayes algorithm to determine the cyberbullying strength of each tweet.
+    We work with our data_list containing all stemmed and processed tweets and our lexicon.
+
+    For Naive Bayes we need to:
+        - estimate P(class|tweet) for every class (s1-s5) and every tweet
+        - compare the probabilites to find the greatest probability and therefore the most suitable class
+        - save the tweet with the respective class in a csv-file (to later compare it with the manually assigned classes)
+
+    P(tweet|class) = P(w1|class) * P(w2|class) * ... * P(wn|class)
+
+    Then we have to estimate P(class|tweet) by multiplying P(tweet|class) with P(class), which is
+    determined by the number of s1- to s5-tweets in our data.
+    """
+
+    # base value must be 1, so we won't multiply with 0
+    p_utterance_class_1 = 1                                             # p(tweet|class)
+    p_utterance_class_2 = 1
+    p_utterance_class_3 = 1
+    p_utterance_class_4 = 1
+    p_utterance_class_5 = 1
+
+    for word in utterance:
+        for line in open(lex):
+            if word in line:
+                line_split = line.split()
+
+                # multiply each word frequency in the respective class
+                # with laplace smoothing
+                p_utterance_class_1 *= float(line_split[1])
+                p_utterance_class_2 *= float(line_split[2])
+                p_utterance_class_3 *= float(line_split[3])
+                p_utterance_class_4 *= float(line_split[4])
+                p_utterance_class_5 *= float(line_split[5])
+
+    # multiply p(tweet|class) with p(class) (freq_cb / freq_no_cb)
+    p_class_utterance_1 = p_utterance_class_1 * freq_s1                 # p(class|tweet)
+    p_class_utterance_2 = p_utterance_class_2 * freq_s2
+    p_class_utterance_3 = p_utterance_class_3 * freq_s3
+    p_class_utterance_4 = p_utterance_class_4 * freq_s4
+    p_class_utterance_5 = p_utterance_class_5 * freq_s5
+
+    # class with the higher probability will be assigned to the utterance
+    values = [p_class_utterance_1, p_class_utterance_2, p_class_utterance_3, p_class_utterance_4, p_class_utterance_5]
+    if max(values) == values[0]:                                        # determine class (max p(class|tweet))
+        class_strength = 1
+    elif max(values) == values[1]:
+        class_strength = 2
+    elif max(values) == values[2]:
+        class_strength = 3
+    elif max(values) == values[3]:
+        class_strength = 4
+    else:
+        class_strength = 5
+
+    return class_strength
+
 # function to label a test set using the Naive Bayes algorithm and to save results in a new file
 def do_test_set_naive_bayes(utterances, filename, lex):
     # annotation using naive_bayes will be saved in a new file
@@ -199,6 +387,38 @@ def do_test_set_naive_bayes_sent(utterances, filename, lex, file, column, sentim
             writer.writerow([utterance_string, class_cb])
             utterance_id += 1
 
+# function to label a test set using the Naive Bayes algorithm and to save results in a new file
+def do_test_set_naive_bayes_hate_speech(utterances, filename, lex):
+    # annotation using naive_bayes will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Hate Speech"]) # header
+
+        for utterance in utterances:
+            class_hs = do_naive_bayes_hate_speech(utterance, lex)               # determine class of the utterance using do_naive_bayes()
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_hs])
+
+# function to label a test set using the Naive Bayes algorithm and to save results in a new file
+def do_test_set_naive_bayes_strength(utterances, filename, lex):
+    # annotation using naive_bayes will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Cyberbullying Strength"]) # header
+
+        for utterance in utterances:
+            class_strength = do_naive_bayes_strength(utterance, lex)            # determine class of the utterance using do_naive_bayes()
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_strength])
+
 utterance = machine_learning_processing.process_utterance("Yup. I can't stand this shit. The left screams and yells Black Lives Matter and the minute a black man or woman disappear")
 utterance2 = machine_learning_processing.process_utterance("ban islam")
 utterance3 = machine_learning_processing.process_utterance("This is our president. WHO talks like that?!? Our leader does. I cant. How embarrassing. A disgrace to the office.")
@@ -218,10 +438,20 @@ test_list = machine_learning_processing.process_data("test_set.csv")
 
 #do_test_set_naive_bayes(test_list, "twitter_bullying_naive_bayes_c.csv", "lexicon_with_occurences.txt")
 
-do_test_set_naive_bayes_sent(test_list, "twitter_bullying_naive_bayes_sent_c.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
+#do_test_set_naive_bayes_sent(test_list, "twitter_bullying_naive_bayes_sent_c.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
 
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes.csv", 1)
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes_sent.csv", 1)
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes2.csv", 1)
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes_c.csv", 1)
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes_sent_c.csv", 1)
+
+# hate speech
+#do_test_set_naive_bayes_hate_speech(test_list, "twitter_bullying_naive_bayes_hs.csv", "lexicon_with_occurences_hs.txt")
+#estimation.test_results("test_set.csv", 9, "twitter_bullying_naive_bayes_hs.csv", 1)
+
+# strength
+test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
+#do_test_set_naive_bayes_strength(test_s_list, "twitter_bullying_naive_bayes_strength.csv", "lexicon_with_occurences_cb.txt")
+#estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_strength.csv", 1)
+
