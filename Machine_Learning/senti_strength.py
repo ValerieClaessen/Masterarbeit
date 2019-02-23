@@ -2,61 +2,7 @@ import csv
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem.snowball import SnowballStemmer
-
-# function to further process the datasets
-def process_data(file):
-    """
-    Before we can analyize our data, we need to process it.
-    This includes:
-        - converting all words to lowercase
-        - deleting punctuation marks
-        - deleting numbers
-        - tokenize tweets to get a list of words
-        - deleting stopwords or not deleting stopwords depending on the results
-        - stem all words
-
-    This function will return a list of lists containing all stemmed words of every tweets (data_list)
-    """
-
-    data_list = []
-    punctuation = ['.', ',', ';', '!', '?', '(', ')', '[', ']',             # list of english punctuation marks (used in utterances)
-                   '&', ':', '-', '/', '\\', '$', '*', '"', "'", '+',
-                   '=', '@', '%', '~', '{', '}', '|', '<', '>', '`', '']
-    stopwords = nltk.corpus.stopwords.words("english")                      # list of english stopwords
-
-    with open(file, 'r') as csvfile:                                        # collect tweets from csv-data in list
-        reader = csv.reader(csvfile, delimiter=';')
-        next(reader, None)                                                  # skip header
-        for row in reader:
-            data_list.append(row[5])
-
-    for index, element in enumerate(data_list):
-        element = element.lower()                                           # utterance to lowercase
-        for mark in punctuation:
-            element = element.replace(mark, '')                             # delete punctuation marks
-        element = ''.join([i for i in element if not i.isdigit()])          # delete numbers
-        element = word_tokenize(element)                                    # tokenize utterance
-        element = [w for w in element if w not in stopwords]                # delete stopwords (depending on results we may not remvove stopwords)
-
-        for i, word in enumerate(element):                                  # stem words in utterance
-            word = nltk.SnowballStemmer("english").stem(word)
-            element[i] = str(word)
-
-        data_list[index] = element
-
-    return data_list
-
-# function to make a list of all values from a column from a dataset
-def make_list_of_column(file, column):
-    with open(file, 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=';')
-        next(reader, None)  # skip header
-
-        list = []
-        for row in reader:
-            list.append(row[column])
-
-    return list
+import machine_learning_processing
 
 # function to write all utterances into a txt file to use with SentiStrength
 def utterances_into_txt(file, filename):
@@ -82,7 +28,7 @@ def sentiment_into_csv(file, filename):
                 writer.writerow(row)
 
 #sentiment_into_csv("train_set_sentiment.txt", "train_set_sentiment.csv")
-sentiment_into_csv("test_set_sentiment.txt", "test_set_sentiment.csv")
+#sentiment_into_csv("test_set_sentiment.txt", "test_set_sentiment.csv")
 
 # function to estimate the sentiment based on SentiStrength assigned positive and negative values
 def estimate_sentiment(file, filename):
@@ -107,12 +53,12 @@ def estimate_sentiment(file, filename):
                 writer.writerow([row[0], sentiment, row[1], row[2], row[3]])
 
 #estimate_sentiment("train_set_sentiment.csv", "train_set_with_sentiment.csv")
-estimate_sentiment("test_set_sentiment.csv", "test_set_with_sentiment.csv")
+#estimate_sentiment("test_set_sentiment.csv", "test_set_with_sentiment.csv")
 
 # function to estimate the probability of an utterance with a specific sentiment to be in class cyberbullying / no_cyberbullying
 # return a list of all probabilities (sentiment_list)
 def estimate_sentiment_probabilities(sentimentfile, cbfile, cbrow):
-    cb_list = make_list_of_column(cbfile, cbrow)    # list of cyberbullying values
+    cb_list = machine_learning_processing.make_list_of_column(cbfile, cbrow)    # list of cyberbullying values
 
     count_pos = 0                                           # number of positive utterances
     count_neut = 0                                          # number of neutral utterances
@@ -178,12 +124,12 @@ def estimate_sentiment_probabilities(sentimentfile, cbfile, cbrow):
 #sentiment_list = estimate_sentiment_probabilities("train_set_with_sentiment.csv", "train_set.csv", 7)
 #print(sentiment_list)
 
-def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment):
+def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode):
     lex = []
 
-    sentiment_list = make_list_of_column(sentimentfile, 1)
+    sentiment_list = machine_learning_processing.make_list_of_column(sentimentfile, 1)
 
-    data_list = process_data(trainfile)
+    data_list = machine_learning_processing.process_data(trainfile)
 
     utterance_id = 0
     for list in data_list:
@@ -197,10 +143,25 @@ def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment):
 
     lex = sorted(lex)                                                       # sort list alphabetically
 
-    with open(lexname, 'w') as f:
-        for word in lex:
-            f.write("%s\n" % word)
+    # only words that occur at least twice in the dataset will be part of the lexicon
+    lex2 = []
+    for word in lex:
+        count = sum(x.count(word) for x in data_list)
+        if count > 1:
+            lex2.append(word)
 
-#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_pos.txt", 1)
-#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neg.txt", -1)
-#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neut.txt", 0)
+    with open(lexname, 'w') as f:
+        if mode == 1:
+            for word in lex:
+                f.write("%s\n" % word)
+        else:
+            for word in lex2:
+                f.write("%s\n" % word)
+
+#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_pos.txt", 1, 1)
+#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neg.txt", -1, 1)
+#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neut.txt", 0, 1)
+
+#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_pos2.txt", 1, 0)
+#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neg2.txt", -1, 0)
+#make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neut2.txt", 0, 0)

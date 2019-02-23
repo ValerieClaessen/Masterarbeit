@@ -54,7 +54,13 @@ def do_naive_bayes(utterance, lex):
     p_utterance_class_1 = 1                                             # p(tweet|class)
     p_utterance_class_0 = 1
 
+    contains_curses = False
+    curses = machine_learning_processing.make_list_of_curse_words("curses.txt")
+
     for word in utterance:
+        if word in curses:
+            contains_curses = True                                      # utterances that contain curses will automatically be labeled as cyberbullying later
+
         for line in open(lex):
             if word in line:
                 line_split = line.split()
@@ -82,6 +88,8 @@ def do_naive_bayes(utterance, lex):
     values = [p_class_utterance_1, p_class_utterance_0]
     if max(values) == values[0]:                                        # determine class (max p(class|tweet))
         class_cb = 1
+    elif contains_curses == True:                                       # utterances that contain curses will automatically be labeled as cyberbullying
+        class_cb = 1
     else:
         class_cb = 0
     #print(class_cb)
@@ -94,7 +102,13 @@ def do_sentiment_naive_bayes(utterance, lex, sentiment, sentimentlist):
     p_utterance_class_1 = 1  # p(tweet|class)
     p_utterance_class_0 = 1
 
+    contains_curses = False
+    curses = machine_learning_processing.make_list_of_curse_words("curses.txt")
+
     for word in utterance:
+        if word in curses:
+            contains_curses = True                                      # utterances that contain curses will automatically be labeled as cyberbullying later
+
         for line in open(lex):
             if word in line:
                 line_split = line.split()
@@ -139,6 +153,8 @@ def do_sentiment_naive_bayes(utterance, lex, sentiment, sentimentlist):
     # class with the higher probability will be assigned to the utterance
     values = [p_class_utterance_1, p_class_utterance_0]
     if max(values) == values[0]:  # determine class (max p(class|tweet))
+        class_cb = 1
+    elif contains_curses == True:                                                               # utterances that contain curses will automatically be labeled as cyberbullying
         class_cb = 1
     else:
         class_cb = 0
@@ -198,5 +214,14 @@ test_list = machine_learning_processing.process_data("test_set.csv")
 
 #do_test_set_naive_bayes_sent(test_list, "twitter_bullying_naive_bayes_sent.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
 
+#do_test_set_naive_bayes(test_list, "twitter_bullying_naive_bayes2.csv", "lexicon_with_occurences2.txt")
+
+#do_test_set_naive_bayes(test_list, "twitter_bullying_naive_bayes_c.csv", "lexicon_with_occurences.txt")
+
+do_test_set_naive_bayes_sent(test_list, "twitter_bullying_naive_bayes_sent_c.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
+
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes.csv", 1)
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes_sent.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes2.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes_c.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_naive_bayes_sent_c.csv", 1)

@@ -21,7 +21,14 @@ def do_mem(utterance, lex):
     cyberbullying_feature_sum = 0                                   # weighted feature sums
     no_cyberbullying_feature_sum = 0
     cb_class = ""
+
+    contains_curses = False
+    curses = machine_learning_processing.make_list_of_curse_words("curses.txt")
+
     for word in utterance:
+        if word in curses:
+            contains_curses = True                                          # utterances that contain curses will automatically be labeled as cyberbullying later
+
         for line in open(lex):
             if word in line:
                 line_split = line.split()
@@ -42,6 +49,8 @@ def do_mem(utterance, lex):
 
     if max(values) == values[0]:                                    # determine class (max P(class|tweet))
         cb_class = 1
+    elif contains_curses == True:                                                               # utterances that contain curses will automatically be labeled as cyberbullying
+        cb_class = 1
     else:
         cb_class = 0
     #print(cb_class)
@@ -54,7 +63,14 @@ def do_sentiment_mem(utterance, lex, sentiment, sentimentlist):
     cyberbullying_feature_sum = 0                                   # weighted feature sums
     no_cyberbullying_feature_sum = 0
     cb_class = ""
+
+    contains_curses = False
+    curses = machine_learning_processing.make_list_of_curse_words("curses.txt")
+
     for word in utterance:
+        if word in curses:
+            contains_curses = True                                          # utterances that contain curses will automatically be labeled as cyberbullying later
+
         for line in open(lex):
             if word in line:
                 line_split = line.split()
@@ -94,6 +110,8 @@ def do_sentiment_mem(utterance, lex, sentiment, sentimentlist):
     #print(values)
 
     if max(values) == values[0]:                                    # determine class (max P(class|tweet))
+        cb_class = 1
+    elif contains_curses == True:                                                               # utterances that contain curses will automatically be labeled as cyberbullying
         cb_class = 1
     else:
         cb_class = 0
@@ -159,9 +177,17 @@ test_list = machine_learning_processing.process_data("test_set.csv")
 
 #do_test_set_mem(test_list, "twitter_bullying_mem2.csv", "lexicon_with_occurences.txt")
 #do_test_set_mem_sent(test_list, "twitter_bullying_mem_sent.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
+#do_test_set_mem(test_list, "twitter_bullying_mem3.csv", "lexicon_with_occurences2.txt")
 
-#estimation.test_results("test_set.csv", 7, "twitter_bullying_mem.csv", 1)
+#do_test_set_mem(test_list, "twitter_bullying_mem_c.csv", "lexicon_with_occurences.txt")
+#do_test_set_mem_sent(test_list, "twitter_bullying_mem_sent_c.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
+
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_mem2.csv", 1)
 #estimation.test_results("test_set.csv", 7, "twitter_bullying_mem_sent.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_mem3.csv", 1)
+
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_mem_c.csv", 1)
+#estimation.test_results("test_set.csv", 7, "twitter_bullying_mem_sent_c.csv", 1)
 
 
 

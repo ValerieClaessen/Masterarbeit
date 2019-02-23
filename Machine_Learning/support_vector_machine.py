@@ -135,7 +135,16 @@ def do_svm(data_list, lex, test_utterance, file, column, matrix):
     #    cb_class = 0
     #print(cb_class)
 
+    contains_curses = False
+    curses = machine_learning_processing.make_list_of_curse_words("curses.txt")
+
+    for word in test_utterance:
+        if word in curses:
+            contains_curses = True                              # utterances that contain curses will automatically be labeled as cyberbullying later
+
     if cb >= 2:
+        cb_class = 1
+    elif contains_curses == True:                                                               # utterances that contain curses will automatically be labeled as cyberbullying
         cb_class = 1
     else:
         cb_class = 0
@@ -221,16 +230,34 @@ utterance3 = machine_learning_processing.process_utterance("This is our presiden
 test_list = machine_learning_processing.process_data("test_set.csv")
 training_list = machine_learning_processing.process_data("train_set.csv")
 
-#term_utterance_matrix = do_matrix(training_list, "lexicon.txt")
+term_utterance_matrix = do_matrix(training_list, "lexicon.txt")
+term_utterance_matrix2 = do_matrix(training_list, "lexicon2.txt")
 matrix_pos = do_matrix(training_list, "lexicon_pos.txt")
 matrix_neut = do_matrix(training_list, "lexicon_neut.txt")
 matrix_neg = do_matrix(training_list, "lexicon_neg.txt")
+matrix_pos2 = do_matrix(training_list, "lexicon_pos2.txt")
+matrix_neut2 = do_matrix(training_list, "lexicon_neut2.txt")
+matrix_neg2 = do_matrix(training_list, "lexicon_neg2.txt")
 
 #do_svm(training_list, "lexicon.txt", utterance, "train_set.csv", 7, term_utterance_matrix)
 #do_svm(training_list, "lexicon.txt", utterance2, "train_set.csv", 7, term_utterance_matrix)
 #do_svm(training_list, "lexicon.txt", utterance3, "train_set.csv", 7, term_utterance_matrix)
 
 #do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2.csv", "lexicon.txt", "train_set.csv", 7, term_utterance_matrix)
-do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
+#do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
 
+do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2_2.csv", "lexicon2.txt", "train_set.csv", 7, term_utterance_matrix2)
+do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_2.csv", "lexicon_pos2.txt", "lexicon_neut2.txt", "lexicon_neg2.txt", "train_set.csv", 7, matrix_pos2, matrix_neut2, matrix_neg2, "test_set_with_sentiment.csv")
+
+do_test_set_svm(test_list, training_list, "twitter_bullying_svm_k2_c.csv", "lexicon.txt", "train_set.csv", 7, term_utterance_matrix)
+do_test_set_svm_sent(test_list, training_list, "twitter_bullying_svm_sent_c.csv", "lexicon_pos.txt", "lexicon_neut.txt", "lexicon_neg.txt", "train_set.csv", 7, matrix_pos, matrix_neut, matrix_neg, "test_set_with_sentiment.csv")
+
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2.csv", 1)
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2_2.csv", 1)
 estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent_2.csv", 1)
+
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2.csv", 1)
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent.csv", 1)
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_k2_c.csv", 1)
+estimation.test_results("test_set.csv", 7, "twitter_bullying_svm_sent_c.csv", 1)

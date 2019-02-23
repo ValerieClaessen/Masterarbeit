@@ -87,7 +87,7 @@ def process_utterance(utterance):
 #print(test_utterance)
 
 # function to make a lexicon containing all vocabulary of our dataset
-def make_lexicon(data_list):
+def make_lexicon(data_list, mode):
     lex = []
 
     for list in data_list:
@@ -99,20 +99,32 @@ def make_lexicon(data_list):
 
     lex = sorted(lex)                                                       # sort list alphabetically
 
-    return lex
+    # only words that occur at least twice in the dataset will be part of the lexicon
+    lex2 = []
+    for word in lex:
+        count = sum(x.count(word) for x in data_list)
+        if count > 1:
+            lex2.append(word)
+
+    if mode == 1:
+        return lex
+    else:
+        return lex2
 
 #test_lex = make_lexicon(test_list)
 #print(test_lex)
-#lex = make_lexicon(train_list)
+#lex = make_lexicon(train_list, 1)
+#lex2 = make_lexicon(train_list, 0)
 
 # function to save lexicon in a txt file
-def lex_into_txt(lex):
-    with open("lexicon.txt", 'w') as f:
+def lex_into_txt(lex, filename):
+    with open(filename, 'w') as f:
         for word in lex:
             f.write("%s\n" % word)
 
 #lex_into_txt(test_lex)
-#lex_into_txt(lex)
+#lex_into_txt(lex, "lexicon.txt")
+#lex_into_txt(lex2, "lexicon2.txt")
 
 # function to make a list of all values from a column from a dataset
 def make_list_of_column(file, column):
@@ -126,9 +138,19 @@ def make_list_of_column(file, column):
 
     return list
 
+# function to make a list of all curse words
+def make_list_of_curse_words(file):
+    with open(file, 'r') as f:
+        curses = [line.strip() for line in f]
+
+    return curses
+
+#curses = make_list_of_curse_words("curses.txt")
+#print(curses)
+
 # function to make a lexicon containing all vocabulary of our dataset + their relative occurences in tweets labeled as
 # cyberbullying / no cyberbullying
-def make_lexicon_with_occurence(file, column, lex, utterances):
+def make_lexicon_with_occurence(file, column, lex, utterances, filename):
     with open(file, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=';')
         next(reader, None)                                                  # skip header
@@ -137,7 +159,7 @@ def make_lexicon_with_occurence(file, column, lex, utterances):
         cyberbuylling_list = make_list_of_column(file, column)              # list of all cyberbullying values
 
         # write new lexicon that contains the word plus its relative occurence in both classes (cyberbullying & no_cyberbullying)
-        file = open("lexicon_with_occurences.txt", "w")
+        file = open(filename, "w")
         for word in lex:
             glob_count = 0
             cyberbullying_count = 0
@@ -180,5 +202,6 @@ def make_lexicon_with_occurence(file, column, lex, utterances):
             file.write(line)
         file.close()
 
-#make_lexicon_with_occurence("twitter_bullying_training.csv", 7, test_lex, test_list)
-#make_lexicon_with_occurence("/machinelearning/train_set.csv", 7, lex, train_list)
+#make_lexicon_with_occurence("twitter_bullying_training.csv", 7, test_lex, test_list, "lexicon_with_occurences.txt")
+#make_lexicon_with_occurence("train_set.csv", 7, lex, train_list, "lexicon_with_occurences.txt")
+#make_lexicon_with_occurence("train_set.csv", 7, lex2, train_list, "lexicon_with_occurences2.txt")
