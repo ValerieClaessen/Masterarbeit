@@ -18,6 +18,12 @@ def utterances_into_txt(file, filename):
 #utterances_into_txt("test_set.csv", "test_set.txt")
 #utterances_into_txt("train_cb_set.csv", "train_cb_set.txt")
 #utterances_into_txt("test_cb_set.csv", "test_cb_set.txt")
+utterances_into_txt("bullying_traces_train.csv", "bullying_traces_train.txt")
+utterances_into_txt("bullying_traces_test.csv", "bullying_traces_test.txt")
+utterances_into_txt("labeled_data_train.csv", "labeled_data_train.txt")
+utterances_into_txt("labeled_data_test.csv", "labeled_data_test.txt")
+utterances_into_txt("twitter_hate_speech_train.csv", "twitter_hate_speech_train.txt")
+utterances_into_txt("twitter_hate_speech_test.csv", "twitter_hate_speech_test.txt")
 
 # function to save results of SentiStrength into csv file
 def sentiment_into_csv(file, filename):
@@ -33,6 +39,12 @@ def sentiment_into_csv(file, filename):
 #sentiment_into_csv("test_set_sentiment.txt", "test_set_sentiment.csv")
 #sentiment_into_csv("train_cb_set_sentiment.txt", "train_cb_set_sentiment.csv")
 #sentiment_into_csv("test_cb_set_sentiment.txt", "test_cb_set_sentiment.csv")
+sentiment_into_csv("bullying_traces_train_sentiment.txt", "bullying_traces_train_sentiment.csv")
+sentiment_into_csv("bullying_traces_test_sentiment.txt", "bullying_traces_test_sentiment.csv")
+sentiment_into_csv("labeled_data_train_sentiment.txt", "labeled_data_train_sentiment.csv")
+sentiment_into_csv("labeled_data_test_sentiment.txt", "labeled_data_test_sentiment.csv")
+sentiment_into_csv("twitter_hate_speech_train_sentiment.txt", "twitter_hate_speech_train_sentiment.csv")
+sentiment_into_csv("twitter_hate_speech_test_sentiment.txt", "twitter_hate_speech_test_sentiment.csv")
 
 # function to estimate the sentiment based on SentiStrength assigned positive and negative values
 def estimate_sentiment(file, filename):
@@ -60,6 +72,12 @@ def estimate_sentiment(file, filename):
 #estimate_sentiment("test_set_sentiment.csv", "test_set_with_sentiment.csv")
 #estimate_sentiment("train_cb_set_sentiment.csv", "train_cb_set_with_sentiment.csv")
 #estimate_sentiment("test_cb_set_sentiment.csv", "test_cb_set_with_sentiment.csv")
+estimate_sentiment("bullying_traces_train_sentiment.csv", "bullying_traces_train_with_sentiment.csv")
+estimate_sentiment("bullying_traces_test_sentiment.csv", "bullying_traces_test_with_sentiment.csv")
+estimate_sentiment("labeled_data_train_sentiment.csv", "labeled_data_train_with_sentiment.csv")
+estimate_sentiment("labeled_data_test_sentiment.csv", "labeled_data_test_with_sentiment.csv")
+estimate_sentiment("twitter_hate_speech_train_sentiment.csv", "twitter_hate_speech_train_with_sentiment.csv")
+estimate_sentiment("twitter_hate_speech_test_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv")
 
 # function to estimate the probability of an utterance with a specific sentiment to be in class cyberbullying / no_cyberbullying
 # return a list of all probabilities (sentiment_list)
@@ -242,6 +260,102 @@ def estimate_sentiment_probabilities_strengths(sentimentfile, cbfile, cbrow):
     sentiment_list = [p_pos_s1, p_pos_s2, p_pos_s3, p_pos_s4, p_pos_s5, p_neut_s1, p_neut_s2, p_neut_s3, p_neut_s4, p_neut_s5, p_neg_s1, p_neg_s2, p_neg_s3, p_neg_s4, p_neg_s5]
     return sentiment_list
 
+# function to estimate the probability of an utterance with a specific sentiment to be in class cyberbullying / no_cyberbullying
+# return a list of all probabilities (sentiment_list)
+def estimate_sentiment_probabilities_other_datasets(sentimentfile, cbfile, cbrow, mode):
+    cb_list = machine_learning_processing.make_list_of_column(cbfile, cbrow)    # list of cyberbullying values
+
+    count_pos = 0                                           # number of positive utterances
+    count_neut = 0                                          # number of neutral utterances
+    count_neg = 0                                           # number of negative utterances
+
+    pos_cb = 0                                              # number of positive utterances in class cyberbullying
+    pos_no_cb = 0                                           # number of positive utterances in class no_cyberbullying
+    neut_cb = 0                                             # number of neutral utterances in class cyberbullying
+    neut_no_cb = 0                                          # number of neutral utterances in class no_cyberbullying
+    neg_cb = 0                                              # number of negative utterances in class cyberbullying
+    neg_no_cb = 0                                           # number of negative utterances in class no_cyberbullying
+
+    with open(sentimentfile, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                  # skip header
+
+        utterance_id = 0
+        for row in reader:
+            if row[1] == 1 or row[1] == "1":
+                count_pos += 1
+
+                if mode == 2:
+                    if cb_list[utterance_id] == 1 or cb_list[utterance_id] == "1":
+                        pos_cb += 1
+                    elif cb_list[utterance_id] == 0 or cb_list[utterance_id] == "0":
+                        pos_cb += 1
+                    else:
+                        pos_no_cb += 1
+                else:
+                    if cb_list[utterance_id] == 1 or cb_list[utterance_id] == "1":
+                        pos_cb += 1
+                    elif cb_list[utterance_id] == 2 or cb_list[utterance_id] == "2":
+                        pos_cb += 1
+                    else:
+                        pos_no_cb += 1
+            elif row[1] == -1 or row[1] == "-1":
+                count_neg += 1
+
+                if mode == 2:
+                    if cb_list[utterance_id] == 1 or cb_list[utterance_id] == "1":
+                        neg_cb += 1
+                    elif cb_list[utterance_id] == 0 or cb_list[utterance_id] == "0":
+                        neg_cb += 1
+                    else:
+                        neg_no_cb += 1
+                else:
+                    if cb_list[utterance_id] == 1 or cb_list[utterance_id] == "1":
+                        neg_cb += 1
+                    elif cb_list[utterance_id] == 2 or cb_list[utterance_id] == "2":
+                        neg_cb += 1
+                    else:
+                        neg_no_cb += 1
+            else:
+                count_neut += 1
+
+                if mode == 2:
+                    if cb_list[utterance_id] == 1 or cb_list[utterance_id] == "1":
+                        neut_cb += 1
+                    elif cb_list[utterance_id] == 0 or cb_list[utterance_id] == "0":
+                        neut_cb += 1
+                    else:
+                        neut_no_cb += 1
+                else:
+                    if cb_list[utterance_id] == 1 or cb_list[utterance_id] == "1":
+                        neut_cb += 1
+                    elif cb_list[utterance_id] == 2 or cb_list[utterance_id] == "2":
+                        neut_cb += 1
+                    else:
+                        neut_no_cb += 1
+
+            utterance_id += 1
+
+    #print(count_pos, count_neut, count_neg)
+    #print(pos_cb, pos_no_cb, neut_cb, neut_no_cb, neg_cb, neut_no_cb)
+
+    p_pos_cb = pos_cb / count_pos                           # probability of a positive utterance being in class cyberbullying
+    p_pos_no_cb = pos_no_cb / count_pos                     # probability of a positive utterance being in class no_cyberbullying
+    p_neut_cb = neut_cb / count_neut                        # probability of a neutral utterance being in class cyberbullying
+    p_neut_no_cb = neut_no_cb / count_neut                  # probability of a neutral utterance being in class no_cyberbullying
+    p_neg_cb = neg_cb / count_neg                           # probability of a negative utterance being in class cyberbullying
+    p_neg_no_cb = neg_no_cb / count_neg                     # probability of a negative utterance being in class no_cyberbullying
+
+    p_pos_cb = round(p_pos_cb, 3)                           # round probabilities to values with 3 positions behind decimal point
+    p_pos_no_cb = round(p_pos_no_cb, 3)
+    p_neut_cb = round(p_neut_cb, 3)
+    p_neut_no_cb = round(p_neut_no_cb, 3)
+    p_neg_cb = round(p_neg_cb, 3)
+    p_neg_no_cb = round(p_neg_no_cb, 3)
+
+    sentiment_list = [p_pos_cb, p_pos_no_cb, p_neut_cb, p_neut_no_cb, p_neg_cb, p_neg_no_cb]
+    return sentiment_list
+
 #sentiment_list = estimate_sentiment_probabilities("train_set_with_sentiment.csv", "train_set.csv", 7)
 #print(sentiment_list)
 
@@ -253,12 +367,12 @@ def estimate_sentiment_probabilities_strengths(sentimentfile, cbfile, cbrow):
 #sentiment_list = estimate_sentiment_probabilities_strengths("train_cb_set_with_sentiment.csv", "train_cb_set.csv", 8)
 #print(sentiment_list)
 
-def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode):
+def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode, class_column):
     lex = []
 
     sentiment_list = machine_learning_processing.make_list_of_column(sentimentfile, 1)
 
-    data_list = machine_learning_processing.process_data(trainfile)
+    data_list = machine_learning_processing.process_data(trainfile, class_column)
 
     utterance_id = 0
     for list in data_list:
@@ -296,6 +410,18 @@ def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode):
 #make_lex_based_on_sent("train_set_with_sentiment.csv", "train_set.csv", "lexicon_neut2.txt", 0, 0)
 
 # strength
-#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_pos_cb.txt", 1, 0)
-#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neg_cb.txt", -1, 0)
-#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neut_cb.txt", 0, 0)
+#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_pos_cb.txt", 1, 1, 5)
+#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neg_cb.txt", -1, 1, 5)
+#make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neut_cb.txt", 0, 1, 5)
+
+make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_pos_bt.txt", 1, 1, 2)
+make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_neg_bt.txt", -1, 1, 2)
+make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_neut_bt.txt", 0, 1, 2)
+
+make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_pos_ld.txt", 1, 1, 6)
+make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_neg_ld.txt", -1, 1, 6)
+make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_neut_ld.txt", 0, 1, 6)
+
+make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_pos_ths.txt", 1, 1, 1)
+make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_neg_ths.txt", -1, 1, 1)
+make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_neut_ths.txt", 0, 1, 1)

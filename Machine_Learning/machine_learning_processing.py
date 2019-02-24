@@ -4,7 +4,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem.snowball import SnowballStemmer
 
 # function to further process the datasets
-def process_data(file):
+def process_data(file, class_column):
     """
     Before we can analyize our data, we need to process it.
     This includes:
@@ -28,7 +28,7 @@ def process_data(file):
         reader = csv.reader(csvfile, delimiter=';')
         next(reader, None)                                                  # skip header
         for row in reader:
-            data_list.append(row[5])
+            data_list.append(row[class_column])
 
     for index, element in enumerate(data_list):
         element = element.lower()                                           # utterance to lowercase
@@ -46,10 +46,13 @@ def process_data(file):
 
     return data_list
 
-#train_list = process_data("twitter_bullying_training.csv")
+#train_list = process_data("twitter_bullying_training.csv", 5)
 #print(test_list)
-train_list = process_data("train_set.csv")
-train_list_cb = process_data("train_cb_set.csv")
+#train_list = process_data("train_set.csv", 5)
+#train_list_cb = process_data("train_cb_set.csv",5)
+train_list_bt = process_data("bullying_traces_train.csv", 2)
+train_list_ld = process_data("labeled_data_train.csv", 6)
+train_list_ths = process_data("twitter_hate_speech_train.csv", 1)
 
 # function to process an utterance of the test set
 def process_utterance(utterance):
@@ -116,7 +119,10 @@ def make_lexicon(data_list, mode):
 #print(test_lex)
 #lex = make_lexicon(train_list, 1)
 #lex2 = make_lexicon(train_list, 0)
-lex = make_lexicon(train_list_cb, 1)
+#lex = make_lexicon(train_list_cb, 1)
+lex_bt = make_lexicon(train_list_bt, 1)
+lex_ld = make_lexicon(train_list_ld, 1)
+lex_ths = make_lexicon(train_list_ths, 1)
 
 # function to save lexicon in a txt file
 def lex_into_txt(lex, filename):
@@ -128,6 +134,9 @@ def lex_into_txt(lex, filename):
 #lex_into_txt(lex, "lexicon.txt")
 #lex_into_txt(lex2, "lexicon2.txt")
 #lex_into_txt(lex, "lexicon_cb.txt")
+lex_into_txt(lex_bt, "lexicon_bt.txt")
+lex_into_txt(lex_ld, "lexicon_ld.txt")
+lex_into_txt(lex_ths, "lexicon_ths.txt")
 
 # function to make a list of all values from a column from a dataset
 def make_list_of_column(file, column):
@@ -315,6 +324,128 @@ def make_lexicon_with_occurence_cb(file, column, lex, utterances, filename):
             file.write(line)
         file.close()
 
+# function to make a lexicon containing all vocabulary of the other datasets + their relative occurences in tweets labeled as
+# cyberbullying / no cyberbullying
+def make_lexicon_with_occurence_other(file, column, lex, utterances, filename, mode):
+    with open(file, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                                  # skip header
+
+        lex_size = len(lex)                                                 # size of the lexicon that is needed to apply laplace smoothing
+        cyberbuylling_list = make_list_of_column(file, column)              # list of all cyberbullying values
+
+        # write new lexicon that contains the word plus its relative occurence in both classes (cyberbullying & no_cyberbullying)
+        file = open(filename, "w")
+        for word in lex:
+            glob_count = 0
+            cyberbullying_count = 0
+            no_cyberbullying_count = 0
+
+            # count how often each word occurs in our dataset
+            for utterance in utterances:
+                utterance_string = ""
+                for item in utterance:
+                    utterance_string = utterance_string + " " + item
+                glob_count += utterance_string.count(word)
+
+            x = 0
+            for value in cyberbuylling_list:
+                sentence = utterances[x]
+                sentence_string = ""
+                for item in sentence:
+                    sentence_string = sentence_string + " " + item
+
+                if mode == 2:
+                    if value == 1 or value == "1":
+                        cyberbullying_count += sentence_string.count(word)      # count how often each word occurs in utterances labeled as cyberbullying
+                    elif value == 0 or value == "0":
+                        cyberbullying_count += sentence_string.count(word)
+                    else:
+                        no_cyberbullying_count += sentence_string.count(word)   # count how often each word occurs in utterances labeled as no_cyberbullying
+                    x += 1
+                else:
+                    if value == 1 or value == "1":
+                        cyberbullying_count += sentence_string.count(word)      # count how often each word occurs in utterances labeled as cyberbullying
+                    elif value == 2 or value == "2":
+                        cyberbullying_count += sentence_string.count(word)
+                    else:
+                        no_cyberbullying_count += sentence_string.count(word)   # count how often each word occurs in utterances labeled as no_cyberbullying
+                    x += 1
+
+            #print(word + " " + str(glob_count) + " " + str(cyberbullying_count) + " " + str(no_cyberbullying_count))
+
+            # with Laplace Smoothing
+            # We add 1 to all word occurences in the two classes and divide that value by their total occurences plus the size
+            # of the lexicon. The result is multiplied by 100 to achieve more practical values.
+            occurence_cyberbullying = ((cyberbullying_count + 1) / (glob_count + lex_size)) * 100
+            occurence_no_cyberbullying = ((no_cyberbullying_count + 1) / (glob_count + lex_size)) * 100
+
+            # without laplace_smoothing
+            #occurence_cyberbullying = cyberbullying_count / glob_count
+            #occurence_no_cyberbullying = no_cyberbullying_count / glob_count
+
+            # the word and its relative occurence in each class is saved into a new lexicon (lexicon_with_occurences.txt)
+            line = word + " " + str(round(occurence_cyberbullying, 3)) + " " + str(round(occurence_no_cyberbullying, 3)) + "\n"
+            file.write(line)
+        file.close()
+
+# function to make a lexicon containing all vocabulary of the other dataset + their relative occurences in tweets labeled as
+# hate speech / no hate speech
+def make_lexicon_with_occurence_hs_other(file, column, lex, utterances, filename, mode):
+    with open(file, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                                  # skip header
+
+        lex_size = len(lex)                                                 # size of the lexicon that is needed to apply laplace smoothing
+        hate_speech_list = make_list_of_column(file, column)                # list of all cyberbullying values
+
+        # write new lexicon that contains the word plus its relative occurence in both classes (hate speech & no hate speech)
+        file = open(filename, "w")
+        for word in lex:
+            glob_count = 0
+            hs_count = 0
+            no_hs_count = 0
+
+            # count how often each word occurs in our dataset
+            for utterance in utterances:
+                utterance_string = ""
+                for item in utterance:
+                    utterance_string = utterance_string + " " + item
+                glob_count += utterance_string.count(word)
+
+            x = 0
+            for value in hate_speech_list:
+                sentence = utterances[x]
+                sentence_string = ""
+                for item in sentence:
+                    sentence_string = sentence_string + " " + item
+
+                if mode == 2:
+                    if value == 0 or value == "0":
+                        hs_count += sentence_string.count(word)      # count how often each word occurs in utterances labeled as cyberbullying
+                    else:
+                        no_hs_count += sentence_string.count(word)   # count how often each word occurs in utterances labeled as no_cyberbullying
+                    x += 1
+                else:
+                    if value == 2 or value == "2":
+                        hs_count += sentence_string.count(word)      # count how often each word occurs in utterances labeled as cyberbullying
+                    else:
+                        no_hs_count += sentence_string.count(word)   # count how often each word occurs in utterances labeled as no_cyberbullying
+                    x += 1
+
+            #print(word + " " + str(glob_count) + " " + str(cyberbullying_count) + " " + str(no_cyberbullying_count))
+
+            # with Laplace Smoothing
+            # We add 1 to all word occurences in the two classes and divide that value by their total occurences plus the size
+            # of the lexicon. The result is multiplied by 100 to achieve more practical values.
+            occurence_hs = ((hs_count + 1) / (glob_count + lex_size)) * 100
+            occurence_no_hs = ((no_hs_count + 1) / (glob_count + lex_size)) * 100
+
+            # the word and its relative occurence in each class is saved into a new lexicon
+            line = word + " " + str(round(occurence_hs, 3)) + " " + str(round(occurence_no_hs, 3)) + "\n"
+            file.write(line)
+        file.close()
+
 #make_lexicon_with_occurence("twitter_bullying_training.csv", 7, test_lex, test_list, "lexicon_with_occurences.txt")
 #make_lexicon_with_occurence("train_set.csv", 7, lex, train_list, "lexicon_with_occurences.txt")
 #make_lexicon_with_occurence("train_set.csv", 7, lex2, train_list, "lexicon_with_occurences2.txt")
@@ -323,4 +454,17 @@ def make_lexicon_with_occurence_cb(file, column, lex, utterances, filename):
 #make_lexicon_with_occurence_hs("train_set.csv", 9, lex, train_list, "lexicon_with_occurences_hs.txt")
 
 # strength
-make_lexicon_with_occurence_cb("train_cb_set.csv", 8, lex, train_list_cb, "lexicon_with_occurences_cb.txt")
+#make_lexicon_with_occurence_cb("train_cb_set.csv", 8, lex, train_list_cb, "lexicon_with_occurences_cb.txt")
+
+# bullying traces
+make_lexicon_with_occurence("bullying_traces_train.csv", 3, lex_bt, train_list_bt, "lexicon_with_occurences_bt.txt")
+
+# labeled data
+make_lexicon_with_occurence_other("labeled_data_train.csv", 5, lex_ld, train_list_ld, "lexicon_with_occurences_ld.txt", 2)
+make_lexicon_with_occurence_hs_other("labeled_data_train.csv", 5, lex_ld, train_list_ld, "lexicon_with_occurences_hs_ld.txt", 2)
+
+# twitter bullying
+make_lexicon_with_occurence_other("twitter_hate_speech_train.csv", 2, lex_ths, train_list_ths, "lexicon_with_occurences_ths.txt", 3)
+make_lexicon_with_occurence_hs_other("twitter_hate_speech_train.csv", 2, lex_ths, train_list_ths, "lexicon_with_occurences_hs_ths.txt", 3)
+
+

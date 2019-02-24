@@ -37,7 +37,59 @@ def estimate_class_frequency(file):
         global freq_no_cb
         freq_no_cb = no_cyberbullying / utterances          # frequency of utterances that are labeled as no_cyberbullying
 
-estimate_class_frequency("train_set.csv")
+#estimate_class_frequency("train_set.csv")
+
+# function to estimate the frequencies of each cyberbullying class in the training dataset
+def estimate_class_frequency_other_datasets(file, mode):
+    """
+    Bullying Traces:        Utterance in row[2], Cyberbullying in row[3] with 1 = Cyberbullying, 0 = no Cyberbullying; Mode: 1
+
+    Labeled Data:           Utterance in row[6], Class in row[5] with Hate Speech = 0, Offensive Language = 1 and neither = 2.
+                            Cyberbullying are all utterances with class 0 and 1. Mode: 2
+
+    Twitter Hate Speech:    Utterance in row[1], Class in row[2] with Hate Speech = 2, Offensive Language = 1 and neither = 0.
+                            Cyberbullying are all utterances with class 2 and 1. Mode: 3
+    """
+
+    with open(file, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                                  # skip header
+
+        cyberbullying = 0
+        no_cyberbullying = 0
+        utterances = 0
+
+        # count utterances that are labeled as cyberbuylling / no_cyberbullying
+        if mode == 1:
+            for row in reader:
+                if row[3] == 1 or row[3] == "1":
+                    cyberbullying += 1
+                else:
+                    no_cyberbullying += 1
+                utterances += 1
+        elif mode == 2:
+            for row in reader:
+                if row[5] == 1 or row[5] == "1":
+                    cyberbullying += 1
+                elif row[5] == 0 or row[5] == "0":
+                    cyberbullying += 1
+                else:
+                    no_cyberbullying += 1
+                utterances += 1
+        else:
+            for row in reader:
+                if row[2] == 1 or row[2] == "1":
+                    cyberbullying += 1
+                elif row[2] == 2 or row[2] == "2":
+                    cyberbullying += 1
+                else:
+                    no_cyberbullying += 1
+                utterances += 1
+
+        global freq_cb
+        freq_cb = cyberbullying / utterances                # frequency of utterances that are labeled as cyberbullying
+        global freq_no_cb
+        freq_no_cb = no_cyberbullying / utterances          # frequency of utterances that are labeled as no_cyberbullying
 
 # function to estimate the frequencies of each hate speech class in the training dataset
 def estimate_hate_speech_frequency(file):
@@ -62,7 +114,46 @@ def estimate_hate_speech_frequency(file):
         global freq_no_hs
         freq_no_hs = no_hatespeech / utterances          # frequency of utterances that are labeled as no_cyberbullying
 
-estimate_hate_speech_frequency("train_set.csv")
+#estimate_hate_speech_frequency("train_set.csv")
+
+# function to estimate the frequencies of each hate speech class in the training dataset
+def estimate_hate_speech_frequency_other_datasets(file, mode):
+    """
+    Labeled Data:           Utterance in row[6], Class in row[5] with Hate Speech = 0, Offensive Language = 1 and neither = 2.
+                            Cyberbullying are all utterances with class 0 and 1. Mode: 2
+
+    Twitter Hate Speech:    Utterance in row[1], Class in row[2] with Hate Speech = 2, Offensive Language = 1 and neither = 0.
+                            Cyberbullying are all utterances with class 2 and 1. Mode: 3
+    """
+
+    with open(file, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        next(reader, None)                                                  # skip header
+
+        hate_speech = 0
+        no_hatespeech = 0
+        utterances = 0
+
+        # count utterances that are labeled as hate speech / no hate speech
+        if mode == 2:
+            for row in reader:
+                if row[5] == 0 or row[5] == "0":
+                    hate_speech += 1
+                else:
+                    no_hatespeech += 1
+                utterances += 1
+        else:
+            for row in reader:
+                if row[2] == 2 or row[2] == "2":
+                    hate_speech += 1
+                else:
+                    no_hatespeech += 1
+                utterances += 1
+
+        global freq_hs
+        freq_hs = hate_speech / utterances                # frequency of utterances that are labeled as cyberbullying
+        global freq_no_hs
+        freq_no_hs = no_hatespeech / utterances          # frequency of utterances that are labeled as no_cyberbullying
 
 # function to estimate the frequencies of each cyberbullying strength class in the training dataset
 def estimate_cb_strength_frequency(file):
@@ -579,12 +670,53 @@ def do_test_set_naive_bayes_sent_strength(utterances, filename, lex, file, colum
             writer.writerow([utterance_string, class_strength])
             utterance_id += 1
 
+# function to label a test set using the Naive Bayes algorithm and Sentiment and to save results in a new file for the other datasets
+def do_test_set_naive_bayes_sent_other(utterances, filename, lex, file, column, sentimentfile_train, sentimentfile_test, mode):
+    # annotation using naive_bayes will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Cyberbullying"]) # header
+
+        sentimentlist = senti_strength.estimate_sentiment_probabilities_other_datasets(sentimentfile_train, file, column, mode)
+        list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile_test, 1)
+
+        utterance_id = 0
+        for utterance in utterances:
+            class_cb = do_sentiment_naive_bayes(utterance, lex, list_of_sentiments[utterance_id], sentimentlist)  # determine class of the utterance using do_naive_bayes()
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_cb])
+            utterance_id += 1
+
+# function to label a test set using the Naive Bayes algorithm and Sentiment and to save results in a new file for the other datesets
+def do_test_set_naive_bayes_sent_hs_other(utterances, filename, lex, file, column, sentimentfile_train, sentimentfile_test, mode):
+    # annotation using naive_bayes will be saved in a new file
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter=';')
+        writer.writerow(["Utterance", "Hate Speech"]) # header
+
+        sentimentlist = senti_strength.estimate_sentiment_probabilities_other_datasets(sentimentfile_train, file, column, mode)
+        list_of_sentiments = machine_learning_processing.make_list_of_column(sentimentfile_test, 1)
+
+        utterance_id = 0
+        for utterance in utterances:
+            class_hs = do_sentiment_naive_bayes_hs(utterance, lex, list_of_sentiments[utterance_id], sentimentlist)  # determine class of the utterance using do_sentiment_naive_bayes_hs()
+
+            # write utterance and its assigned class into the file
+            utterance_string = ""
+            for word in utterance:
+                utterance_string = utterance_string + word + " "
+            writer.writerow([utterance_string, class_hs])
+            utterance_id += 1
 
 utterance = machine_learning_processing.process_utterance("Yup. I can't stand this shit. The left screams and yells Black Lives Matter and the minute a black man or woman disappear")
 utterance2 = machine_learning_processing.process_utterance("ban islam")
 utterance3 = machine_learning_processing.process_utterance("This is our president. WHO talks like that?!? Our leader does. I cant. How embarrassing. A disgrace to the office.")
 
-test_list = machine_learning_processing.process_data("test_set.csv")
+test_list = machine_learning_processing.process_data("test_set.csv", 5)
 
 #do_naive_bayes(utterance, "lexicon_with_occurences.txt")
 #do_naive_bayes(utterance2, "lexicon_with_occurences.txt")
@@ -616,12 +748,36 @@ test_list = machine_learning_processing.process_data("test_set.csv")
 #estimation.test_results("test_set.csv", 9, "twitter_bullying_naive_bayes_sent_hs.csv", 1)
 
 # strength
-test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
+test_s_list = machine_learning_processing.process_data("test_cb_set.csv", 5)
 #do_test_set_naive_bayes_strength(test_s_list, "twitter_bullying_naive_bayes_strength.csv", "lexicon_with_occurences_cb.txt")
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_strength.csv", 1)
 
 # strength with sentiment
 #do_test_set_naive_bayes_sent_strength(test_s_list, "twitter_bullying_naive_bayes_sent_strength.csv", "lexicon_with_occurences_cb.txt", "train_cb_set.csv", 8, "train_cb_set_with_sentiment.csv", "test_cb_set_with_sentiment.csv")
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_sent_strength.csv", 1)
+
+# bullying traces
+estimate_class_frequency_other_datasets("bullying_traces_train.csv", 1)
+test_list_bt = machine_learning_processing.process_data("bullying_traces_test.csv", 2)
+do_test_set_naive_bayes_sent(test_list_bt, "bullying_traces_naive_bayes.csv", "lexicon_with_occurences_bt.txt", "bullying_traces_train.csv", 3, "train_set_bt_with_sentiment.csv", "test_set_bt_with_sentiment.csv")
+estimation.test_results("test_set.csv", 7, "bullying_traces_naive_bayes.csv", 1)
+
+# labeled data
+estimate_class_frequency_other_datasets("labeled_data_train.csv", 2)
+estimate_hate_speech_frequency_other_datasets("labeled_data_train.csv", 2)
+test_list_ld = machine_learning_processing.process_data("labeled_data_test.csv", 6)
+do_test_set_naive_bayes_sent_other(test_list_ld, "labeled_data_naive_bayes.csv", "lexicon_with_occurences_ld.txt", "labeled_data_train.csv", 5, "train_set_ld_with_sentiment.csv", "test_set_ld_with_sentiment.csv", 2)
+do_test_set_naive_bayes_sent_hs_other(test_list_ld, "labeled_data_naive_bayes_hs.csv", "lexicon_with_occurences_hs_ld.txt", "labeled_data_train.csv", 5, "train_set_ld_with_sentiment.csv", "test_set_ld_with_sentiment.csv", 2)
+estimation.test_results("test_set.csv", 7, "labeled_data_naive_bayes.csv", 1)
+estimation.test_results("test_set.csv", 9, "labeled_data_naive_bayes_hs.csv", 1)
+
+# twitter hate speech
+estimate_class_frequency_other_datasets("twitter_hate_speech_train.csv", 3)
+estimate_hate_speech_frequency_other_datasets("twitter_hate_speech_train.csv", 3)
+test_list_ths = machine_learning_processing.process_data("twitter_hater_speech_test.csv", 1)
+do_test_set_naive_bayes_sent_other(test_list_ths, "twitter_hate_speech_naive_bayes.csv", "lexicon_with_occurences_ths.txt", "twitter_hate_speech_train.csv", 2, "train_set_ths_with_sentiment.csv", "test_set_ths_with_sentiment.csv", 3)
+do_test_set_naive_bayes_sent_hs_other(test_list_ths, "twitter_hate_speech_naive_bayes_hs.csv", "lexicon_with_occurences_hs_ths.txt", "twitter_hate_speech_train.csv", 2, "train_set_ths_with_sentiment.csv", "test_set_ths_with_sentiment.csv", 3)
+estimation.test_results("test_set.csv", 7, "twitter_hate_speech_naive_bayes.csv", 1)
+estimation.test_results("test_set.csv", 9, "twitter_hate_speech_naive_bayes_hs.csv", 1)
 
 
