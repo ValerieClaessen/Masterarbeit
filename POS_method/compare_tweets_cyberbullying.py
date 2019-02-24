@@ -8,7 +8,7 @@ c1.truncate()
 c1.close()
 
 text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
-#TODO: Distanz nicht komplett für jeden Vergleichstweet in ein Dokument schreiben sondern direkt nur die 10 größten Werte in einer Liste zwischenspeichern
+#TODO: Distanz nicht komplett für jeden Vergleichstweet in ein Dokument schreiben sondern direkt nur die 11 größten Werte in einer Liste zwischenspeichern
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
 # return: Distanz
@@ -45,19 +45,19 @@ def compare_vec_tweet(tweet, row_number):
             dist_list.append(dist.copy())
 
     sorted_dist = sorted(dist_list, key=lambda k: k['cos'], reverse=True)
-    knn_list = sorted_dist[:10]
+    knn_list = sorted_dist[:11]
     count_cb = 0
     for x in knn_list:
         cb = x.get("CB")
         count_cb += int(cb)
             #percent += int(bc)
 
-    percent = count_cb/10
+    percent = count_cb/11
 
-    return percent
+    return round(percent, 2)
 
 
-print(compare_vec_tweet(text, 3))
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_tweet(text, 3))
 
 
 
