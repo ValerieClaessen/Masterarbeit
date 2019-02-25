@@ -9,7 +9,6 @@ c1.truncate()
 c1.close()
 
 text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
-#TODO: Distanz nicht komplett für jeden Vergleichstweet in ein Dokument schreiben sondern direkt nur die 11 größten Werte in einer Liste zwischenspeichern
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
 # return: Distanz

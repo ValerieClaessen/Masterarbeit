@@ -1,13 +1,14 @@
 import csv
 import numpy as np
+from numpy import median
 
 from POS_method.process_single_tweet import process_single_tweet
 
-c1 = open("POS_Testdaten_cos_dist.csv", "w")
-c1.truncate()
-c1.close()
+# c1 = open("labeled_data_cos_dist.csv", "w")
+# c1.truncate()
+# c1.close()
 
-text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+text = "Donald Trump is an Ass and a coward, I HATE him!!!"
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
 # return: Distanz
@@ -20,12 +21,12 @@ def cos_sim(a, b):
 #####berechnen der knn#####
 #input: tweet =Tweet der verglichen werden soll, row_number = Spalte vond er die Nachbarn "eingeholt" werden
 
-def compare_vec_tweet(tweet, row_number):
+def compare_vec_labeled_data(tweet, row_number):
     dist_list = []
     vector = process_single_tweet(tweet)
 
     ##### Einlesen der Vektoren und berechnung der Cosinus-Distanz #####
-    with open('POS_Testdaten_vec.csv', 'r') as f:
+    with open('labeled_data_files/labeled_data_train_vec.csv', 'r') as f:
         reader = csv.reader(f, delimiter=";")
         for row in reader:
             words = []
@@ -45,18 +46,15 @@ def compare_vec_tweet(tweet, row_number):
 
     sorted_dist = sorted(dist_list, key=lambda k: k['cos'], reverse=True)
     knn_list = sorted_dist[:11]
-    count_cb = 0
+    cb = []
     for x in knn_list:
-        cb = x.get("CB")
-        count_cb += int(cb)
-            #percent += int(bc)
-
-    percent = count_cb/11
-
-    return round(percent, 2)
+        cb.append(int(x.get("CB")))
+    print(cb)
+    #TODO: Ist hier wirklich der Median angemessen oder soll doch eine Art Mittelwert angegeben werden?
+    return median(cb)
 
 
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_tweet(text, 3))
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_labeled_data(text, 3))
 
 
 

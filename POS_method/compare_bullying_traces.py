@@ -3,9 +3,6 @@ import numpy as np
 
 from POS_method.process_single_tweet import process_single_tweet
 
-c1 = open("POS_Testdaten_cos_dist.csv", "w")
-c1.truncate()
-c1.close()
 
 text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
@@ -20,12 +17,12 @@ def cos_sim(a, b):
 #####berechnen der knn#####
 #input: tweet =Tweet der verglichen werden soll, row_number = Spalte vond er die Nachbarn "eingeholt" werden
 
-def compare_vec_tweet(tweet, row_number):
+def compare_vec_bullying_traces(tweet, row_number):
     dist_list = []
     vector = process_single_tweet(tweet)
 
     ##### Einlesen der Vektoren und berechnung der Cosinus-Distanz #####
-    with open('POS_Testdaten_vec.csv', 'r') as f:
+    with open('bullying_traces_files/bullying_traces_train_vec.csv', 'r') as f:
         reader = csv.reader(f, delimiter=";")
         for row in reader:
             words = []
@@ -49,6 +46,7 @@ def compare_vec_tweet(tweet, row_number):
     for x in knn_list:
         cb = x.get("CB")
         count_cb += int(cb)
+        print(cb)
             #percent += int(bc)
 
     percent = count_cb/11
@@ -56,7 +54,7 @@ def compare_vec_tweet(tweet, row_number):
     return round(percent, 2)
 
 
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_tweet(text, 3))
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_bullying_traces(text, 3))
 
 
 
