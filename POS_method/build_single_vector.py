@@ -42,18 +42,6 @@ def build_vector(tagged_tweet):
             elif word == "n" or word == "n":
                 n_counter += 1
 
-        # print(
-        #     N_counter,
-        #     V_counter,
-        #     J_counter,
-        #     P_counter,
-        #     R_counter,
-        #     EXCL_counter,
-        #     QUE_counter,
-        #     CL_counter,
-        #     sw_counter,
-        #     name_counter,
-        #     n_counter)
 
         vector = []
 
