@@ -60,7 +60,7 @@ def compare_vec_labeled_data_hs(tweet, row_number):
 
 
 
-    return hatespeech/11
+    return round(hatespeech/11, 2)
 
 def compare_vec_labeled_data_cb(tweet, row_number):
     dist_list = []
@@ -98,7 +98,7 @@ def compare_vec_labeled_data_cb(tweet, row_number):
             cyberbullying += 1
 
 
-    return cyberbullying/11
+    return round(cyberbullying/11, 2)
 
 
 print("Testsentence 1")

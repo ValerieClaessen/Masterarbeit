@@ -55,7 +55,7 @@ def compare_vec_twitter_bullying_hs(tweet, row_number):
     # for x in knn_list:
     #     cb.append(int(x.get("CB")))
     # print(cb)
-    return hatespeech/11
+    return round(hatespeech/11, 2)
 
 
 def compare_vec_twitter_bullying_cb(tweet, row_number):
@@ -95,7 +95,7 @@ def compare_vec_twitter_bullying_cb(tweet, row_number):
     # for x in knn_list:
     #     cb.append(int(x.get("CB")))
     # print(cb)
-    return cyberbullying/11
+    return round(cyberbullying/11, 2)
 
 print("Testsentence 1")
 print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_1, 3))
