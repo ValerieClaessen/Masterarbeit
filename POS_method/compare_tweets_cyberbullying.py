@@ -7,7 +7,10 @@ c1 = open("POS_Testdaten_cos_dist.csv", "w")
 c1.truncate()
 c1.close()
 
-text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+testsentence_1 = "I love You!"
+testsentence_2 = "Donald Trump is the President."
+testsentence_3 = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
 # return: Distanz
@@ -56,7 +59,7 @@ def compare_vec_tweet(tweet, row_number):
     return round(percent, 2)
 
 
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_tweet(text, 3))
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_tweet(testsentence_3, 3))
 
 
 

@@ -9,7 +9,7 @@ from POS_method.POS_test import prepare_POS_text, POS_specials_all
 
 def train_data_bullying_traces():
     ##### Lesen der Ausgangssätze #####
-    with open('bullying_traces_train.csv', 'r') as f8:
+    with open('bullying_traces_files/bullying_traces_train.csv', 'r') as f8:
         reader = csv.reader(f8, delimiter = ";")
         for row in reader:
             text2 = ""
@@ -24,14 +24,14 @@ def train_data_bullying_traces():
             logging.info('Starting POS-Tagging')
 
             ##### Schreiben der Ausgangssätze und POS-tags #####
-            with open('bullying_traces_train_pos.csv', 'a') as f3:
+            with open('bullying_traces_files/bullying_traces_train_pos.csv', 'a') as f3:
                 writer = csv.writer(f3, delimiter=';')
                 str1 = ','.join(POS_specials_all(test_tags2))   #Anwenden des speziellen Taggens
-                writer.writerow([row[0], str1, row[2], row[3], row[4], row[5]])         #Ausgangstext , POS-Tags, Cyberbullying (1/0)
+                writer.writerow([row[0], str1, row[2]])         #Ausgangstext , POS-Tags, Cyberbullying (1/0)
             logging.info('POS-Tagging: END')
 
     ##### Erstellen der Vektoren der einzelnen Sätze #####
-    with open('bullying_traces_train_pos.csv', 'r') as f:
+    with open('bullying_traces_files/bullying_traces_train_pos.csv', 'r') as f:
         reader = csv.reader(f, delimiter=";")
         for row in reader:
             words = row[1].split(',')
@@ -104,10 +104,10 @@ def train_data_bullying_traces():
             logging.info('Starting Vector')
 
             ##### Aufschreiben der Vektoren in neue .csv #####
-            with open('bullying_traces_train_vec.csv', 'a') as f3:
+            with open('bullying_traces_files/bullying_traces_train_vec.csv', 'a') as f3:
                 writer = csv.writer(f3, delimiter=';')
                 str1 = ','.join(str(v) for v in vector)
-                writer.writerow([row[0], row[1], str1, row[2], row[3], row[4], row[5]])     #Ausgangstext, POS-Tags, Vektoren, Cyberbullying (1/0)
+                writer.writerow([row[0], row[1], str1, row[2]])     #Ausgangstext, POS-Tags, Vektoren, Cyberbullying (1/0)
             logging.info('Vector: END')
 
 train_data_bullying_traces()

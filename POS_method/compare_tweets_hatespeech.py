@@ -8,7 +8,10 @@ c1 = open("POS_Testdaten_cos_dist_cb.csv", "w")
 c1.truncate()
 c1.close()
 
-text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+testsentence_1 = "I love You!"
+testsentence_2 = "Donald Trump is the President."
+testsentence_3 = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
 # return: Distanz
@@ -91,8 +94,8 @@ def compare_vec_tweet_strenght(tweet, row_number):
     return median(cb)
 
 
-print("Hatespeech Wahrscheinlichkeit= " ,compare_vec_tweet_hatespeech(text, 5))   #Hate-Speech bei Cyberbullying = pos
-print("Durchschnittsstärke des Cyberbullying (gerundet auf ganze Zahl)= " ,(compare_vec_tweet_strenght(text, 4)))   #Stärke des Cyberbullying bei Cyberbullying = pos
+print("Hatespeech Wahrscheinlichkeit= " ,compare_vec_tweet_hatespeech(testsentence_3, 5))   #Hate-Speech bei Cyberbullying = pos
+print("Durchschnittsstärke des Cyberbullying (gerundet auf ganze Zahl)= " ,(compare_vec_tweet_strenght(testsentence_3, 4)))   #Stärke des Cyberbullying bei Cyberbullying = pos
 
 
 

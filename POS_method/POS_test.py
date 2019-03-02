@@ -17,7 +17,7 @@ from POS_method.build_single_vector import build_vector
 # c3 = open("POS_Testdaten_compare.csv", "w")
 # c3.truncate()
 # c3.close()
-
+from POS_method.senti_word_net import analyze_sentiment
 
 text = "Why is Donald Trump a coward,!!!!"
 
@@ -167,12 +167,14 @@ def POS_specials_all(pos_tags):
                 written = True
                 break
         f4 = open('negative-words.txt', 'r')
-        for line in f4:
-            if tag[0].lower() == line.lower().strip() and written == False:  # wichtig: Vornamen werden Nachnamen bevorzugt
-                new_pos[1] = new_pos[1] + " ,n"
+        # for line in f4:
+        #     if tag[0].lower() == line.lower().strip() and written == False:  # wichtig: Vornamen werden Nachnamen bevorzugt
+        #         new_pos[1] = new_pos[1] + " ,n"
+        if analyze_sentiment(tag[0].lower()) == True:
+            #print("True: ", tag[0])
+            new_pos[1] = new_pos[1] + " ,n"
+            written = True
 
-                written = True
-                break
         # f5 = open('smileys.txt', 'r')
         # for line in f5:
         #     if tag[0].strip("<").strip(">") == line and written == False:  # wichtig: Vornamen werden Nachnamen bevorzugt

@@ -4,7 +4,10 @@ import numpy as np
 from POS_method.process_single_tweet import process_single_tweet
 
 
-text = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+testsentence_1 = "I love You!"
+testsentence_2 = "Donald Trump is the President."
+testsentence_3 = "Donald Trump is an Ass and a coward, I HATE him, ban Islam!!!"
+
 # - Kann mit dem Vorgehen von K-Nearest-Neighbors zusammengelegt werden!
 ##### Berechnung der Cosinus-Distanz zwischen zwei Vektoren #####
 # return: Distanz
@@ -46,15 +49,19 @@ def compare_vec_bullying_traces(tweet, row_number):
     for x in knn_list:
         cb = x.get("CB")
         count_cb += int(cb)
-        print(cb)
+        #print(cb)
             #percent += int(bc)
 
     percent = count_cb/11
 
     return round(percent, 2)
 
+print("Testsentence 1")
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_bullying_traces(testsentence_1, 3))
 
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_bullying_traces(text, 3))
 
+print("Testsentence 2")
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_bullying_traces(testsentence_2, 3))
 
-
+print("Testsentence 3")
+print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_bullying_traces(testsentence_3, 3))
