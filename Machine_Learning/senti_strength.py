@@ -18,12 +18,12 @@ def utterances_into_txt(file, filename):
 #utterances_into_txt("test_set.csv", "test_set.txt")
 #utterances_into_txt("train_cb_set.csv", "train_cb_set.txt")
 #utterances_into_txt("test_cb_set.csv", "test_cb_set.txt")
-utterances_into_txt("bullying_traces_train.csv", "bullying_traces_train.txt")
-utterances_into_txt("bullying_traces_test.csv", "bullying_traces_test.txt")
-utterances_into_txt("labeled_data_train.csv", "labeled_data_train.txt")
-utterances_into_txt("labeled_data_test.csv", "labeled_data_test.txt")
-utterances_into_txt("twitter_hate_speech_train.csv", "twitter_hate_speech_train.txt")
-utterances_into_txt("twitter_hate_speech_test.csv", "twitter_hate_speech_test.txt")
+#utterances_into_txt("bullying_traces_train.csv", "bullying_traces_train.txt")
+#utterances_into_txt("bullying_traces_test.csv", "bullying_traces_test.txt")
+#utterances_into_txt("labeled_data_train.csv", "labeled_data_train.txt")
+#utterances_into_txt("labeled_data_test.csv", "labeled_data_test.txt")
+#utterances_into_txt("twitter_hate_speech_train.csv", "twitter_hate_speech_train.txt")
+#utterances_into_txt("twitter_hate_speech_test.csv", "twitter_hate_speech_test.txt")
 
 # function to save results of SentiStrength into csv file
 def sentiment_into_csv(file, filename):
@@ -39,12 +39,12 @@ def sentiment_into_csv(file, filename):
 #sentiment_into_csv("test_set_sentiment.txt", "test_set_sentiment.csv")
 #sentiment_into_csv("train_cb_set_sentiment.txt", "train_cb_set_sentiment.csv")
 #sentiment_into_csv("test_cb_set_sentiment.txt", "test_cb_set_sentiment.csv")
-sentiment_into_csv("bullying_traces_train_sentiment.txt", "bullying_traces_train_sentiment.csv")
-sentiment_into_csv("bullying_traces_test_sentiment.txt", "bullying_traces_test_sentiment.csv")
-sentiment_into_csv("labeled_data_train_sentiment.txt", "labeled_data_train_sentiment.csv")
-sentiment_into_csv("labeled_data_test_sentiment.txt", "labeled_data_test_sentiment.csv")
-sentiment_into_csv("twitter_hate_speech_train_sentiment.txt", "twitter_hate_speech_train_sentiment.csv")
-sentiment_into_csv("twitter_hate_speech_test_sentiment.txt", "twitter_hate_speech_test_sentiment.csv")
+#sentiment_into_csv("bullying_traces_train_sentiment.txt", "bullying_traces_train_sentiment.csv")
+#sentiment_into_csv("bullying_traces_test_sentiment.txt", "bullying_traces_test_sentiment.csv")
+#sentiment_into_csv("labeled_data_train_sentiment.txt", "labeled_data_train_sentiment.csv")
+#sentiment_into_csv("labeled_data_test_sentiment.txt", "labeled_data_test_sentiment.csv")
+#sentiment_into_csv("twitter_hate_speech_train_sentiment.txt", "twitter_hate_speech_train_sentiment.csv")
+#sentiment_into_csv("twitter_hate_speech_test_sentiment.txt", "twitter_hate_speech_test_sentiment.csv")
 
 # function to estimate the sentiment based on SentiStrength assigned positive and negative values
 def estimate_sentiment(file, filename):
@@ -72,12 +72,12 @@ def estimate_sentiment(file, filename):
 #estimate_sentiment("test_set_sentiment.csv", "test_set_with_sentiment.csv")
 #estimate_sentiment("train_cb_set_sentiment.csv", "train_cb_set_with_sentiment.csv")
 #estimate_sentiment("test_cb_set_sentiment.csv", "test_cb_set_with_sentiment.csv")
-estimate_sentiment("bullying_traces_train_sentiment.csv", "bullying_traces_train_with_sentiment.csv")
-estimate_sentiment("bullying_traces_test_sentiment.csv", "bullying_traces_test_with_sentiment.csv")
-estimate_sentiment("labeled_data_train_sentiment.csv", "labeled_data_train_with_sentiment.csv")
-estimate_sentiment("labeled_data_test_sentiment.csv", "labeled_data_test_with_sentiment.csv")
-estimate_sentiment("twitter_hate_speech_train_sentiment.csv", "twitter_hate_speech_train_with_sentiment.csv")
-estimate_sentiment("twitter_hate_speech_test_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv")
+#estimate_sentiment("bullying_traces_train_sentiment.csv", "bullying_traces_train_with_sentiment.csv")
+#estimate_sentiment("bullying_traces_test_sentiment.csv", "bullying_traces_test_with_sentiment.csv")
+#estimate_sentiment("labeled_data_train_sentiment.csv", "labeled_data_train_with_sentiment.csv")
+#estimate_sentiment("labeled_data_test_sentiment.csv", "labeled_data_test_with_sentiment.csv")
+#estimate_sentiment("twitter_hate_speech_train_sentiment.csv", "twitter_hate_speech_train_with_sentiment.csv")
+#estimate_sentiment("twitter_hate_speech_test_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv")
 
 # function to estimate the probability of an utterance with a specific sentiment to be in class cyberbullying / no_cyberbullying
 # return a list of all probabilities (sentiment_list)
@@ -95,8 +95,8 @@ def estimate_sentiment_probabilities(sentimentfile, cbfile, cbrow):
     neg_cb = 0                                              # number of negative utterances in class cyberbullying
     neg_no_cb = 0                                           # number of negative utterances in class no_cyberbullying
 
-    with open(sentimentfile, 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=';')
+    with open(sentimentfile, 'r') as file:
+        reader = csv.reader(file, delimiter=';')
         next(reader, None)                                  # skip header
 
         utterance_id = 0
@@ -414,14 +414,14 @@ def make_lex_based_on_sent(sentimentfile, trainfile, lexname, sentiment, mode, c
 #make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neg_cb.txt", -1, 1, 5)
 #make_lex_based_on_sent("train_cb_set_with_sentiment.csv", "train_cb_set.csv", "lexicon_neut_cb.txt", 0, 1, 5)
 
-make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_pos_bt.txt", 1, 1, 2)
-make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_neg_bt.txt", -1, 1, 2)
-make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_neut_bt.txt", 0, 1, 2)
+#make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_pos_bt.txt", 1, 1, 2)
+#make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_neg_bt.txt", -1, 1, 2)
+#make_lex_based_on_sent("bullying_traces_train_with_sentiment.csv", "bullying_traces_train.csv", "lexicon_neut_bt.txt", 0, 1, 2)
 
-make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_pos_ld.txt", 1, 1, 6)
-make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_neg_ld.txt", -1, 1, 6)
-make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_neut_ld.txt", 0, 1, 6)
+#make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_pos_ld.txt", 1, 1, 6)
+#make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_neg_ld.txt", -1, 1, 6)
+#make_lex_based_on_sent("labeled_data_train_with_sentiment.csv", "labeled_data_train.csv", "lexicon_neut_ld.txt", 0, 1, 6)
 
-make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_pos_ths.txt", 1, 1, 1)
-make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_neg_ths.txt", -1, 1, 1)
-make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_neut_ths.txt", 0, 1, 1)
+#make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_pos_ths.txt", 1, 1, 1)
+#make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_neg_ths.txt", -1, 1, 1)
+#make_lex_based_on_sent("twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_train.csv", "lexicon_neut_ths.txt", 0, 1, 1)

@@ -50,9 +50,9 @@ def process_data(file, class_column):
 #print(test_list)
 #train_list = process_data("train_set.csv", 5)
 #train_list_cb = process_data("train_cb_set.csv",5)
-train_list_bt = process_data("bullying_traces_train.csv", 2)
-train_list_ld = process_data("labeled_data_train.csv", 6)
-train_list_ths = process_data("twitter_hate_speech_train.csv", 1)
+#train_list_bt = process_data("bullying_traces_train.csv", 2)
+#train_list_ld = process_data("labeled_data_train.csv", 6)
+#train_list_ths = process_data("twitter_hate_speech_train.csv", 1)
 
 # function to process an utterance of the test set
 def process_utterance(utterance):
@@ -120,9 +120,9 @@ def make_lexicon(data_list, mode):
 #lex = make_lexicon(train_list, 1)
 #lex2 = make_lexicon(train_list, 0)
 #lex = make_lexicon(train_list_cb, 1)
-lex_bt = make_lexicon(train_list_bt, 1)
-lex_ld = make_lexicon(train_list_ld, 1)
-lex_ths = make_lexicon(train_list_ths, 1)
+#lex_bt = make_lexicon(train_list_bt, 1)
+#lex_ld = make_lexicon(train_list_ld, 1)
+#lex_ths = make_lexicon(train_list_ths, 1)
 
 # function to save lexicon in a txt file
 def lex_into_txt(lex, filename):
@@ -134,9 +134,9 @@ def lex_into_txt(lex, filename):
 #lex_into_txt(lex, "lexicon.txt")
 #lex_into_txt(lex2, "lexicon2.txt")
 #lex_into_txt(lex, "lexicon_cb.txt")
-lex_into_txt(lex_bt, "lexicon_bt.txt")
-lex_into_txt(lex_ld, "lexicon_ld.txt")
-lex_into_txt(lex_ths, "lexicon_ths.txt")
+#lex_into_txt(lex_bt, "lexicon_bt.txt")
+#lex_into_txt(lex_ld, "lexicon_ld.txt")
+#lex_into_txt(lex_ths, "lexicon_ths.txt")
 
 # function to make a list of all values from a column from a dataset
 def make_list_of_column(file, column):
@@ -457,14 +457,14 @@ def make_lexicon_with_occurence_hs_other(file, column, lex, utterances, filename
 #make_lexicon_with_occurence_cb("train_cb_set.csv", 8, lex, train_list_cb, "lexicon_with_occurences_cb.txt")
 
 # bullying traces
-make_lexicon_with_occurence("bullying_traces_train.csv", 3, lex_bt, train_list_bt, "lexicon_with_occurences_bt.txt")
+#make_lexicon_with_occurence("bullying_traces_train.csv", 3, lex_bt, train_list_bt, "lexicon_with_occurences_bt.txt")
 
 # labeled data
-make_lexicon_with_occurence_other("labeled_data_train.csv", 5, lex_ld, train_list_ld, "lexicon_with_occurences_ld.txt", 2)
-make_lexicon_with_occurence_hs_other("labeled_data_train.csv", 5, lex_ld, train_list_ld, "lexicon_with_occurences_hs_ld.txt", 2)
+#make_lexicon_with_occurence_other("labeled_data_train.csv", 5, lex_ld, train_list_ld, "lexicon_with_occurences_ld.txt", 2)
+#make_lexicon_with_occurence_hs_other("labeled_data_train.csv", 5, lex_ld, train_list_ld, "lexicon_with_occurences_hs_ld.txt", 2)
 
 # twitter bullying
-make_lexicon_with_occurence_other("twitter_hate_speech_train.csv", 2, lex_ths, train_list_ths, "lexicon_with_occurences_ths.txt", 3)
-make_lexicon_with_occurence_hs_other("twitter_hate_speech_train.csv", 2, lex_ths, train_list_ths, "lexicon_with_occurences_hs_ths.txt", 3)
+#make_lexicon_with_occurence_other("twitter_hate_speech_train.csv", 2, lex_ths, train_list_ths, "lexicon_with_occurences_ths.txt", 3)
+#make_lexicon_with_occurence_hs_other("twitter_hate_speech_train.csv", 2, lex_ths, train_list_ths, "lexicon_with_occurences_hs_ths.txt", 3)
 
 

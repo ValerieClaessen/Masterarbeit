@@ -86,7 +86,8 @@ def do_sentiment_mem(utterance, lex, sentiment, sentimentlist):
     e_no_cyberbullying_feature_sum = e ** no_cyberbullying_feature_sum
 
     p_cyberbullying_utterance = e_cyberbullying_feature_sum * 1.2 / (e_cyberbullying_feature_sum + e_no_cyberbullying_feature_sum)
-    p_no_cyberbullying_utterance = e_no_cyberbullying_feature_sum / (e_no_cyberbullying_feature_sum + e_no_cyberbullying_feature_sum)
+    #p_cyberbullying_utterance = e_cyberbullying_feature_sum / (e_cyberbullying_feature_sum + e_no_cyberbullying_feature_sum)
+    p_no_cyberbullying_utterance = e_no_cyberbullying_feature_sum / (e_cyberbullying_feature_sum + e_no_cyberbullying_feature_sum)
 
     p_pos_cb = sentimentlist[0]
     p_pos_no_cb = sentimentlist[1]
@@ -104,6 +105,7 @@ def do_sentiment_mem(utterance, lex, sentiment, sentimentlist):
         p_no_cyberbullying_utterance = p_no_cyberbullying_utterance * p_neut_no_cb
     else:
         p_cyberbullying_utterance = p_cyberbullying_utterance * p_neg_cb * 500
+        #p_cyberbullying_utterance = p_cyberbullying_utterance * p_neg_cb
         p_no_cyberbullying_utterance = p_no_cyberbullying_utterance * p_neg_no_cb
 
     values = [p_cyberbullying_utterance, p_no_cyberbullying_utterance]
@@ -576,7 +578,7 @@ utterance3 = machine_learning_processing.process_utterance("This is our presiden
 #do_mem(utterance2, "lexicon_with_occurences.txt")
 #do_mem(utterance3, "lexicon_with_occurences.txt")
 
-test_list = machine_learning_processing.process_data("test_set.csv")
+#test_list = machine_learning_processing.process_data("test_set.csv")
 
 #do_test_set_mem(test_list, "twitter_bullying_mem2.csv", "lexicon_with_occurences.txt")
 #do_test_set_mem_sent(test_list, "twitter_bullying_mem_sent.csv", "lexicon_with_occurences.txt", "train_set.csv", 7, "train_set_with_sentiment.csv", "test_set_with_sentiment.csv")
@@ -601,7 +603,7 @@ test_list = machine_learning_processing.process_data("test_set.csv")
 #estimation.test_results("test_set.csv", 9, "twitter_bullying_mem_sent_hs.csv", 1)
 
 # strength
-test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
+#test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
 #do_test_set_mem_strength(test_s_list, "twitter_bullying_mem_strength.csv", "lexicon_with_occurences_cb.txt")
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_mem_strength.csv", 1)
 
@@ -609,24 +611,24 @@ test_s_list = machine_learning_processing.process_data("test_cb_set.csv")
 #do_test_set_mem_sent_strength(test_s_list, "twitter_bullying_mem_sent_strength.csv", "lexicon_with_occurences_cb.txt", "train_cb_set.csv", 8, "train_cb_set_with_sentiment.csv", "test_cb_set_with_sentiment.csv")
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_mem_sent_strength.csv", 1)
 
-test_list_bt = machine_learning_processing.process_data("bullying_traces_test.csv", 2)
-test_list_ld = machine_learning_processing.process_data("labeled_data_test.csv", 6)
-test_list_ths = machine_learning_processing.process_data("twitter_hater_speech_test.csv", 1)
+#test_list_bt = machine_learning_processing.process_data("bullying_traces_test.csv", 2)
+#test_list_ld = machine_learning_processing.process_data("labeled_data_test.csv", 6)
+#test_list_ths = machine_learning_processing.process_data("twitter_hate_speech_test.csv", 1)
 
 # bullying traces
-do_test_set_mem_sent(test_list_bt, "bullying_traces_mem.csv", "lexicon_with_occurences_bt.txt", "bullying_traces_train.csv", 3, "bullying_traces_train_with_sentiment.csv", "bullying_traces_test_with_sentiment.csv")
-estimation.test_results_strengths("test_set.csv", 7, "bullying_traces_mem.csv", 1)
+#do_test_set_mem_sent(test_list_bt, "bullying_traces_mem.csv", "lexicon_with_occurences_bt.txt", "bullying_traces_train.csv", 3, "bullying_traces_train_with_sentiment.csv", "bullying_traces_test_with_sentiment.csv")
+#estimation.test_results("bullying_traces_test.csv", 3, "bullying_traces_mem.csv", 1)
 
 # labeled data
-do_test_set_mem_sent_other(test_list_ld, "labeled_data_mem.csv", "lexicon_with_occurences_ld.txt", "labeled_data_train.csv", 5, "labeled_data_train_with_sentiment.csv", "labeled_data_test_with_sentiment.csv", 2)
-do_test_set_mem_sent_hs_other(test_list_ld, "labeled_data_mem_hs.csv", "lexicon_with_occurences_hs_ld.txt", "labeled_data_train.csv", 5, "labeled_data_train_with_sentiment.csv", "labeled_data_test_with_sentiment.csv", 2)
-estimation.test_results_strengths("test_set.csv", 7, "labeled_data_mem.csv", 1)
-estimation.test_results_strengths("test_set.csv", 9, "labeled_data_mem_hs.csv", 1)
+#do_test_set_mem_sent_other(test_list_ld, "labeled_data_mem.csv", "lexicon_with_occurences_ld.txt", "labeled_data_train.csv", 5, "labeled_data_train_with_sentiment.csv", "labeled_data_test_with_sentiment.csv", 2)
+#do_test_set_mem_sent_hs_other(test_list_ld, "labeled_data_mem_hs.csv", "lexicon_with_occurences_hs_ld.txt", "labeled_data_train.csv", 5, "labeled_data_train_with_sentiment.csv", "labeled_data_test_with_sentiment.csv", 2)
+#estimation.test_results("labeled_data_test.csv", 5, "labeled_data_mem.csv", 1)
+#estimation.test_results("labeled_data_test.csv", 5, "labeled_data_mem_hs.csv", 1)
 
 # twitter hate speech
-do_test_set_mem_sent_other(test_list_ths, "twitter_hate_speech_mem.csv", "lexicon_with_occurences_ths.txt", "twitter_hate_speech_train.csv", 2, "twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv", 3)
-do_test_set_mem_sent_hs_other(test_list_ths, "twitter_hate_speech_mem_hs.csv", "lexicon_with_occurences_hs_ths.txt", "twitter_hate_speech_train.csv", 2, "twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv", 3)
-estimation.test_results_strengths("test_set.csv", 7, "twitter_hate_speech_mem.csv", 1)
-estimation.test_results_strengths("test_set.csv", 9, "twitter_hate_speech_mem_hs.csv", 1)
+#do_test_set_mem_sent_other(test_list_ths, "twitter_hate_speech_mem.csv", "lexicon_with_occurences_ths.txt", "twitter_hate_speech_train.csv", 2, "twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv", 3)
+#do_test_set_mem_sent_hs_other(test_list_ths, "twitter_hate_speech_mem_hs.csv", "lexicon_with_occurences_hs_ths.txt", "twitter_hate_speech_train.csv", 2, "twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv", 3)
+#estimation.test_results("twitter_hate_speech_test.csv", 2, "twitter_hate_speech_mem.csv", 1)
+#estimation.test_results("twitter_hate_speech_test.csv", 2, "twitter_hate_speech_mem_hs.csv", 1)
 
 

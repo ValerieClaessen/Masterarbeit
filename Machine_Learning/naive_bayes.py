@@ -193,7 +193,7 @@ def estimate_cb_strength_frequency(file):
         global freq_s5
         freq_s5 = s5 / utterances                   # frequency of utterances that are labeled as no_cyberbullying strength 5
 
-estimate_cb_strength_frequency("train_cb_set.csv")
+#estimate_cb_strength_frequency("train_cb_set.csv")
 
 #function to use the naive bayes algorithm on an utterance of the test_set
 # returns the cyberbullying class for the utterances assigned by the algorithm
@@ -716,7 +716,7 @@ utterance = machine_learning_processing.process_utterance("Yup. I can't stand th
 utterance2 = machine_learning_processing.process_utterance("ban islam")
 utterance3 = machine_learning_processing.process_utterance("This is our president. WHO talks like that?!? Our leader does. I cant. How embarrassing. A disgrace to the office.")
 
-test_list = machine_learning_processing.process_data("test_set.csv", 5)
+#test_list = machine_learning_processing.process_data("test_set.csv", 5)
 
 #do_naive_bayes(utterance, "lexicon_with_occurences.txt")
 #do_naive_bayes(utterance2, "lexicon_with_occurences.txt")
@@ -748,7 +748,7 @@ test_list = machine_learning_processing.process_data("test_set.csv", 5)
 #estimation.test_results("test_set.csv", 9, "twitter_bullying_naive_bayes_sent_hs.csv", 1)
 
 # strength
-test_s_list = machine_learning_processing.process_data("test_cb_set.csv", 5)
+#test_s_list = machine_learning_processing.process_data("test_cb_set.csv", 5)
 #do_test_set_naive_bayes_strength(test_s_list, "twitter_bullying_naive_bayes_strength.csv", "lexicon_with_occurences_cb.txt")
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_strength.csv", 1)
 
@@ -757,27 +757,25 @@ test_s_list = machine_learning_processing.process_data("test_cb_set.csv", 5)
 #estimation.test_results_strengths("test_cb_set.csv", 8, "twitter_bullying_naive_bayes_sent_strength.csv", 1)
 
 # bullying traces
-estimate_class_frequency_other_datasets("bullying_traces_train.csv", 1)
-test_list_bt = machine_learning_processing.process_data("bullying_traces_test.csv", 2)
-do_test_set_naive_bayes_sent(test_list_bt, "bullying_traces_naive_bayes.csv", "lexicon_with_occurences_bt.txt", "bullying_traces_train.csv", 3, "train_set_bt_with_sentiment.csv", "test_set_bt_with_sentiment.csv")
-estimation.test_results("test_set.csv", 7, "bullying_traces_naive_bayes.csv", 1)
+#estimate_class_frequency_other_datasets("bullying_traces_train.csv", 1)
+#test_list_bt = machine_learning_processing.process_data("bullying_traces_test.csv", 2)
+#do_test_set_naive_bayes_sent(test_list_bt, "bullying_traces_naive_bayes.csv", "lexicon_with_occurences_bt.txt", "bullying_traces_train.csv", 3, "bullying_traces_train_with_sentiment.csv", "bullying_traces_test_with_sentiment.csv")
+#estimation.test_results("bullying_traces_test.csv", 3, "bullying_traces_naive_bayes.csv", 1)
 
 # labeled data
-estimate_class_frequency_other_datasets("labeled_data_train.csv", 2)
-estimate_hate_speech_frequency_other_datasets("labeled_data_train.csv", 2)
-test_list_ld = machine_learning_processing.process_data("labeled_data_test.csv", 6)
-do_test_set_naive_bayes_sent_other(test_list_ld, "labeled_data_naive_bayes.csv", "lexicon_with_occurences_ld.txt", "labeled_data_train.csv", 5, "train_set_ld_with_sentiment.csv", "test_set_ld_with_sentiment.csv", 2)
-do_test_set_naive_bayes_sent_hs_other(test_list_ld, "labeled_data_naive_bayes_hs.csv", "lexicon_with_occurences_hs_ld.txt", "labeled_data_train.csv", 5, "train_set_ld_with_sentiment.csv", "test_set_ld_with_sentiment.csv", 2)
-estimation.test_results("test_set.csv", 7, "labeled_data_naive_bayes.csv", 1)
-estimation.test_results("test_set.csv", 9, "labeled_data_naive_bayes_hs.csv", 1)
+#estimate_class_frequency_other_datasets("labeled_data_train.csv", 2)
+#estimate_hate_speech_frequency_other_datasets("labeled_data_train.csv", 2)
+#test_list_ld = machine_learning_processing.process_data("labeled_data_test.csv", 6)
+#do_test_set_naive_bayes_sent_other(test_list_ld, "labeled_data_naive_bayes.csv", "lexicon_with_occurences_ld.txt", "labeled_data_train.csv", 5, "labeled_data_train_with_sentiment.csv", "labeled_data_test_with_sentiment.csv", 2)
+#do_test_set_naive_bayes_sent_hs_other(test_list_ld, "labeled_data_naive_bayes_hs.csv", "lexicon_with_occurences_hs_ld.txt", "labeled_data_train.csv", 5, "labeled_data_train_with_sentiment.csv", "labeled_data_test_with_sentiment.csv", 2)
+#estimation.test_results("labeled_data_test.csv", 5, "labeled_data_naive_bayes.csv", 1)
+#estimation.test_results("labeled_data_test.csv", 5, "labeled_data_naive_bayes_hs.csv", 1)
 
 # twitter hate speech
-estimate_class_frequency_other_datasets("twitter_hate_speech_train.csv", 3)
-estimate_hate_speech_frequency_other_datasets("twitter_hate_speech_train.csv", 3)
-test_list_ths = machine_learning_processing.process_data("twitter_hater_speech_test.csv", 1)
-do_test_set_naive_bayes_sent_other(test_list_ths, "twitter_hate_speech_naive_bayes.csv", "lexicon_with_occurences_ths.txt", "twitter_hate_speech_train.csv", 2, "train_set_ths_with_sentiment.csv", "test_set_ths_with_sentiment.csv", 3)
-do_test_set_naive_bayes_sent_hs_other(test_list_ths, "twitter_hate_speech_naive_bayes_hs.csv", "lexicon_with_occurences_hs_ths.txt", "twitter_hate_speech_train.csv", 2, "train_set_ths_with_sentiment.csv", "test_set_ths_with_sentiment.csv", 3)
-estimation.test_results("test_set.csv", 7, "twitter_hate_speech_naive_bayes.csv", 1)
-estimation.test_results("test_set.csv", 9, "twitter_hate_speech_naive_bayes_hs.csv", 1)
-
-
+#estimate_class_frequency_other_datasets("twitter_hate_speech_train.csv", 3)
+#estimate_hate_speech_frequency_other_datasets("twitter_hate_speech_train.csv", 3)
+#test_list_ths = machine_learning_processing.process_data("twitter_hate_speech_test.csv", 1)
+#do_test_set_naive_bayes_sent_other(test_list_ths, "twitter_hate_speech_naive_bayes.csv", "lexicon_with_occurences_ths.txt", "twitter_hate_speech_train.csv", 2, "twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv", 3)
+#do_test_set_naive_bayes_sent_hs_other(test_list_ths, "twitter_hate_speech_naive_bayes_hs.csv", "lexicon_with_occurences_hs_ths.txt", "twitter_hate_speech_train.csv", 2, "twitter_hate_speech_train_with_sentiment.csv", "twitter_hate_speech_test_with_sentiment.csv", 3)
+#estimation.test_results("twitter_hate_speech_test.csv", 2, "twitter_hate_speech_naive_bayes.csv", 1)
+#estimation.test_results("twitter_hate_speech_test.csv", 2, "twitter_hate_speech_naive_bayes_hs.csv", 1)
