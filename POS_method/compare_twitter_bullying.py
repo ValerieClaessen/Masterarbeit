@@ -97,18 +97,18 @@ def compare_vec_twitter_bullying_cb(tweet, row_number):
     # print(cb)
     return round(cyberbullying/11, 2)
 
-print("Testsentence 1")
-print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_1, 3))
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_twitter_bullying_cb(testsentence_1, 3))
-
-
-print("Testsentence 2")
-print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_2, 3))
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_twitter_bullying_cb(testsentence_2, 3))
-
-
-print("Testsentence 3")
-print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_3, 3))
-print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_twitter_bullying_cb(testsentence_3, 3))
+# print("Testsentence 1")
+# print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_1, 3))
+# print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_twitter_bullying_cb(testsentence_1, 3))
+#
+#
+# print("Testsentence 2")
+# print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_2, 3))
+# print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_twitter_bullying_cb(testsentence_2, 3))
+#
+#
+# print("Testsentence 3")
+# print("Hatespeech Wahrscheinlichkeit= ",compare_vec_twitter_bullying_hs(testsentence_3, 3))
+# print("Cyberbullying Wahrscheinlichkeit= ",compare_vec_twitter_bullying_cb(testsentence_3, 3))
 
 

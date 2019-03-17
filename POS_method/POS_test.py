@@ -166,7 +166,7 @@ def POS_specials_all(pos_tags):
 
                 written = True
                 break
-        f4 = open('negative-words.txt', 'r')
+        #f4 = open('negative-words.txt', 'r')
         # for line in f4:
         #     if tag[0].lower() == line.lower().strip() and written == False:  # wichtig: Vornamen werden Nachnamen bevorzugt
         #         new_pos[1] = new_pos[1] + " ,n"
