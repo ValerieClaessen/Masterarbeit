@@ -10,10 +10,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
-
-
 </head>
 <body>
 
@@ -23,14 +19,14 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-        <h4>Thank you for using our chatroom!</h4>
-        <p>We're doing a master thesis on...</p>
-        <p><b>Cyberbullying:</b></p>
-    </div>
-    <div class="col-sm-4">
-        <div class="container-flude">
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>Thank you for using our chatroom!</h4>
+            <p>We're doing a master thesis on...</p>
+            <p><b>Cyberbullying:</b></p>
+        </div>
+
+        <div class="col-sm-5">
             <div class="msg-group center">
                 <div class="card">
                     <div class="card-body">
@@ -41,28 +37,37 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted text-right">Karen:</h6>
-                        <p class="card-text float-right">Hi how are you?</p>
+                        <h6 class="card-subtitle mb-2 text-muted text-left">Karen:</h6>
+                        <p class="card-text float-left">Hi how are you?</p>
                     </div>
                 </div>
             </div>
+
             <form action="" method="POST">
                 <div class="input-group">
+                    <p>Karen &nbsp;</p>
                     <textarea id="input-box" class="form-control" rows="1" placeholder="Say something..."></textarea>
                     <span class="input-group-btn">
-                        <button class="btn btn-secondary" id = "demo" onclick="myFunction()" type="button" >send</button>
+                        <button class="btn btn-secondary" id = "demo" onclick="myFunction()" type="button">send</button>
                     </span>
                 </div>
             </form>
         </div>
-    </div>
 
-    <div class="col-sm-4">
-        <h4>Don't know what to write?</h4>
-        <p>Here are some example topics to talk about:</p>
-        <p>...</p>
+        <div class="col-sm-2">
+            <p><b>Users in Chatroom:</b><br>Karl<br>Karen<br>...</p>
+        </div>
+
+        <div class="col-sm-2">
+            <h4>Don't know what to write?</h4>
+            <p>Here are some example topics to talk about:</p>
+            <ul>
+                <li>Topic 1</li>
+                <li>Topic 2</li>
+                <li>...</li>
+            </ul>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="jumbotron text-center" style="margin-bottom:0">
