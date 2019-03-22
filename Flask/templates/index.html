@@ -1,15 +1,25 @@
-<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% block title %}Chatroom{% endblock %}
+
+{% block content %}
 <html lang="en">
 <head>
     <title>Chatroom</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap-theme.css') }}">
+
     <script src="{{url_for('static', filename='index_script.js')}}"></script>
+    <script src="{{url_for('static', filename='chat_script.js')}}"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+
 </head>
 <body>
 
@@ -40,16 +50,45 @@
                         <h6 class="card-subtitle mb-2 text-muted text-left">Karen:</h6>
                         <p class="card-text float-left">Hi how are you?</p>
                     </div>
+                    <div class="message_holder"></div>
                 </div>
             </div>
 
             <form action="" method="POST">
                 <div class="input-group">
-                    <p>Karen &nbsp;</p>
+                    <span class="input-group-addon"><i  class="glyphicon glyphicon-user" data-toggle="modal" data-target="#myModal"></i></span>
                     <textarea id="input-box" class="form-control" rows="1" placeholder="Say something..."></textarea>
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" id = "demo" onclick="myFunction()" type="button">send</button>
                     </span>
+
+                    <!-- Modal -->
+                      <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title">Username</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group">
+                                  <textarea id="username" class="form-control" rows="1" placeholder="Enter username"></textarea>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-secondary" id = "send_name" onclick="myFunction()" type="button">send</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+
                 </div>
             </form>
         </div>
@@ -76,3 +115,11 @@
 
 </body>
 </html>
+
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='style.css')}}">
+{% endblock %}
