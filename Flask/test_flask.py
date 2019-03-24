@@ -10,9 +10,10 @@ bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(app)
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def sessions():
     return render_template('index.html')
+    #return render_template('session.html')
 
 def messageReceived(methods=['GET', 'POST']):
     print('message was received!!!')
@@ -22,7 +23,7 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
     if (json.get("user_name") != "None"):
         write_to_file(json.get("message"),json.get("user_name"))
-        #print(json.get("user_name"))
+        print(json.get("user_name"))
     socketio.emit('my response', json, callback=messageReceived)
 
 if __name__ == '__main__':

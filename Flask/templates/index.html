@@ -7,7 +7,6 @@
     <title>Chatroom</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap-theme.css') }}">
 
     <script src="{{url_for('static', filename='index_script.js')}}"></script>
     <script src="{{url_for('static', filename='chat_script.js')}}"></script>
@@ -108,6 +107,13 @@
         </div>
     </div>
 </div>
+<div class="message_holder"></div>
+
+    <form action="" method="POST">
+      <input type="text" class="username" placeholder="User Name"/>
+      <input type="text" class="message" placeholder="Messages"/>
+      <input type="submit"/>
+    </form>
 
 <div class="jumbotron text-center" style="margin-bottom:0">
     <p>&copy; Valerie Claessen and Sabrina Wirkner<p>
