@@ -8,3 +8,17 @@ input {
     width: 100%;
 }
 
+#chatbox {
+    background-color:#FFF !important;
+}
+
+.message_holder {
+    display:block;
+    line-height: 2.5ex;
+    height: 40ex;
+    overflow-y: scroll;
+}
+
+
+
+

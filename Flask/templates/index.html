@@ -16,8 +16,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <script src="{{url_for('static', filename='index_script.js')}}"></script>
-    <script src="{{url_for('static', filename='chat_script.js')}}"></script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -35,7 +33,7 @@
             <p><b>Cyberbullying:</b></p>
         </div>
 
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <!--<div class="msg-group center">
                 <div class="card">
                     <div class="card-body">
@@ -53,8 +51,9 @@
                 </div>
             </div>-->
 
-            <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
-            <div class="message_holder"></div>
+            <!--<h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>-->
+
+            <div class="message_holder" id="message_holder"></div>
 
             <form action="" method="POST">
                 <div class="input-group">
@@ -65,7 +64,7 @@
                         <span class="input-group-btn">
                             <input type="submit" class="btn btn-secondary" value="Send" id = "demo" onclick="myFunction()"/>
                         </span>
-                    
+
                     <!-- Modal -->
                       <div class="modal fade" id="myModal" role="dialog">
                         <div class="modal-dialog">
@@ -99,8 +98,8 @@
             </form>
         </div>
 
-        <div class="col-sm-2">
-            <p><b>Users in Chatroom:</b><br>Karl<br>Karen<br>...</p>
+        <div class="col-sm-1">
+            <p><b>Users:</b><br>Karl<br>Karen<br>...</p>
         </div>
 
         <div class="col-sm-2">
