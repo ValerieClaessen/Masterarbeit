@@ -1,7 +1,14 @@
 /**
  * Created by valerie on 21.03.19.
  */
+
+function myFunction() {
+    document.getElementById("demo").style.color = "green";
+}
+
+
 var socket = io.connect('http://' + document.domain + ':' + location.port);
+      document.write(document.domain)
       socket.on( 'connect', function() {
         socket.emit( 'my event', {
           data: 'User Connected'
