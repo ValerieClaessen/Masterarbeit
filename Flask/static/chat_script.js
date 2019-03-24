@@ -8,7 +8,7 @@ function myFunction() {
 
 
 var socket = io.connect('http://' + document.domain + ':' + location.port);
-      document.write(document.domain)
+
       socket.on( 'connect', function() {
         socket.emit( 'my event', {
           data: 'User Connected'
@@ -17,6 +17,7 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
           e.preventDefault()
           let user_name = $( 'input.username' ).val()
           let user_input = $( 'input.message' ).val()
+            //$( 'div.username_holder' ).append( '<div><b style="color: #000">'+msg.user_name+'</b>' )
           socket.emit( 'my event', {
             user_name : user_name,
             message : user_input

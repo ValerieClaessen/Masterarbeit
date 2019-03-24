@@ -1,8 +1,10 @@
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO
 
-from test_save_chat import write_to_file
+
 from flask_bootstrap import Bootstrap
+
+from Flask.test_save_chat import write_to_file
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -19,11 +21,14 @@ def messageReceived(methods=['GET', 'POST']):
 
 @socketio.on('my event')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
+    currentSocketId = request.sid   #gibt die individuelle ID des aktuellen User an
+    print(currentSocketId)
     print('received my event: ' + str(json))
-    if (json.get("user_name") != "None"):
-        write_to_file(json.get("message"),json.get("user_name"))
-        print(json.get("user_name"))
+    if (json.get("user_name") is not None):
+        write_to_file(json.get("message"),json.get("user_name"), currentSocketId)
     socketio.emit('my response', json, callback=messageReceived)
+
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

@@ -11,9 +11,11 @@ var form = $( 'form' ).on( 'submit', function( e ) {
   e.preventDefault()
   let user_name = $( 'input.username' ).val()
   let user_input = $( 'input.message' ).val()
+    //let radio_color = $('input[name=optradio]:checked').val()
   socket.emit( 'my event', {
     user_name : user_name,
-    message : user_input
+    message : user_input,
+      //color : radio_color
   } )
   $( 'input.message' ).val( '' ).focus()
 } )
@@ -42,3 +44,15 @@ function updateScroll(){
     var element = document.getElementById("message_holder");
     element.scrollTop = element.scrollHeight;
 }
+
+function getUserColor() {
+    let radio_color = $('input[name=optradio]:checked').val()
+    return radio_color
+
+}
+
+function setUserColor() {
+    document.getElementById("gly").style.color = getUserColor();
+
+}
+

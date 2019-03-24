@@ -57,7 +57,7 @@
 
             <form action="" method="POST">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user" data-toggle="modal" data-target="#myModal"></i></span>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user" id = "gly" data-toggle="modal" data-target="#myModal"></i></span>
                     <div class="form-control">
                         <input type="text" class="message" rows="1" placeholder="Say something..."/>
                     </div>
@@ -81,8 +81,22 @@
                                         <input type="text" class="username" placeholder="Enter username">
                                     </div>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-secondary" id = "send_name" onclick="myFunction()" type="button">send</button>
+                                        <button class="btn btn-secondary" id = "send_name" onclick="setUserColor()" type="button">send</button>
                                     </span>
+                                </div>
+                            </div>
+                            <div class="radio_select">
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio" value="red">red</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio" value="green">green</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio" value="blue">blue</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio"value="yellow">yellow</label>
                                 </div>
                             </div>
                             <div class="modal-footer">
