@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 
 from flask_bootstrap import Bootstrap
 
-from Flask.test_save_chat import write_to_file
+from test_save_chat import write_to_file
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -27,8 +27,6 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
     if (json.get("user_name") is not None):
         write_to_file(json.get("message"),json.get("user_name"), currentSocketId)
     socketio.emit('my response', json, callback=messageReceived)
-
-
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

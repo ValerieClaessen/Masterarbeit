@@ -22,7 +22,7 @@
 
 <div class="jumbotron text-center">
   <h1>Welcome to our Chatroom</h1>
-  <p>This chatroom is part of our master thesis in Information Science & Language Technology</p>
+  <h5>This chatroom is part of our master thesis in Information Science & Language Technology</h5>
 </div>
 
 <div class="container">
@@ -34,26 +34,9 @@
         </div>
 
         <div class="col-sm-6">
-            <!--<div class="msg-group center">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted text-left">Karl:</h6>
-                        <p class="card-text float-left">Hello</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted text-left">Karen:</h6>
-                        <p class="card-text float-left">Hi how are you?</p>
-                    </div>
-                    <div class="message_holder"></div>
-                </div>
-            </div>-->
-
-            <!--<h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>-->
-
-            <div class="message_holder" id="message_holder"></div>
+            <div class="message_holder" id="message_holder">
+                <h4 id="message_default">&nbsp;&nbsp;No messages yet</h4>
+            </div>
 
             <form action="" method="POST">
                 <div class="input-group">
@@ -62,7 +45,7 @@
                         <input type="text" class="message" rows="1" placeholder="Say something..."/>
                     </div>
                         <span class="input-group-btn">
-                            <input type="submit" class="btn btn-secondary" value="Send" id = "demo" onclick="myFunction()"/>
+                            <input type="submit" class="btn btn-secondary" value="Send" id = "demo"/>
                         </span>
 
                     <!-- Modal -->
@@ -77,26 +60,15 @@
                             </div>
                             <div class="modal-body">
                                 <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input type="color" class="color" name="name_color" id="name_color" value="#3366ff">
+                                    </span>
                                     <div class="form-control">
                                         <input type="text" class="username" placeholder="Enter username">
                                     </div>
                                     <span class="input-group-btn">
                                         <button class="btn btn-secondary" id = "send_name" onclick="setUserColor()" type="button">send</button>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="radio_select">
-                                <div class="radio">
-                                  <label><input type="radio" name="optradio" value="red">red</label>
-                                </div>
-                                <div class="radio">
-                                  <label><input type="radio" name="optradio" value="green">green</label>
-                                </div>
-                                <div class="radio">
-                                  <label><input type="radio" name="optradio" value="blue">blue</label>
-                                </div>
-                                <div class="radio">
-                                  <label><input type="radio" name="optradio"value="yellow">yellow</label>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -129,7 +101,7 @@
 </div>
 
 <div class="jumbotron text-center" style="margin-bottom:0">
-    <h6>Heinrich-Heine-Universität &copy; Valerie Claessen and Sabrina Wirkner</h6>
+    <h6>Heinrich-Heine-Universität Düsseldorf &copy; Valerie Claessen and Sabrina Wirkner</h6>
 </div>
 
 </body>

@@ -1,8 +1,8 @@
-#demo{
+/*#demo{
     color: aqua;
-}
+}*/
 
-input {
+.username, .message  {
     border: none;
     background: transparent;
     width: 100%;
@@ -17,7 +17,19 @@ input {
     line-height: 2.5ex;
     height: 40ex;
     overflow-y: scroll;
+    border-top: 1px solid #BFBFBF;
+    border-left: 1px solid #BFBFBF;
+    border-right: 1px solid #BFBFBF;
 }
+
+#message_default {
+    color: #BFBFBF;
+}
+
+#name_color {
+    height: 20px;
+}
+
 
 
 
