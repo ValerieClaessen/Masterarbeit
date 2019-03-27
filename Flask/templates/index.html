@@ -15,6 +15,8 @@
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="{{url_for('static', filename='index_script.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -36,6 +38,7 @@
         <div class="col-sm-6">
             <div class="message_holder" id="message_holder">
                 <h4 id="message_default">&nbsp;&nbsp;No messages yet</h4>
+                <!--<div id="loader" class="loader"></div>-->
             </div>
 
             <form action="" method="POST">
@@ -45,7 +48,7 @@
                         <input type="text" class="message" rows="1" placeholder="Say something..."/>
                     </div>
                         <span class="input-group-btn">
-                            <input type="submit" class="btn btn-secondary" value="Send" id = "demo"/>
+                            <input type="submit" id="pop_over_button" class="btn btn-secondary" value="Send" data-container="body" data-toggle="popover" data-placement="top" data-content="Message is inappropriate" data-trigger="focus">
                         </span>
 
                     <!-- Modal -->
@@ -66,13 +69,10 @@
                                     <div class="form-control">
                                         <input type="text" class="username" placeholder="Enter username">
                                     </div>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-secondary" id = "send_name" onclick="setUserColor()" type="button">send</button>
-                                    </span>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              <button class="btn btn-secondary" id = "send_name" onclick="setUserColor()" type="button" data-dismiss="modal">Send</button>
                             </div>
                           </div>
 

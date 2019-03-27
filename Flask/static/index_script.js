@@ -11,6 +11,9 @@ socket.emit( 'my event', {
   data: 'User Connected'
 } )
 var form = $( 'form' ).on( 'submit', function( e ) {
+    $( '#message_default' ).remove()
+    $('div.message_holder').append('<div id="loader" class="loader"></div>')
+
   e.preventDefault()
   let user_name = $( 'input.username' ).val()
   let user_input = $( 'input.message' ).val()
@@ -18,18 +21,27 @@ var form = $( 'form' ).on( 'submit', function( e ) {
   socket.emit( 'my event', {
     user_name : user_name,
     message : user_input,
-      color: user_color
+      color: user_color,
+      cb: 0,
+      hs: 0
   } )
   $( 'input.message' ).val( '' ).focus()
 } )
 } )
 socket.on( 'my response', function( msg ) {
-console.log( msg )
-if( typeof msg.user_name !== 'undefined' ) {
-  $( '#message_default' ).remove()
-    $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class="card-subtitle mb-2 text-muted text-left" style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
-    updateScroll();
-}
+    console.log( msg )
+
+    if( typeof msg.user_name !== 'undefined' ) {
+        if( msg.cb == 1 || msg.hs == 1) {
+            $( '#loader' ).remove()
+            $('#pop_over_button').popover('toggle')
+        }
+        else {
+            $( '#loader' ).remove()
+            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class="card-subtitle mb-2 text-muted text-left" style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+            updateScroll();
+        }
+    }
 })
 
 /*
@@ -57,7 +69,14 @@ function getUserColor() {
 
 function setUserColor() {
     document.getElementById("gly").style.color = getUserColor();
-
 }
+
+// hides popover after the next click
+$('body').on('click', function (e) {
+    if ($(e.target).data('toggle') !== 'popover'
+        && $(e.target).parents('.popover.in').length === 0) {
+        $('[data-toggle="popover"]').popover('hide');
+    }
+});
 
 
