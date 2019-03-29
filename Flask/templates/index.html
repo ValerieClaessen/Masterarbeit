@@ -48,8 +48,40 @@
                         <input type="text" class="message" rows="1" placeholder="Say something..."/>
                     </div>
                         <span class="input-group-btn">
-                            <input type="submit" id="pop_over_button" class="btn btn-secondary" value="Send" data-container="body" data-toggle="popover" data-placement="top" data-content="Message is inappropriate" data-trigger="focus">
+                            <input type="submit" id="pop_over_button" class="btn btn-secondary" value="Send" data-container="body" data-toggle="modal" data-target="#exampleModal" data-placement="top" data-content="Message is inappropriate" data-trigger="focus">
                         </span>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Was that correct?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <p>Your message "xxxxxxxxxxxxxxxxxxxxxx" was marked as XYZ.</p>
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio" class="eval_radio" value="e1">My message contained cyberbullying.</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio" class="eval_radio" value="e2">My message contained cyberbullying (specific hatespeech).</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="optradio" class="eval_radio" value="e3">My message did not contain cyberbullying.</label>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="submit_evaluation" disabled="disabled" data-dismiss="modal">Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+
+
 
                     <!-- Modal -->
                       <div class="modal fade" id="myModal" role="dialog">
@@ -103,6 +135,12 @@
 <div class="jumbotron text-center" style="margin-bottom:0">
     <h6>Heinrich-Heine-Universität Düsseldorf &copy; Valerie Claessen and Sabrina Wirkner</h6>
 </div>
+
+
+<p><a href="#" role="button" class="btn btn-secondary popover-test" data-html="true" data-toggle="popover" title="Email me:" data-content="<a href=&quot;mailto:someone@example.com?Subject=Hello&quot; target=&quot;_top&quot;>Send Mail to:</a> templenaylor@gmail.com">Contact
+        Me</a>
+</p>
+
 
 </body>
 </html>

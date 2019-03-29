@@ -38,7 +38,7 @@ socket.on( 'my response', function( msg ) {
         }
         else {
             $( '#loader' ).remove()
-            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class="card-subtitle mb-2 text-muted text-left" style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
             updateScroll();
         }
     }
@@ -80,3 +80,17 @@ $('body').on('click', function (e) {
 });
 
 
+
+$('.eval_radio').keyup(function () {
+    if ($(this).is(':checked')) {
+        //Check to see if there is any text entered
+        // If there is no text within the input ten disable the button
+        $('#submit_evaluation').prop('disabled', true);
+    } else {
+        //If there is text in the input, then enable the button
+        $('#submit_evaluation').prop('disabled', false);
+    }
+});
+
+
+$("input:radio").change(function () {$("#submit_evaluation").prop("disabled", false);});
