@@ -38,6 +38,7 @@ socket.on( 'my response', function( msg ) {
     if( typeof msg.user_name !== 'undefined' ) {
         if( msg.cb == 1 || msg.hs == 1) {
             $( '#loader' ).remove()
+            $('div.message_holder').append('<h4 id="message_default">&nbsp;&nbsp;No messages yet</h4>')
             $('#pop_over_button').popover('toggle')
         }
         else {
@@ -47,12 +48,6 @@ socket.on( 'my response', function( msg ) {
         }
     }
 })
-
-/*
-function myFunction() {
-    document.getElementById("demo").style.color = "red";
-}
-*/
 
 function oeffnefenster (url) {
    fenster = window.open(url, "fenster1", "width=600,height=400,status=yes,scrollbars=yes,resizable=yes");

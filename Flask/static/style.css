@@ -50,6 +50,11 @@
   100% { transform: rotate(360deg); }
 }
 
+#pop_over_button, #send_name{
+  background-color: #EEEEEE;
+  border: 1px solid #CCCCCC
+}
+
 .computed_class{
    display:inline-block;
     visibility: hidden;
