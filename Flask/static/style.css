@@ -50,5 +50,9 @@
   100% { transform: rotate(360deg); }
 }
 
+.computed_class{
+   display:inline-block;
+    visibility: hidden;
+}
 
 

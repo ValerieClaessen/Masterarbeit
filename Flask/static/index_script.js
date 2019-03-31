@@ -3,6 +3,7 @@
  */
 $(window).on('load',function(){
         $('#myModal').modal('show');
+
     });
 
 var socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -18,12 +19,15 @@ var form = $( 'form' ).on( 'submit', function( e ) {
   let user_name = $( 'input.username' ).val()
   let user_input = $( 'input.message' ).val()
     let user_color = $( 'input.color' ).val()
+    let user_evaluation = $('input.eval_radio').val()
   socket.emit( 'my event', {
     user_name : user_name,
     message : user_input,
       color: user_color,
       cb: 0,
-      hs: 0
+      hs: 0,
+      evaluation: user_evaluation   //funktioniert noch nicht weil her noch kein radiobutton gechecked ist!
+
   } )
   $( 'input.message' ).val( '' ).focus()
 } )
@@ -69,6 +73,7 @@ function getUserColor() {
 
 function setUserColor() {
     document.getElementById("gly").style.color = getUserColor();
+    addUser()
 }
 
 // hides popover after the next click
@@ -81,16 +86,54 @@ $('body').on('click', function (e) {
 
 
 
-$('.eval_radio').keyup(function () {
-    if ($(this).is(':checked')) {
-        //Check to see if there is any text entered
-        // If there is no text within the input ten disable the button
-        $('#submit_evaluation').prop('disabled', true);
-    } else {
-        //If there is text in the input, then enable the button
-        $('#submit_evaluation').prop('disabled', false);
-    }
-});
 
 
-$("input:radio").change(function () {$("#submit_evaluation").prop("disabled", false);});
+
+if ($('#message_inappropriate').is(':visible')) {
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+}
+
+$(document).ready(function() {
+     $('#pop_over_button').attr('disabled','disabled');
+     $('input[type="text"]').keyup(function() {
+        if($('#input_chatmessage').val() != '') {
+           $('input[type="submit"]').removeAttr('disabled');
+        }
+     });
+ });
+
+
+
+function enableButton_inap() {
+            document.getElementById("submit_message_inappropriate").disabled = false;
+        }
+
+function enableButtonap() {
+            document.getElementById("submit_message_appropriate").disabled = false;
+        }
+
+// function addUser() {
+//     $('div.user_holder').append(msg.user_name)
+//
+// }
+
+
+
+var message_evaluate = "";
+function save_for_evaluation() {
+    to_eval = document.getElementById("input_chatmessage");
+    message_evaluate = to_eval
+    console.log(to_eval)
+}
+
+
+
+
+
