@@ -48,7 +48,8 @@
                         <input type="text" id="input_chatmessage" class="message" rows="1" placeholder="Say something..."/>
                     </div>
                         <span class="input-group-btn">
-                            <input type="submit" id="pop_over_button" class="btn btn-secondary" value="Send" onclick="" data-container="body" data-toggle="modal" data-target="#message_appropriate" data-placement="top" data-content="Message is inappropriate" data-trigger="focus" data-backdrop="static" data-keyboard="false" disabled="disabled">
+                            <!--<input type="submit" id="pop_over_button" class="btn btn-secondary" value="Send" data-container="body" data-toggle="modal" data-target="#message_appropriate" data-placement="top" data-content="Message is inappropriate" data-trigger="focus" data-backdrop="static" data-keyboard="false" disabled="disabled">-->
+                            <button type="button" class="btn btn-secondary" id="ml_button" onclick="machine_learning()">Send</button>
                         </span>
                         <!-- Modal -->
                         <div class="modal fade" id="message_inappropriate" tabindex="-1" role="dialog" aria-labelledby="message_inappropriateLabel" aria-hidden="true">
@@ -71,7 +72,7 @@
 
                               </div>
                               <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" id="submit_message_inappropriate"  data-dismiss="modal" disabled>Submit</button>
+                                <button type="button" class="btn btn-secondary" id="submit_message_inappropriate"  onclick="remove_loader()" data-dismiss="modal">Send</button>
                               </div>
                             </div>
                           </div>
@@ -100,15 +101,12 @@
                                   <input type="text" class="computed_class" placeholder="CB">
                               </div>
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-secondary" id="submit_message_appropriate"  data-dismiss="modal" disabled>Submit</button>
+                                  <!--<input type="submit" class="btn btn-secondary" id="submit_message_appropriate"  data-dismiss="modal" value="Submit" disabled>-->
+                                  <input type="submit" class="btn btn-secondary" id="submit_message_test" value="Send">
                               </div>
                             </div>
                           </div>
                         </div>
-
-
-
-
 
                     <!-- Modal -->
                       <div class="modal fade" id="myModal" role="dialog" data-backdrop="static" data-keyboard="false">
@@ -137,7 +135,7 @@
                         </div>
                       </div>
 
-
+                    <!--<input type="submit" class="btn btn-secondary" id="submit_message" value="Send">-->
                 </div>
             </form>
         </div>
@@ -145,7 +143,7 @@
         <div class="col-sm-1">
             <p><b>Users:</b><br>
                 <div class="user_holder" id="user_holder">
-                <h4 id="user_default">&nbsp;&nbsp;No messages yet</h4>
+                <h4 id="user_default">&nbsp;&nbsp;No Users present</h4>
                 <!--<div id="loader" class="loader"></div>-->
             </div>
             </p>
@@ -166,12 +164,6 @@
 <div class="jumbotron text-center" style="margin-bottom:0">
     <h6>Heinrich-Heine-Universität Düsseldorf &copy; Valerie Claessen and Sabrina Wirkner</h6>
 </div>
-
-
-<p><a href="#" role="button" class="btn btn-secondary popover-test" data-html="true" data-toggle="popover" title="Email me:" data-content="<a href=&quot;mailto:someone@example.com?Subject=Hello&quot; target=&quot;_top&quot;>Send Mail to:</a> templenaylor@gmail.com">Contact
-        Me</a>
-</p>
-
 
 </body>
 </html>

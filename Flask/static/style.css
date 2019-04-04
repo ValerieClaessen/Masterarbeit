@@ -50,7 +50,7 @@
   100% { transform: rotate(360deg); }
 }
 
-#pop_over_button, #send_name{
+.btn,  .btn-secondary{
   background-color: #EEEEEE;
   border: 1px solid #CCCCCC
 }

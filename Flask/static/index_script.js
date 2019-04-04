@@ -11,10 +11,8 @@ socket.on( 'connect', function() {
 socket.emit( 'my event', {
   data: 'User Connected'
 } )
-var form = $( 'form' ).on( 'submit', function( e ) {
-    $( '#message_default' ).remove()
-    $('div.message_holder').append('<div id="loader" class="loader"></div>')
 
+var form = $( 'form' ).on( 'submit', function( e ) {
   e.preventDefault()
   let user_name = $( 'input.username' ).val()
   let user_input = $( 'input.message' ).val()
@@ -24,34 +22,60 @@ var form = $( 'form' ).on( 'submit', function( e ) {
     user_name : user_name,
     message : user_input,
       color: user_color,
-      cb: 0,
-      hs: 0,
       evaluation: user_evaluation   //funktioniert noch nicht weil her noch kein radiobutton gechecked ist!
 
   } )
   $( 'input.message' ).val( '' ).focus()
 } )
 } )
+
 socket.on( 'my response', function( msg ) {
     console.log( msg )
 
+    //Unterscheideung zwischen ausgewählten Buttons fehlt noch
     if( typeof msg.user_name !== 'undefined' ) {
-        if( msg.cb == 1 || msg.hs == 1) {
-            $( '#loader' ).remove()
-            $('div.message_holder').append('<h4 id="message_default">&nbsp;&nbsp;No messages yet</h4>')
-            $('#pop_over_button').popover('toggle')
-        }
-        else {
-            $( '#loader' ).remove()
-            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
-            updateScroll();
-        }
+        $('#message_appropriate').modal('hide');
+        $( '#loader' ).remove()
+        $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+        $('#input_chatmessage').val('');
+        updateScroll();
     }
 })
 
 function oeffnefenster (url) {
    fenster = window.open(url, "fenster1", "width=600,height=400,status=yes,scrollbars=yes,resizable=yes");
    fenster.focus();
+}
+
+function remove_loader() {
+    $( '#loader' ).remove()
+    $('#input_chatmessage').val('');
+}
+
+function machine_learning() {
+    $( '#message_default' ).remove()
+    $('div.message_holder').append('<div id="loader" class="loader"></div>')
+
+    let message = $('#input_chatmessage').val();
+    console.log(message);
+
+    socket.emit( 'machine learning', {
+        sentence : message,
+        cb: 0,
+        hs: 0})
+
+    //öffnet sich bei allen Usern! Fix!
+    socket.on( 'ml response', function( msg ) {
+        if( typeof msg.sentence !== 'undefined' ) {
+            console.log(msg.sentence);
+            if( msg.cb == 1 || msg.hs == 1) {
+                $('#message_inappropriate').modal('show')
+            }
+            else {
+                $('#message_appropriate').modal('show')
+            }
+        }
+    })
 }
 
 function updateScroll(){
@@ -78,11 +102,6 @@ $('body').on('click', function (e) {
         $('[data-toggle="popover"]').popover('hide');
     }
 });
-
-
-
-
-
 
 if ($('#message_inappropriate').is(':visible')) {
     $(document).ready(function () {
