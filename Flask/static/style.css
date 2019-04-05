@@ -15,7 +15,7 @@
 .message_holder {
     display:block;
     line-height: 2.5ex;
-    height: 40ex;
+    height: 60ex;
     overflow-y: scroll;
     border-top: 1px solid #BFBFBF;
     border-left: 1px solid #BFBFBF;
@@ -64,4 +64,16 @@
     color: #ed5d4d;
 }
 
+.smaller_text{
+    font-size: 11px;
+    text-align: justify;
+}
 
+.block {
+    text-align: justify;
+    font-size: 12px;
+}
+
+.topics {
+    font-size: 12px;
+}

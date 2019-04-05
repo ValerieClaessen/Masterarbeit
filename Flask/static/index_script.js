@@ -42,9 +42,19 @@ socket.on( 'my response', function( msg ) {
     //Unterscheideung zwischen ausgewählten Buttons fehlt noch
     if( typeof msg.user_name !== 'undefined' ) {
         if( msg.cyberbullying == 1 || msg.hatespeech == 1) {
-            $( '#loader' ).remove()
-            $('#input_chatmessage').val('');
-            $('#message_inappropriate').modal('hide');
+            if (msg.evaluation == 'i1') {
+                $( '#loader' ).remove()
+                $('#input_chatmessage').val('');
+                $('#message_appropriate').modal('hide');
+            }
+            else {
+                $( '#message_default' ).remove()
+                $('#message_appropriate').modal('hide');
+                $( '#loader' ).remove()
+                $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+                $('#input_chatmessage').val('');
+                updateScroll();
+            }
         }
         else if (msg.evaluation == 'a1') {
             $( '#message_default' ).remove()
