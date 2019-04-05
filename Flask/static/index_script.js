@@ -69,10 +69,28 @@ $(function () {
 
                 if( typeof sentence !== 'undefined' ) {
                     console.log(sentence);
+                    console.log(cb);
+                    console.log(hs);
+
                     if( cb == 1 || hs == 1) {
+                        if (cb == 1) {
+                            $('#cb_inappropriate').val('1');
+                        }
+                        else {
+                            $('#cb_inappropriate').val('0');
+                        }
+
+                        if (hs == 1) {
+                            $('#hs_inappropriate').val('1');
+                        }
+                        else {
+                            $('#hs_inappropriate').val('0');
+                        }
                         $('#message_inappropriate').modal('show')
                     }
                     else {
+                        $('#cb_appropriate').val('0');
+                        $('#hs_appropriate').val('0');
                         $('#message_appropriate').modal('show')
                     }
                 }
