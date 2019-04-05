@@ -17,13 +17,20 @@ var form = $( 'form' ).on( 'submit', function( e ) {
   let user_name = $( 'input.username' ).val()
   let user_input = $( 'input.message' ).val()
     let user_color = $( 'input.color' ).val()
-    let user_evaluation = $('input.eval_radio').val()
+    let cb = $( '#cb_inappropriate' ).val()
+    let hs = $( '#hs_inappropriate' ).val()
+    let user_evaluation = $('input[name=optradio]:checked').val();
+  console.log(cb)
+  console.log(hs)
+  console.log(user_evaluation)
+
   socket.emit( 'my event', {
     user_name : user_name,
     message : user_input,
+      cyberbullying :cb,
+      hatespeech : hs,
       color: user_color,
-      evaluation: user_evaluation   //funktioniert noch nicht weil her noch kein radiobutton gechecked ist!
-
+      evaluation: user_evaluation
   } )
   $( 'input.message' ).val( '' ).focus()
 } )
@@ -34,23 +41,25 @@ socket.on( 'my response', function( msg ) {
 
     //Unterscheideung zwischen ausgewählten Buttons fehlt noch
     if( typeof msg.user_name !== 'undefined' ) {
-        $( '#message_default' ).remove()
-        $('#message_appropriate').modal('hide');
-        $( '#loader' ).remove()
-        $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
-        $('#input_chatmessage').val('');
-        updateScroll();
+        if( msg.cyberbullying == 1 || msg.hatespeech == 1) {
+            $( '#loader' ).remove()
+            $('#input_chatmessage').val('');
+            $('#message_inappropriate').modal('hide');
+        }
+        else {
+            $( '#message_default' ).remove()
+            $('#message_appropriate').modal('hide');
+            $( '#loader' ).remove()
+            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+            $('#input_chatmessage').val('');
+            updateScroll();
+        }
     }
 })
 
 function oeffnefenster (url) {
    fenster = window.open(url, "fenster1", "width=600,height=400,status=yes,scrollbars=yes,resizable=yes");
    fenster.focus();
-}
-
-function remove_loader() {
-    $( '#loader' ).remove()
-    $('#input_chatmessage').val('');
 }
 
 $(function () {
@@ -75,22 +84,28 @@ $(function () {
                     if( cb == 1 || hs == 1) {
                         if (cb == 1) {
                             $('#cb_inappropriate').val('1');
+                            $('#cb_appropriate').val('1');
                         }
                         else {
                             $('#cb_inappropriate').val('0');
+                            $('#cb_appropriate').val('0');
                         }
 
                         if (hs == 1) {
                             $('#hs_inappropriate').val('1');
+                            $('#hs_appropriate').val('1');
                         }
                         else {
                             $('#hs_inappropriate').val('0');
+                            $('#hs_appropriate').val('0');
                         }
                         $('#message_inappropriate').modal('show')
                     }
                     else {
                         $('#cb_appropriate').val('0');
+                        $('#cb_inappropriate').val('0');
                         $('#hs_appropriate').val('0');
+                        $('#hs_inappropriate').val('0');
                         $('#message_appropriate').modal('show')
                     }
                 }

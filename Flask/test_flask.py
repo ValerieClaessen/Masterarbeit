@@ -27,8 +27,7 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
 
     if (json.get("user_name") is not None):
         print(json.get("message"))
-        #write_to_file(json.get("message"),json.get("user_name"), currentSocketId, str(json["cb"]), str(json["hs"]), json.get("evaluation"))
-        write_to_file(json.get("message"),json.get("user_name"), currentSocketId, json.get("evaluation"))
+        write_to_file(json.get("message"),json.get("user_name"), currentSocketId, str(json["cyberbullying"]), str(json["hatespeech"]), json.get("evaluation"))
 
     socketio.emit('my response', json, callback=messageReceived)
 
