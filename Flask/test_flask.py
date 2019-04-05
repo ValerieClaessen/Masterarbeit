@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from flask_socketio import SocketIO
 
 from flask_bootstrap import Bootstrap
@@ -32,18 +32,22 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
 
     socketio.emit('my response', json, callback=messageReceived)
 
-@socketio.on('machine learning')
-def do_machine_learning(json, methods=['GET', 'POST']):
-    print(json.get("sentence"))
+@app.route('/machine_learning', methods=['GET', 'POST'])
+def do_machine_learning():
+    message = request.form['sentence']
+    c_b = request.form['cb']
+    h_s = request.form['hs']
 
-    if (json.get("sentence") is not None):
-        class_cb = machine_learning.use_svm(json.get("sentence"))
+    if (message is not None):
+        class_cb = machine_learning.use_svm(message)
         print("Cyberbullying: ", class_cb[0])
         print("Hate Speech: ", class_cb[1])
-        json["cb"] = class_cb[0]
-        json["hs"] = class_cb[1]
+        c_b = class_cb[0]
+        h_s = class_cb[1]
 
-    socketio.emit('ml response', json, callback=messageReceived)
+    dict = {'sentence': message, 'cb': c_b, 'hs': h_s}
+
+    return jsonify(dict)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

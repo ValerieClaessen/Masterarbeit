@@ -34,6 +34,7 @@ socket.on( 'my response', function( msg ) {
 
     //Unterscheideung zwischen ausgewählten Buttons fehlt noch
     if( typeof msg.user_name !== 'undefined' ) {
+        $( '#message_default' ).remove()
         $('#message_appropriate').modal('hide');
         $( '#loader' ).remove()
         $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
@@ -52,31 +53,33 @@ function remove_loader() {
     $('#input_chatmessage').val('');
 }
 
-function machine_learning() {
-    $( '#message_default' ).remove()
-    $('div.message_holder').append('<div id="loader" class="loader"></div>')
+$(function () {
+    //xxxxx mit message austauschen im Modal!
+    $('#ml_button').bind('click', function() {
+        $( '#message_default' ).remove()
+        $('div.message_holder').append('<div id="loader" class="loader"></div>')
+        updateScroll();
+        let message = $('#input_chatmessage').val();
 
-    let message = $('#input_chatmessage').val();
-    console.log(message);
+        $.post('/machine_learning', {'sentence': message, 'cb': 0, 'hs': 0},
+            function(data) {
+                sentence = data["sentence"]
+                cb = data["cb"]
+                hs = data["hs"]
 
-    socket.emit( 'machine learning', {
-        sentence : message,
-        cb: 0,
-        hs: 0})
-
-    //öffnet sich bei allen Usern! Fix!
-    socket.on( 'ml response', function( msg ) {
-        if( typeof msg.sentence !== 'undefined' ) {
-            console.log(msg.sentence);
-            if( msg.cb == 1 || msg.hs == 1) {
-                $('#message_inappropriate').modal('show')
-            }
-            else {
-                $('#message_appropriate').modal('show')
-            }
-        }
-    })
-}
+                if( typeof sentence !== 'undefined' ) {
+                    console.log(sentence);
+                    if( cb == 1 || hs == 1) {
+                        $('#message_inappropriate').modal('show')
+                    }
+                    else {
+                        $('#message_appropriate').modal('show')
+                    }
+                }
+            });
+        return false;
+    });
+});
 
 function updateScroll(){
     var element = document.getElementById("message_holder");
