@@ -60,4 +60,8 @@
     visibility: hidden;
 }
 
+#message_inappropriateLabel {
+    color: #ed5d4d;
+}
+
 

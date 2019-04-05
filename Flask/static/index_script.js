@@ -46,11 +46,19 @@ socket.on( 'my response', function( msg ) {
             $('#input_chatmessage').val('');
             $('#message_inappropriate').modal('hide');
         }
-        else {
+        else if (msg.evaluation == 'a1') {
             $( '#message_default' ).remove()
             $('#message_appropriate').modal('hide');
             $( '#loader' ).remove()
             $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class=" " style="color: ' + msg.color + '";>&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+            $('#input_chatmessage').val('');
+            updateScroll();
+        }
+        else {
+            $( '#message_default' ).remove()
+            $('#message_appropriate').modal('hide');
+            $( '#loader' ).remove()
+            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class="text-muted">&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left text-muted">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
             $('#input_chatmessage').val('');
             updateScroll();
         }
@@ -63,8 +71,9 @@ function oeffnefenster (url) {
 }
 
 $(function () {
-    //xxxxx mit message austauschen im Modal!
     $('#ml_button').bind('click', function() {
+        $('#msg_inappropriate').remove()
+        $('#msg_appropriate').remove()
         $( '#message_default' ).remove()
         $('div.message_holder').append('<div id="loader" class="loader"></div>')
         updateScroll();
@@ -99,6 +108,7 @@ $(function () {
                             $('#hs_inappropriate').val('0');
                             $('#hs_appropriate').val('0');
                         }
+                        $('div.inappropriate-header').append('<div id="msg_inappropriate"><p><b>Your message: </b>' + message + '</p></div>')
                         $('#message_inappropriate').modal('show')
                     }
                     else {
@@ -106,6 +116,8 @@ $(function () {
                         $('#cb_inappropriate').val('0');
                         $('#hs_appropriate').val('0');
                         $('#hs_inappropriate').val('0');
+
+                        $('div.appropriate-header').append('<div id="msg_appropriate"><p><b>Your message: </b>' + message + '</p></div>')
                         $('#message_appropriate').modal('show')
                     }
                 }
@@ -168,13 +180,6 @@ function enableButton_inap() {
 function enableButtonap() {
             document.getElementById("submit_message_appropriate").disabled = false;
         }
-
-// function addUser() {
-//     $('div.user_holder').append(msg.user_name)
-//
-// }
-
-
 
 var message_evaluate = "";
 function save_for_evaluation() {
