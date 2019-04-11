@@ -14,6 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -60,7 +61,7 @@
                             <button type="button" class="btn btn-secondary" id="ml_button" onclick="machine_learning()">Send</button>
                         </span>
                         <!-- Modal -->
-                        <div class="modal fade" id="message_inappropriate" tabindex="-1" role="dialog" aria-labelledby="message_inappropriateLabel" aria-hidden="true">
+                        <div class="modal fade" id="message_inappropriate" tabindex="-1" role="dialog" aria-labelledby="message_inappropriateLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -80,14 +81,14 @@
                               </div>
                               <div class="modal-footer">
                                   <!--<button type="button" class="btn btn-secondary" id="submit_message_inappropriate"  onclick="remove_loader()" data-dismiss="modal" disabled>Send</button>-->
-                                  <input type="submit" class="btn btn-secondary" id="submit_message_inappropriate" value="Send" disabled>
+                                  <input type="submit" class="btn btn-secondary" id="submit_message_inappropriate" disabled value="Send" data-backdrop="static" data-keyboard="false">
                               </div>
                             </div>
                           </div>
                         </div>
 
                     <!-- Modal -->
-                        <div class="modal fade" id="message_appropriate" tabindex="-1" role="dialog" aria-labelledby="message_appropriateLabel" aria-hidden="true">
+                        <div class="modal fade" id="message_appropriate" tabindex="-1" role="dialog" aria-labelledby="message_appropriateLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -98,10 +99,10 @@
                                 <div class="radio" onchange="enableButtonap()">
                                   <label><input type="radio" name="optradio" id="ap_1" class="eval_radio" value="a1">Yes</label>
                                 </div>
-                                <div class="radio" onchange="enableButtonap()">
+                                <div class="radio" onchange="enableButton_ap()">
                                   <label><input type="radio" name="optradio" class="eval_radio" value="a2">No, it’s Cyberbullying</label>
                                 </div>
-                                <div class="radio" onchange="enableButtonap()">
+                                <div class="radio" onchange="enableButton_ap()">
                                   <label><input type="radio" name="optradio" class="eval_radio" value="a3">No, it’s Hate Speech</label>
                                 </div>
                                   <input type="text" id="hs_appropriate" class="computed_class" placeholder="HS">
@@ -154,7 +155,6 @@
                 </div>
             </p>
         </div>
-
         <div class="col-sm-2">
             <h4>Don't know what to write?</h4>
             <p><b>Here are some example topics to talk about:</b></p>

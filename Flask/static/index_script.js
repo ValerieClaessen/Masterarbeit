@@ -181,13 +181,14 @@ $(document).ready(function() {
      });
  });
 
-
+document.getElementById("submit_message_inappropriate").disabled = true;
+document.getElementById("submit_message_appropriate").disabled = true;
 
 function enableButton_inap() {
             document.getElementById("submit_message_inappropriate").disabled = false;
         }
 
-function enableButtonap() {
+function enableButton_ap() {
             document.getElementById("submit_message_appropriate").disabled = false;
         }
 
@@ -197,7 +198,6 @@ function save_for_evaluation() {
     message_evaluate = to_eval
     console.log(to_eval)
 }
-
 
 
 
