@@ -6,6 +6,8 @@ from flask_bootstrap import Bootstrap
 import machine_learning
 from test_save_chat import write_to_file
 
+count = 0
+
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
@@ -18,6 +20,28 @@ def sessions():
 
 def messageReceived(methods=['GET', 'POST']):
     print('message was received!!!')
+
+@socketio.on('connect')
+def connect():
+    global count
+    count += 1
+    #print(count)
+
+    stat = {'count': count}
+    jsonify(stat)
+
+    socketio.emit('status', stat, broadcast=True)
+
+@socketio.on('disconnect')
+def disconnect():
+    global count
+    count -= 1
+    #print(count)
+
+    stat = {'count': count}
+    jsonify(stat)
+
+    socketio.emit('status', stat, broadcast=True)
 
 @socketio.on('my event')
 def handle_my_custom_event(json, methods=['GET', 'POST']):

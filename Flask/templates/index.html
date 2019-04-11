@@ -60,7 +60,7 @@
                             <button type="button" class="btn btn-secondary" id="ml_button" onclick="machine_learning()">Send</button>
                         </span>
                         <!-- Modal -->
-                        <div class="modal fade" id="message_inappropriate" tabindex="-1" role="dialog" aria-labelledby="message_inappropriateLabel" aria-hidden="true">
+                        <div class="modal fade" id="message_inappropriate" tabindex="-1" role="dialog" aria-labelledby="message_inappropriateLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -69,10 +69,10 @@
                               </div>
                               <div class="modal-body inappropriate-header" id="inappropriate-header">
                                 <div class="radio" onchange="enableButton_inap()">
-                                  <label><input type="radio" name="optradio" class="eval_radio" value="i1">Yes</label>
+                                  <label><input type="radio" name="optradio" class="eval_radio" id="inap_1" value="i1" checked>Yes</label>
                                 </div>
                                 <div class="radio"  onchange="enableButton_inap()">
-                                  <label><input type="radio" name="optradio" class="eval_radio" value="i2">No</label>
+                                  <label><input type="radio" name="optradio" class="eval_radio" id="inap_2" value="i2">No</label>
                                 </div>
                                   <input type="text" id="hs_inappropriate" class="computed_class" placeholder="HS">
                                   <input type="text" id="cb_inappropriate" class="computed_class" placeholder="CB">
@@ -87,7 +87,7 @@
                         </div>
 
                     <!-- Modal -->
-                        <div class="modal fade" id="message_appropriate" tabindex="-1" role="dialog" aria-labelledby="message_appropriateLabel" aria-hidden="true">
+                        <div class="modal fade" id="message_appropriate" tabindex="-1" role="dialog" aria-labelledby="message_appropriateLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -96,13 +96,13 @@
                               </div>
                               <div class="modal-body appropriate-header" id="appropriate-header">
                                 <div class="radio" onchange="enableButtonap()">
-                                  <label><input type="radio" name="optradio" id="ap_1" class="eval_radio" value="a1">Yes</label>
+                                  <label><input type="radio" name="optradio" id="ap_1" class="eval_radio" value="a1" checked>Yes</label>
                                 </div>
                                 <div class="radio" onchange="enableButtonap()">
-                                  <label><input type="radio" name="optradio" class="eval_radio" value="a2">No, it’s Cyberbullying</label>
+                                  <label><input type="radio" name="optradio" class="eval_radio" id="ap_2" value="a2">No, it’s Cyberbullying</label>
                                 </div>
                                 <div class="radio" onchange="enableButtonap()">
-                                  <label><input type="radio" name="optradio" class="eval_radio" value="a3">No, it’s Hate Speech</label>
+                                  <label><input type="radio" name="optradio" class="eval_radio" id="ap_3" value="a3">No, it’s Hate Speech</label>
                                 </div>
                                   <input type="text" id="hs_appropriate" class="computed_class" placeholder="HS">
                                   <input type="text" id="cb_appropriate" class="computed_class" placeholder="CB">
@@ -147,23 +147,19 @@
             </form>
         </div>
 
-        <div class="col-sm-1">
-            <p><b>Users:</b><br>
-                <div class="user_holder" id="user_holder">
-                    <h6 id="user_default">&nbsp;&nbsp;No Users present</h6>
-                </div>
-            </p>
-        </div>
-
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <h4>Don't know what to write?</h4>
             <p><b>Here are some example topics to talk about:</b></p>
-            <p class="topics">General Insults against Appearance, Personality, Abilities</p>
-            <p class="topics">Donald Trump</p>
-            <p class="topics">Clichés about Races</p>
-            <p class="topics">Police Brutality</p>
-            <p class="topics">Anti-feminist / Anti-LGBTQ Commentary</p>
-            <p class="topics">Gossip about Public People (Politicians, Athletes, Actors, …)</p>
+                <ul>
+                    <li class = "topics">General Insults against Appearance, Personality, Abilities</li>
+                    <li class = "topics">Donald Trump</li>
+                    <li class = "topics">Clichés about Races</li>
+                    <li class = "topics">Police Brutality</li>
+                    <li class = "topics">Anti-feminist / Anti-LGBTQ Commentary</li>
+                    <li class = "topics">Gossip about Public People (Politicians, Athletes, Actors, …)</li>
+                </ul><br>
+
+            <p id="user_count">Users in Chatroom: 0</p>
         </div>
     </div>
 </div>
