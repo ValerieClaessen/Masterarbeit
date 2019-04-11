@@ -127,6 +127,7 @@ $(function () {
                             $('#hs_inappropriate').val('0');
                             $('#hs_appropriate').val('0');
                         }
+                        $("#inap_1").prop("checked", true);
                         $('div.inappropriate-header').append('<div id="msg_inappropriate"><p><b>Your message: </b>' + message + '</p></div>')
                         $('#message_inappropriate').modal('show')
                     }
