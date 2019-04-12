@@ -77,7 +77,7 @@ socket.on( 'my response', function( msg ) {
             $('#message_appropriate').modal('hide');
             $("#ap_1").prop("checked", true);
             $( '#loader' ).remove()
-            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class="text-muted">&nbsp;&nbsp;' + msg.user_name + '</h6><p class="card-text float-left text-muted">&nbsp;&nbsp;&nbsp;&nbsp;' + msg.message + '</p></div></div>');
+            $('div.message_holder').append('<div class="card"><div class="card-body"><h6 class="text-muted">&nbsp;&nbsp; <span style="text-decoration: line-through;">' + msg.user_name + '</span></h6><p class="card-text float-left text-muted">&nbsp;&nbsp;&nbsp;&nbsp;<span style="text-decoration: line-through;">' + msg.message + '</span></p></div></div>');
             $('#input_chatmessage').val('');
             updateScroll();
         }
@@ -94,7 +94,7 @@ $(function () {
         $('#msg_inappropriate').remove()
         $('#msg_appropriate').remove()
         $( '#message_default' ).remove()
-        $('div.message_holder').append('<div id="loader" class="loader"></div>')
+        $('div.message_holder').append('<div id="loader"><div class="loader"></div><div id="analyze"><span>&nbsp;&nbsp;Analyzing ...</span></div></div>')
         updateScroll();
         let message = $('#input_chatmessage').val();
 
