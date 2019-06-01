@@ -309,7 +309,7 @@ def do_sentiment_naive_bayes(utterance, lex, sentiment, sentimentlist):
         p_class_utterance_1 = p_utterance_class_1 * freq_cb * p_neut_cb
         p_class_utterance_0 = p_utterance_class_0 * freq_no_cb * p_neut_no_cb
     else:
-        p_class_utterance_1 = p_utterance_class_1 * freq_cb * p_neg_cb * 100000000000000        # more impact if the utterance is negative
+        p_class_utterance_1 = p_utterance_class_1 * freq_cb * p_neg_cb * 100        # more impact if the utterance is negative
         p_class_utterance_0 = p_utterance_class_0 * freq_no_cb * p_neg_no_cb
     #print(p_class_utterance_0, p_class_utterance_1)
 
