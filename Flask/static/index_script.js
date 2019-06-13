@@ -94,7 +94,7 @@ $(function () {
         $('#msg_inappropriate').remove()
         $('#msg_appropriate').remove()
         $( '#message_default' ).remove()
-        $('div.message_holder').append('<div id="loader"><div class="loader"></div><div id="analyze"><span>&nbsp;&nbsp;Analyzing ...</span></div></div>')
+        $('div.message_holder').append('<div id="loader"><div class="loader"></div><div id="analyze"><span>&nbsp;&nbsp;Analyzing (this may take a while) ...</span></div></div>')
         updateScroll();
         let message = $('#input_chatmessage').val();
 

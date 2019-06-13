@@ -57,7 +57,7 @@
                     </div>
                         <span class="input-group-btn">
                             <!--<input type="submit" id="pop_over_button" class="btn btn-secondary" value="Send" data-container="body" data-toggle="modal" data-target="#message_appropriate" data-placement="top" data-content="Message is inappropriate" data-trigger="focus" data-backdrop="static" data-keyboard="false" disabled="disabled">-->
-                            <button type="button" class="btn btn-secondary" id="ml_button" onclick="machine_learning()">Send</button>
+                            <button type="submit" class="btn btn-secondary" id="ml_button" onclick="machine_learning()">Send</button>
                         </span>
                         <!-- Modal -->
                         <div class="modal fade" id="message_inappropriate" tabindex="-1" role="dialog" aria-labelledby="message_inappropriateLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -125,8 +125,8 @@
                               <h4 class="modal-title">Welcome</h4>
                             </div>
                             <div class="modal-body">
-                                <div><p><b>Disclaimer: </b>The messages in this chat can contain insults, threats and violence. Please note that these are not aimed at you personally and follow purely experimental goals.</p>
-                                  <p>All data will be used for scientific reasons. It will not be made public.</p></div>
+                                <br><p><b>Disclaimer: </b>The messages in this chat can contain insults, threats and violence. Please note that these are not aimed at you personally and follow purely experimental goals.</p>
+                                    <p>All data will be used for scientific reasons. It will not be made public.</p>
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <input type="color" class="color" name="name_color" id="name_color" value="#3366ff">
@@ -135,6 +135,7 @@
                                         <input type="text" class="username" placeholder="Enter username">
                                     </div>
                                 </div>
+                                <br><p>The analyzing of the messages may take a while. Please remain patient.</p>
                             </div>
                             <div class="modal-footer">
                               <button class="btn btn-secondary" id = "send_name" onclick="setUserColor()" type="button" data-dismiss="modal">Send</button>
