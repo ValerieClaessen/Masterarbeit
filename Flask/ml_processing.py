@@ -1,5 +1,6 @@
 import csv
 import nltk
+import re
 from nltk.tokenize import word_tokenize
 
 # function to make a list of all values from a column from a dataset
@@ -78,16 +79,18 @@ def process_utterance(utterance):
 
     This function will return the processed chat message.
     """
+    print(utterance)
+    punctuation_numbers = r'[^a-zA-Z ]'
 
-    punctuation = ['.', ',', ';', '!', '?', '(', ')', '[', ']',             # list of english punctuation marks (used in utterances)
-                   '&', ':', '-', '/', '\\', '$', '*', '"', "'", '+',
-                   '=', '@', '%', '~', '{', '}', '|', '<', '>', '`', '']
     stopwords = nltk.corpus.stopwords.words("english")                      # list of english stopwords
 
     utterance = utterance.lower()                                           # utterance to lowercase
-    for mark in punctuation:
-        utterance = utterance.replace(mark, '')                             # delete punctuation marks
-    utterance = ''.join([i for i in utterance if not i.isdigit()])          # delete numbers
+
+    non_alpha = re.findall(punctuation_numbers, utterance)
+    print(non_alpha)
+
+    for x in non_alpha:
+        utterance = utterance.replace(x, '')                             # delete punctuation marks
     utterance = word_tokenize(utterance)                                    # tokenize utterance
     utterance = [w for w in utterance if w not in stopwords]                # delete stopwords (depending on results we may not remvove stopwords)
 
@@ -95,4 +98,5 @@ def process_utterance(utterance):
         word = nltk.SnowballStemmer("english").stem(word)
         utterance[i] = str(word)
 
+    print(utterance)
     return utterance
