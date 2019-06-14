@@ -1,5 +1,6 @@
 import ml_processing
 import numpy as np
+import pickle
 
 # this method should be called as soon as the chat is loaded to avoid creating the matrix over and over again (time-consuming)
 def do_matrix(data_list, lex):
@@ -116,7 +117,7 @@ def do_svm(data_list, lex, test_utterance, file, column, matrix):
     cb_class = ""                                               # determine class of the test_utterance
 
     contains_curses = False
-    curses = ml_processing.make_list_of_curse_words("curses.txt")
+    curses = pickle.load(open("curses.p", "rb"))
 
     for word in test_utterance:
         if word in curses:
@@ -124,7 +125,7 @@ def do_svm(data_list, lex, test_utterance, file, column, matrix):
 
     if cb >= 2:
         cb_class = 1
-    elif contains_curses == True:               # messages that contain curses will automatically be labeled as cyberbullying
+    elif contains_curses is True:               # messages that contain curses will automatically be labeled as cyberbullying
         cb_class = 1
     else:
         cb_class = 0

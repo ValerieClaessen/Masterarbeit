@@ -1,14 +1,7 @@
 import ml_processing
 import svm
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
-# TODO: training_list should be created when the chat is being loaded to avoid creating it over and over
-training_list = ml_processing.process_data("train_set.csv")
-
-# TODO: all matrices should be created when the chat is being loaded to avoid creating them over and over
-matrix_pos = svm.do_matrix(training_list, "lexicon_pos.txt")
-matrix_neut = svm.do_matrix(training_list, "lexicon_neut.txt")
-matrix_neg = svm.do_matrix(training_list, "lexicon_neg.txt")
+import pickle
 
 # we use Vader to determine the sentiment of each chat message as SentiStrength cannot be used for the chat messages
 def determine_sentiment(message):
@@ -30,6 +23,11 @@ def determine_sentiment(message):
     return sentiment
 
 def use_svm(message):
+    training_list = pickle.load(open("training_list.p", "rb"))
+    matrix_pos = pickle.load(open("matrix_pos.p", "rb"))
+    matrix_neut = pickle.load(open("matrix_neut.p", "rb"))
+    matrix_neg = pickle.load(open("matrix_neg.p", "rb"))
+
     file = "train_set.csv"
     cb_column = 7
     hs_column = 9

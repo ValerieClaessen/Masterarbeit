@@ -2,6 +2,7 @@ import csv
 import nltk
 import re
 from nltk.tokenize import word_tokenize
+import pickle
 
 # function to make a list of all values from a column from a dataset
 def make_list_of_column(file, column):
@@ -48,12 +49,7 @@ def process_data(file):
         for row in reader:
             data_list.append(row[5])
 
-    dict_words = {}
-
-    with open('prestem_no_dup.csv', 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=';')
-        for row in reader:
-            dict_words[row[0]] = row[1]
+    dict_words = pickle.load(open("complete_dict.p", "rb"))
 
     for index, element in enumerate(data_list):
             stopwords = nltk.corpus.stopwords.words("english")  # list of english stopwords
@@ -101,38 +97,34 @@ def process_utterance(utterance):
 
     This function will return the processed chat message.
     """
-    dict_words = {}
 
-    with open('prestem_no_dup.csv', 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=';')
-        for row in reader:
-            dict_words[row[0]] = row[1]
+    dict_words = pickle.load(open("complete_dict.p", "rb"))
 
-        stopwords = nltk.corpus.stopwords.words("english")  # list of english stopwords
+    stopwords = nltk.corpus.stopwords.words("english")  # list of english stopwords
 
-        utterance = utterance.lower()  # utterance to lowercase
+    utterance = utterance.lower()  # utterance to lowercase
 
-        punctuation_numbers = r'[^a-zA-Z ]'
+    punctuation_numbers = r'[^a-zA-Z ]'
 
-        non_alpha = re.findall(punctuation_numbers, utterance)
+    non_alpha = re.findall(punctuation_numbers, utterance)
 
-        for x in non_alpha:
-            utterance = utterance.replace(x, '')  # delete punctuation marks
+    for x in non_alpha:
+        utterance = utterance.replace(x, '')  # delete punctuation marks
 
-        utterance = word_tokenize(utterance)  # tokenize utterance
-        utterance = [w for w in utterance if
-                     w not in stopwords]  # delete stopwords (depending on results we may not remvove stopwords)
+    utterance = word_tokenize(utterance)  # tokenize utterance
+    utterance = [w for w in utterance if
+                 w not in stopwords]  # delete stopwords (depending on results we may not remvove stopwords)
 
-        for i, word in enumerate(utterance):
-            in_dict = False
+    for i, word in enumerate(utterance):
+        in_dict = False
 
-            if word in dict_words:
-                word = dict_words[word]
-                utterance[i] = str(word)
-                in_dict = True
+        if word in dict_words:
+            word = dict_words[word]
+            utterance[i] = str(word)
+            in_dict = True
 
-            if in_dict is False:
-                word = nltk.SnowballStemmer("english").stem(word)
-                utterance[i] = str(word)
+        if in_dict is False:
+            word = nltk.SnowballStemmer("english").stem(word)
+            utterance[i] = str(word)
 
     return utterance

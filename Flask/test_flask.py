@@ -6,6 +6,36 @@ from flask_bootstrap import Bootstrap
 import machine_learning
 from test_save_chat import write_to_file
 
+import ml_processing
+
+import svm
+
+import csv
+
+import pickle
+
+training_list = ml_processing.process_data("train_set.csv")
+
+matrix_pos = svm.do_matrix(training_list, "lexicon_pos.txt")
+matrix_neut = svm.do_matrix(training_list, "lexicon_neut.txt")
+matrix_neg = svm.do_matrix(training_list, "lexicon_neg.txt")
+
+curses = ml_processing.make_list_of_curse_words("curses.txt")
+
+with open('prestem_no_dup.csv', 'r') as csvfile:
+    dict_words = {}
+    reader = csv.reader(csvfile, delimiter=';')
+    for row in reader:
+        dict_words[row[0]] = row[1]
+
+    pickle.dump(dict_words, open("complete_dict.p", "wb"))
+
+pickle.dump(training_list, open("training_list.p", "wb"))
+pickle.dump(matrix_pos, open("matrix_pos.p", "wb"))
+pickle.dump(matrix_neut, open("matrix_neut.p", "wb"))
+pickle.dump(matrix_neg, open("matrix_neg.p", "wb"))
+pickle.dump(curses, open("curses.p", "wb"))
+
 count = 0
 
 app = Flask(__name__)
